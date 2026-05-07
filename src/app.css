@@ -20,6 +20,7 @@ ol[role="list"] {
 }
 
 a {
+  color: inherit;
   text-decoration: none;
 }
 
@@ -36,27 +37,24 @@ svg {
   display: block;
 }
 
-a {
-  color: inherit;
-}
-
 :root {
   --palette-white: #ffffff;
   --palette-black: #000000;
 
-  --palette-neutral-100: #fbfbfc;
-  --palette-neutral-200: #F7F7FA;
-  --palette-neutral-300: #EFEFF4;
-  --palette-neutral-400: #E1E1EB;
-  --palette-neutral-500: #CACADC;
-  --palette-neutral-700: #6F6F95;
-  --palette-neutral-800: #3D3D5C;
-  --palette-neutral-900: #191929;
+  --palette-slate-100: #fbfbfc;
+  --palette-slate-200: #F7F7FA;
+  --palette-slate-300: #EFEFF4;
+  --palette-slate-400: #E1E1EB;
+  --palette-slate-500: #CACADC;
+  --palette-slate-700: #6F6F95;
+  --palette-slate-800: #3D3D5C;
+  --palette-slate-900: #191929;
 
   --palette-primary-100: #E2F1FD;
   --palette-primary-200: #65CBFE;
   --palette-primary-300: #2DAFEF;
-  --palette-primary-400: #0852B3;
+  --palette-primary-400: #1488E6;
+  --palette-primary-500: #0D5DC6;
 
   --palette-accent-blue-100: #E1ECFD;
   --palette-accent-blue-200: #3B82F6;
@@ -69,12 +67,9 @@ a {
   --palette-accent-green-100: #E2FDF4;
   --palette-accent-green-200: #10B981;
   --palette-accent-green-300: #008459;
-}
 
-:root {
   /* System UI Font Stack */
   --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --inter: 'Inter Variable', 'Inter', sans-serif;
 
   /* NAMING font-size-16 == 16px == 1rem */
   --font-size-14: 0.875rem;
@@ -82,7 +77,12 @@ a {
   --font-size-20: 1.25rem;
   --font-size-24: 1.5rem;
 
+  --font-weight-light: 400;
+  --font-weight-regular: 500;
+  --font-weight-bold: 700;
+
   --text-box-width-40: 40ch;
+  --text-box-width-50: 50ch;
   --text-box-width-60: 60ch;
 
   --space-4: 0.25rem;
@@ -98,23 +98,43 @@ a {
   --radius-8: 8px;
   --radius-16: 16px;
   --radius-full: 9999px;
+}
 
-  --color-bg-app: var(--palette-neutral-200);
-  --color-bg-surface: var(--palette-white);
-  --color-bg-surface-hover: var(--palette-neutral-200);
+:root {
+  --inter: 'Inter Variable', 'Inter', sans-serif;
 
-  --color-border: var(--palette-neutral-400);
-
-  --color-text: var(--palette-neutral-900);
-  --color-text-light: var(--palette-neutral-700);
-
-  --color-brand-light: var(--palette-primary-100);
-  --color-brand-base: var(--palette-primary-200);
-  --color-brand-hover: var(--palette-primary-300);
-  --color-brand-on: var(--palette-primary-400);
+  --max-main-width: 900px;
 
   --ease-in-sine: cubic-bezier(0.12, 0, 0.39, 0);
   --transition-color: background-color 0.2s var(--ease-in-sine);
+
+  --color-bg-app: var(--palette-slate-200);
+  --color-bg-surface: var(--palette-white);
+  --color-bg-primary: var(--palette-primary-300);
+  --color-bg-primary-dark: var(--palette-primary-400);
+
+  --color-hover-surface: var(--palette-slate-300);
+  --color-hover-primary: var(--palette-primary-200);
+  --color-hover-primary-dark: var(--palette-primary-300);
+
+  --color-active-surface: var(--palette-slate-400);
+  --color-active-primary: var(--palette-primary-400);
+
+  --color-text: var(--palette-slate-900);
+  --color-text-muted: var(--palette-slate-700);
+  --color-text-inverse: var(--palette-slate-100);
+  --color-text-inverse-muted: var(--palette-slate-400);
+  --color-text-primary: var(--palette-primary-500);
+
+  --color-border: var(--palette-slate-400);
+
+  --elevation-1:
+    rgba(0, 0, 0, 0.12) 0px 1px 3px,
+    rgba(0, 0, 0, 0.24) 0px 1px 2px;
+
+  --elevation-2:
+    rgba(0, 0, 0, 0.16) 0px 3px 6px,
+    rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 body {
@@ -129,43 +149,56 @@ h3 {
   color: var(--color-text);
 }
 
+/* HEADER TEXT */
+
 h1 {
   line-height: 1.2;
   font-size: var(--font-size-24);
-  font-weight: 700;
-}
-
-h1.small {
-  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-bold);
 }
 
 h2 {
   line-height: 1.2;
   font-size: var(--font-size-20);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
+
 }
 
 h3 {
   line-height: 1.2;
   font-size: var(--font-size-16);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
+
 }
 
-p,
-a {
+:is(h1, h2, h3).small {
+  font-size: var(--font-size-20);
+}
+
+:is(h1, h2, h3).xsmall {
+  font-size: var(--font-size-16);
+}
+
+/* BODY TEXT */
+
+p {
   line-height: 1.5;
   font-size: var(--font-size-16);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
 }
 
-p.light,
-a.light {
-  color: var(--color-text-light);
+p {
+  max-width: var(--text-box-width-50);
+}
+
+p.muted,
+a.muted {
+  color: var(--color-text-muted);
 }
 
 p.caption {
   line-height: 1.4;
   font-size: var(--font-size-14);
-  font-weight: 400;
-  color: var(--color-text-light);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
 }
