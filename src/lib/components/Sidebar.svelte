@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Button from "./Button.svelte";
+  import Button from "./UI/Button.svelte";
   import { page } from "$app/state";
   import { toolsData, exercisesData } from "$lib/data/appData";
 

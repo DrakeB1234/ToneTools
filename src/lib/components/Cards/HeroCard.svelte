@@ -1,5 +1,5 @@
 <script>
-  import Button from "../Button.svelte";
+  import Button from "../UI/Button.svelte";
   import MaterialIcon from "../Icons/MaterialIcon.svelte";
 </script>
 
@@ -18,7 +18,7 @@
 
 <style>
   .card-base {
-    padding: var(--space-16) var(--space-24);
+    padding: var(--space-24) var(--space-24);
 
     box-shadow: var(--shadow-elevation-2);
     background-color: var(--color-bg-primary-dark);
@@ -32,5 +32,7 @@
     color: var(--color-text-inverse-muted);
     margin-top: var(--space-12);
     margin-bottom: var(--space-24);
+
+    max-width: var(--text-box-width-small);
   }
 </style>

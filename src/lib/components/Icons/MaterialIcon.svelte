@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { materialIconPaths, type MaterialIconPathNames } from "./IconPaths";
+  import {
+    materialIconPaths,
+    type MaterialIconPathNames,
+  } from "./materialIconPaths";
 
   interface IconProps {
     name: MaterialIconPathNames;

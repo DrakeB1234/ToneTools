@@ -4,7 +4,7 @@
   import type { Snippet } from "svelte";
 
   interface Props {
-    variant?: "primary" | "surface" | "text";
+    variant?: "primary" | "surface" | "outline" | "text";
     element?: "a" | "button";
     size?: "small" | "medium" | "large" | "icon";
     class?: string;
@@ -48,10 +48,12 @@
 
     color: var(--color-text);
     font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-14);
     cursor: pointer;
     text-decoration: none;
     border: none;
 
+    -webkit-tap-highlight-color: transparent;
     transition: var(--transition-color);
   }
   .btn.small {
@@ -77,19 +79,12 @@
     background-color: var(--color-bg-surface);
     box-shadow: var(--shadow-elevation-1);
   }
-  .surface:hover {
-    background-color: var(--color-hover-surface);
-  }
-  .surface:active {
-    background-color: var(--color-active-surface);
+
+  .outline {
+    border: 1px solid var(--color-border);
+    background-color: transparent;
   }
 
-  .text:hover {
-    background-color: var(--color-hover-surface);
-  }
-  .text:active {
-    background-color: var(--color-active-surface);
-  }
   .text.active {
     background-color: var(--color-bg-primary);
     color: var(--color-text-inverse);
@@ -98,9 +93,19 @@
     color: var(--color-text-inverse);
   }
   .text.active:hover {
-    background-color: var(--color-hover-primary);
+    background-color: var(--color-bg-primary);
   }
-  .text.active:active {
-    background-color: var(--color-active-primary);
+
+  /* Hover / Active states */
+  .surface:hover,
+  .outline:hover,
+  .text:hover {
+    background-color: var(--color-hover-surface);
+  }
+
+  .surface:active,
+  .outline:active,
+  .text:active {
+    background-color: var(--color-active-surface);
   }
 </style>

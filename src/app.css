@@ -1,3 +1,4 @@
+/* ==== CSS RESET ==== */
 /* https://piccalil.li/blog/a-modern-css-reset */
 
 *,
@@ -6,14 +7,12 @@
   box-sizing: border-box;
 }
 
-/* Remove default margin */
 * {
   margin: 0;
   padding: 0;
   font: inherit;
 }
 
-/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
 ul[role="list"],
 ol[role="list"] {
   list-style: none;
@@ -24,12 +23,10 @@ a {
   text-decoration: none;
 }
 
-/* Set core body defaults */
 body {
   text-rendering: optimizeSpeed;
 }
 
-/* Make images easier to work with */
 img,
 picture,
 svg {
@@ -37,9 +34,11 @@ svg {
   display: block;
 }
 
-/* DESIGN SYSTEM */
+/* ==== DESIGN SYSTEM ==== */
 
 :root {
+  /* color palette */
+
   --palette-white: #ffffff;
   --palette-black: #000000;
 
@@ -48,8 +47,9 @@ svg {
   --palette-slate-300: #EFEFF4;
   --palette-slate-400: #E1E1EB;
   --palette-slate-500: #CACADC;
-  --palette-slate-700: #6F6F95;
-  --palette-slate-800: #3D3D5C;
+  --palette-slate-600: #6F6F95;
+  --palette-slate-700: #3D3D5C;
+  --palette-slate-800: #282842;
   --palette-slate-900: #191929;
 
   --palette-primary-100: #E2F1FD;
@@ -87,9 +87,9 @@ svg {
   --font-weight-regular: 500;
   --font-weight-bold: 700;
 
-  --text-box-width-40: 40ch;
-  --text-box-width-50: 50ch;
-  --text-box-width-60: 60ch;
+  --text-box-width-small: 40ch;
+  --text-box-width-med: 50ch;
+  --text-box-width-large: 70ch;
 
   --space-4: 0.25rem;
   --space-8: 0.5rem;
@@ -107,6 +107,8 @@ svg {
 }
 
 :root {
+  /* app variables */
+
   --inter: 'Inter Variable', 'Inter', sans-serif;
 
   --app-max-width: 800px;
@@ -118,6 +120,8 @@ svg {
 
   --ease-in-sine: cubic-bezier(0.12, 0, 0.39, 0);
   --transition-color: background-color 0.2s var(--ease-in-sine);
+
+  /* app colors */
 
   --color-bg-app: var(--palette-slate-200);
   --color-bg-surface: var(--palette-white);
@@ -137,12 +141,14 @@ svg {
   --color-active-primary: var(--palette-primary-400);
 
   --color-text: var(--palette-slate-900);
-  --color-text-muted: var(--palette-slate-700);
-  --color-text-inverse: var(--palette-slate-100);
+  --color-text-muted: var(--palette-slate-600);
+  --color-text-inverse: var(--palette-white);
   --color-text-inverse-muted: var(--palette-slate-400);
   --color-text-primary: var(--palette-primary-500);
 
-  --color-border: var(--palette-slate-400);
+  --color-border: var(--palette-slate-500);
+  --color-border-light: var(--palette-slate-400);
+  --color-border-primary: var(--palette-primary-400);
 
   --shadow-elevation-1:
     rgba(0, 0, 0, 0.12) 0px 1px 3px,
@@ -153,11 +159,15 @@ svg {
     rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
-/* GLOBAL ELEMENTS */
+/* ==== GLOBAL ELEMENTS ==== */
 
 body {
   font-family: var(--inter);
   background-color: var(--color-bg-app);
+}
+
+hr {
+  border-top: 1px solid var(--color-border-light);
 }
 
 p,
@@ -166,6 +176,8 @@ h2,
 h3 {
   color: var(--color-text);
 }
+
+/* headers */
 
 h1 {
   line-height: 1.2;
@@ -195,14 +207,13 @@ h3 {
   font-size: var(--font-size-16);
 }
 
+/* body */
+
 p {
   line-height: 1.5;
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-regular);
-}
-
-p {
-  max-width: var(--text-box-width-50);
+  max-width: var(--text-box-width-med);
 }
 
 .muted,
@@ -216,7 +227,7 @@ p.caption {
   font-weight: var(--font-weight-regular);
 }
 
-/* GLOBAL SEMANTIC CLASSES, USE SPARINGLY */
+/* ==== GLOBAL SEMANTIC CLASSES, USE SPARINGLY ==== */
 
 .icon-container {
   display: flex;
@@ -234,28 +245,103 @@ p.caption {
   color: var(--color-text-inverse);
 }
 
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+/* card classes */
+
 .card-base {
   padding: var(--space-16) var(--space-16);
 
   border-radius: var(--radius-8);
   box-shadow: var(--shadow-elevation-1);
   background-color: var(--color-bg-surface);
+}
 
+.card-base.clickable {
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
   transition: var(--transition-color);
 }
 
-.card-base:hover {
+.card-base.clickable:hover {
   background-color: var(--color-hover-surface);
 }
 
-.card-base:active {
+.card-base.clickable:active {
   background-color: var(--color-active-surface);
 }
 
-/* GLOBAL MEDIA QUERIES */
+.inner-card-base {
+  padding: var(--space-16) var(--space-16);
+
+  border-radius: var(--radius-8);
+  background-color: var(--color-bg-surface-dark);
+}
+
+.inner-card-base.clickable {
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+  transition: var(--transition-color);
+}
+
+.inner-card-base.clickable:hover {
+  background-color: var(--color-hover-surface);
+}
+
+.inner-card-base.clickable:active {
+  background-color: var(--color-active-surface);
+}
+
+/* ==== GLOBAL MEDIA QUERIES ==== */
 
 @media (max-width: 600px) {
   :root {
-    --app-padding: var(--space-16);
+    --app-padding: var(--space-16) var(--space-12);
+  }
+}
+
+@media (prefers-color-scheme:) {
+  :root {
+    --color-bg-app: var(--palette-slate-900);
+    --color-bg-surface: var(--palette-slate-800);
+    --color-bg-surface-dark: var(--palette-slate-700);
+
+    --color-bg-primary: var(--palette-primary-400);
+    --color-bg-primary-dark: var(--palette-primary-500);
+
+    --color-bg-accent-purple: var(--palette-accent-purple-300);
+    --color-bg-accent-violet: var(--palette-accent-violet-300);
+    --color-bg-accent-blue: var(--palette-accent-blue-300);
+    --color-bg-accent-green: var(--palette-accent-green-300);
+
+    --color-hover-surface: var(--palette-slate-600);
+    --color-hover-primary: var(--palette-primary-300);
+    --color-hover-primary-dark: var(--palette-primary-400);
+
+    --color-active-surface: var(--palette-slate-900);
+    --color-active-primary: var(--palette-primary-500);
+
+    --color-text: var(--palette-slate-100);
+    --color-text-muted: var(--palette-slate-500);
+    --color-text-inverse: var(--palette-white);
+    --color-text-inverse-muted: var(--palette-slate-300);
+    --color-text-primary: var(--palette-primary-300);
+
+    --color-border: var(--palette-slate-600);
+
+    --shadow-elevation-1:
+      rgba(0, 0, 0, 0.3) 0px 1px 3px,
+      rgba(0, 0, 0, 0.4) 0px 1px 2px;
+
+    --shadow-elevation-2:
+      rgba(0, 0, 0, 0.4) 0px 3px 6px,
+      rgba(0, 0, 0, 0.5) 0px 3px 6px;
   }
 }

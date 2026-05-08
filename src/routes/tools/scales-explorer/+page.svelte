@@ -1,8 +1,17 @@
-<script>
-  import Button from "$lib/components/Button.svelte";
+<script lang="ts">
+  import Button from "$lib/components/UI/Button.svelte";
   import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
   import Sidebar from "$lib/components/Sidebar.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
+  import Label from "$lib/components/UI/Label.svelte";
+  import Select from "$lib/components/UI/Select.svelte";
+  import type { Option } from "$lib/components/UI/Select.svelte";
+  import Input from "$lib/components/UI/Input.svelte";
+
+  const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+
+  const selectOptionsNote: Option[] = [{ label: "C", value: "C" }];
+  const selectOptionsScales: Option[] = [{ label: "Major", value: "Major" }];
 </script>
 
 <div class="page">
@@ -20,22 +29,37 @@
       </div>
 
       <section class="card-base input-card">
-        <p class="caption muted">Root Note</p>
-        <select><option>C</option></select>
+        <div class="input-group">
+          <Label text="Root" labelFor="root" />
+          <Select id="root" options={selectOptionsNote} value={"C"} />
+        </div>
+        <div class="input-group">
+          <Label text="Scale" labelFor="scale" />
+          <Select id="scale" options={selectOptionsScales} value={"Major"} />
+        </div>
       </section>
 
       <section class="card-base scale-card">
-        <p>Scale Notes</p>
+        <h3>Scale Notes</h3>
+        <div class="scale-notes-container">
+          {#each noteNames as note (note)}
+            <Button variant="outline">{note}</Button>
+          {/each}
+        </div>
+
+        <hr class="divider" />
+
+        <h3>Piano Roll</h3>
       </section>
 
       <section class="card-base chords-card">
-        <p>Diatonic Chords</p>
+        <h3>Diatonic Chords</h3>
 
         <div class="chords-container">
-          <div class="card-base inner-card">
+          <div class="inner-card-base clickable">
             <p>Cmaj</p>
           </div>
-          <div class="card-base inner-card">
+          <div class="inner-card-base clickable">
             <p>Dmin</p>
           </div>
         </div>
@@ -58,15 +82,6 @@
     padding: var(--app-padding);
   }
 
-  .card-base:hover {
-    background-color: var(--color-bg-surface);
-  }
-
-  .card-base .inner-card {
-    box-shadow: none;
-    background-color: var(--color-bg-surface-dark);
-  }
-
   .header-container {
     display: flex;
     gap: var(--space-16);
@@ -78,6 +93,32 @@
   .text-container {
     display: flex;
     flex-direction: column;
+  }
+
+  .input-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
+    gap: var(--space-12);
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  h3 {
+    margin-bottom: var(--space-16);
+  }
+
+  .scale-notes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+  }
+
+  .divider {
+    margin-block: var(--space-16);
   }
 
   .chords-container {

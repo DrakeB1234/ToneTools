@@ -1,5 +1,4 @@
 <script>
-  import CircleOfFifths from "../Icons/CircleOfFifths.svelte";
   import MaterialIcon from "../Icons/MaterialIcon.svelte";
 
   let {
@@ -10,7 +9,7 @@
   } = $props();
 </script>
 
-<a href="/" class="card-base">
+<a href="/" class="card-base clickable">
   <div
     class="icon-container"
     style="background-color: var(--color-bg-accent-{color});"
@@ -30,6 +29,8 @@
     display: flex;
     align-items: center;
     gap: var(--space-12);
+
+    color: var(--color-text);
   }
 
   .text-container {

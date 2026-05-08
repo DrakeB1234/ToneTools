@@ -10,7 +10,7 @@
   } = $props();
 </script>
 
-<a {href} class="card-base">
+<a {href} class="card-base clickable">
   <div
     class="icon-container"
     style="background-color: var(--color-bg-accent-{color});"
@@ -20,7 +20,7 @@
 
   <div class="text-container">
     <h3>{title}</h3>
-    <p class="caption muted">{description}</p>
+    <p class="caption muted line-clamp-3">{description}</p>
   </div>
 
   <div class="link-action">
