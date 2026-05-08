@@ -41,6 +41,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: var(--space-4);
 
     padding: var(--space-12) var(--space-16);
     border-radius: var(--radius-8);
@@ -60,7 +61,7 @@
 
   .primary {
     background-color: var(--color-bg-primary);
-    box-shadow: var(--elevation-1);
+    box-shadow: var(--shadow-elevation-1);
     color: var(--color-text-inverse);
   }
   .primary:hover {
@@ -72,7 +73,7 @@
 
   .surface {
     background-color: var(--color-bg-surface);
-    box-shadow: var(--elevation-1);
+    box-shadow: var(--shadow-elevation-1);
   }
   .surface:hover {
     background-color: var(--color-hover-surface);

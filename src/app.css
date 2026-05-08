@@ -64,6 +64,10 @@ svg {
   --palette-accent-purple-200: #8B5CF6;
   --palette-accent-purple-300: #6B2AFF;
 
+  --palette-accent-violet-100: #dcdcfa;
+  --palette-accent-violet-200: #6366F1;
+  --palette-accent-violet-300: #191DDC;
+
   --palette-accent-green-100: #E2FDF4;
   --palette-accent-green-200: #10B981;
   --palette-accent-green-300: #008459;
@@ -103,7 +107,11 @@ svg {
 :root {
   --inter: 'Inter Variable', 'Inter', sans-serif;
 
-  --max-main-width: 900px;
+  --max-main-width: 800px;
+
+  --icon-size-sm: 20px;
+  --icon-size-base: 24px;
+  --icon-size-med: 32px;
 
   --ease-in-sine: cubic-bezier(0.12, 0, 0.39, 0);
   --transition-color: background-color 0.2s var(--ease-in-sine);
@@ -112,6 +120,10 @@ svg {
   --color-bg-surface: var(--palette-white);
   --color-bg-primary: var(--palette-primary-300);
   --color-bg-primary-dark: var(--palette-primary-400);
+  --color-bg-accent-purple: var(--palette-accent-purple-200);
+  --color-bg-accent-violet: var(--palette-accent-violet-200);
+  --color-bg-accent-blue: var(--palette-accent-blue-200);
+  --color-bg-accent-green: var(--palette-accent-green-200);
 
   --color-hover-surface: var(--palette-slate-300);
   --color-hover-primary: var(--palette-primary-200);
@@ -128,11 +140,11 @@ svg {
 
   --color-border: var(--palette-slate-400);
 
-  --elevation-1:
+  --shadow-elevation-1:
     rgba(0, 0, 0, 0.12) 0px 1px 3px,
     rgba(0, 0, 0, 0.24) 0px 1px 2px;
 
-  --elevation-2:
+  --shadow-elevation-2:
     rgba(0, 0, 0, 0.16) 0px 3px 6px,
     rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
@@ -201,4 +213,22 @@ p.caption {
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-muted);
+}
+
+/* GLOBAL SEMANTIC CLASSES, USE SPARINGLY */
+
+.icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  max-width: 48px;
+  max-height: 48px;
+  padding: var(--space-8);
+  aspect-ratio: 1 / 1;
+
+  border-radius: var(--radius-8);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-inverse);
 }
