@@ -1,5 +1,6 @@
 <script>
   import CircleOfFifths from "../Icons/CircleOfFifths.svelte";
+  import MaterialIcon from "../Icons/MaterialIcon.svelte";
 
   let {
     title = "Title",
@@ -9,7 +10,7 @@
   } = $props();
 </script>
 
-<a href="/" class="card">
+<a href="/" class="card-base">
   <div
     class="icon-container"
     style="background-color: var(--color-bg-accent-{color});"
@@ -18,28 +19,21 @@
   </div>
   <div class="text-container">
     <h3>{title}</h3>
-    <p class="caption">{description}</p>
+    <p class="caption muted">{description}</p>
   </div>
+
+  <MaterialIcon name="arrowRightAlt" />
 </a>
 
 <style>
-  .card {
+  .card-base {
     display: flex;
+    align-items: center;
     gap: var(--space-12);
-
-    padding: var(--space-16) var(--space-16);
-
-    border-radius: var(--radius-8);
-    box-shadow: var(--shadow-elevation-1);
-    background-color: var(--color-bg-surface);
-
-    transition: var(--transition-color);
-  }
-  .card:hover {
-    background-color: var(--color-hover-surface);
   }
 
   .text-container {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: var(--space-4);

@@ -9,7 +9,7 @@
 <style>
   .wrapper {
     width: 100%;
-    max-width: var(--max-main-width);
+    max-width: var(--app-max-width);
     margin-inline: auto;
   }
 </style>

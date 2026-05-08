@@ -37,6 +37,8 @@ svg {
   display: block;
 }
 
+/* DESIGN SYSTEM */
+
 :root {
   --palette-white: #ffffff;
   --palette-black: #000000;
@@ -107,7 +109,8 @@ svg {
 :root {
   --inter: 'Inter Variable', 'Inter', sans-serif;
 
-  --max-main-width: 800px;
+  --app-max-width: 800px;
+  --app-padding: var(--space-24) var(--space-36);
 
   --icon-size-sm: 20px;
   --icon-size-base: 24px;
@@ -118,6 +121,7 @@ svg {
 
   --color-bg-app: var(--palette-slate-200);
   --color-bg-surface: var(--palette-white);
+  --color-bg-surface-dark: var(--palette-slate-200);
   --color-bg-primary: var(--palette-primary-300);
   --color-bg-primary-dark: var(--palette-primary-400);
   --color-bg-accent-purple: var(--palette-accent-purple-200);
@@ -149,6 +153,8 @@ svg {
     rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
+/* GLOBAL ELEMENTS */
+
 body {
   font-family: var(--inter);
   background-color: var(--color-bg-app);
@@ -160,8 +166,6 @@ h2,
 h3 {
   color: var(--color-text);
 }
-
-/* HEADER TEXT */
 
 h1 {
   line-height: 1.2;
@@ -191,8 +195,6 @@ h3 {
   font-size: var(--font-size-16);
 }
 
-/* BODY TEXT */
-
 p {
   line-height: 1.5;
   font-size: var(--font-size-16);
@@ -203,8 +205,8 @@ p {
   max-width: var(--text-box-width-50);
 }
 
-p.muted,
-a.muted {
+.muted,
+.muted {
   color: var(--color-text-muted);
 }
 
@@ -212,7 +214,6 @@ p.caption {
   line-height: 1.4;
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-regular);
-  color: var(--color-text-muted);
 }
 
 /* GLOBAL SEMANTIC CLASSES, USE SPARINGLY */
@@ -231,4 +232,30 @@ p.caption {
   border-radius: var(--radius-8);
   background-color: var(--color-bg-primary);
   color: var(--color-text-inverse);
+}
+
+.card-base {
+  padding: var(--space-16) var(--space-16);
+
+  border-radius: var(--radius-8);
+  box-shadow: var(--shadow-elevation-1);
+  background-color: var(--color-bg-surface);
+
+  transition: var(--transition-color);
+}
+
+.card-base:hover {
+  background-color: var(--color-hover-surface);
+}
+
+.card-base:active {
+  background-color: var(--color-active-surface);
+}
+
+/* GLOBAL MEDIA QUERIES */
+
+@media (max-width: 600px) {
+  :root {
+    --app-padding: var(--space-16);
+  }
 }

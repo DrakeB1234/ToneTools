@@ -6,7 +6,7 @@
   interface Props {
     variant?: "primary" | "surface" | "text";
     element?: "a" | "button";
-    size?: "small" | "medium" | "large";
+    size?: "small" | "medium" | "large" | "icon";
     class?: string;
     [key: string]: any;
     children?: Snippet;
@@ -43,11 +43,10 @@
     justify-content: center;
     gap: var(--space-4);
 
-    padding: var(--space-12) var(--space-16);
+    padding: var(--space-8) var(--space-12);
     border-radius: var(--radius-8);
 
     color: var(--color-text);
-    font-size: var(--font-size-14);
     font-weight: var(--font-weight-regular);
     cursor: pointer;
     text-decoration: none;
@@ -56,7 +55,10 @@
     transition: var(--transition-color);
   }
   .btn.small {
-    padding: var(--space-12) var(--space-12);
+    padding: var(--space-12);
+  }
+  .btn.icon {
+    padding: var(--space-8);
   }
 
   .primary {
@@ -90,6 +92,9 @@
   }
   .text.active {
     background-color: var(--color-bg-primary);
+    color: var(--color-text-inverse);
+  }
+  .text.active :global(.muted) {
     color: var(--color-text-inverse);
   }
   .text.active:hover {

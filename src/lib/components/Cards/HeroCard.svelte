@@ -3,7 +3,7 @@
   import MaterialIcon from "../Icons/MaterialIcon.svelte";
 </script>
 
-<div class="card">
+<div class="card-base">
   <h1 class="small">Music Training Exercises</h1>
   <p class="caption">
     There's a lot to master when it comes to music. Start working on some of the
@@ -17,10 +17,9 @@
 </div>
 
 <style>
-  .card {
+  .card-base {
     padding: var(--space-16) var(--space-24);
 
-    border-radius: var(--radius-16);
     box-shadow: var(--shadow-elevation-2);
     background-color: var(--color-bg-primary-dark);
   }

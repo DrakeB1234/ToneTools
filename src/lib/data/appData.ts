@@ -66,7 +66,7 @@ export const toolsData: DataEntry[] = [
   {
     name: "Scales Explorer",
     description: "Find the notes and diatonic chords in any scale.",
-    href: "/tools",
+    href: "/tools/scales-explorer",
     color: "green",
     icon: CircleOfFifths
   },

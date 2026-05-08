@@ -38,6 +38,7 @@
             <ToolCard
               title={item.name}
               description={item.description}
+              href={item.href}
               color={item.color}
               icon={item.icon}
             />
@@ -55,7 +56,7 @@
 
   main {
     width: 100%;
-    padding: var(--space-24) var(--space-36);
+    padding: var(--app-padding);
   }
 
   .section {
@@ -74,6 +75,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(12em, 1fr));
     align-items: stretch;
+    grid-auto-rows: 1fr;
     gap: var(--space-12);
 
     margin-top: var(--space-16);

@@ -27,10 +27,10 @@
 
 <aside>
   <div class="wrapper">
-    <div class="container__logo">
-      <img src="images/logo.svg" alt="Music App Logo" width="32" height="32" />
+    <a href="/" class="container__logo">
+      <img src="/images/logo.svg" alt="Music App Logo" width="32" height="32" />
       <h1 class="small">Music App</h1>
-    </div>
+    </a>
     <nav aria-label="Main Navigation">
       <h3>Exercises</h3>
       <ul role="list">
@@ -42,8 +42,9 @@
               size="small"
               href={data.href}
               class={page.url.pathname === data.href ? "active" : ""}
-              >{data.name}</Button
             >
+              <p class="caption muted">{data.name}</p>
+            </Button>
           </li>
         {/each}
       </ul>
@@ -57,8 +58,9 @@
               size="small"
               href={data.href}
               class={page.url.pathname === data.href ? "active" : ""}
-              >{data.name}</Button
             >
+              <p class="caption muted">{data.name}</p>
+            </Button>
           </li>
         {/each}
       </ul>
@@ -81,15 +83,13 @@
     background-color: var(--color-bg-surface);
   }
 
-  div.container__logo {
+  .container__logo {
     display: flex;
     align-items: center;
     gap: var(--space-12);
   }
 
   nav {
-    display: grid;
-
     margin-top: var(--space-24);
   }
 
@@ -108,5 +108,11 @@
   li :global(.btn) {
     justify-content: flex-start;
     width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    aside {
+      display: none;
+    }
   }
 </style>
