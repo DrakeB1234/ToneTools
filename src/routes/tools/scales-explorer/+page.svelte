@@ -6,12 +6,24 @@
   import Label from "$lib/components/UI/Label.svelte";
   import Select from "$lib/components/UI/Select.svelte";
   import type { Option } from "$lib/components/UI/Select.svelte";
-  import Input from "$lib/components/UI/Input.svelte";
+  import PianoRoll from "$lib/components/PianoRoll.svelte";
 
   const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
 
-  const selectOptionsNote: Option[] = [{ label: "C", value: "C" }];
-  const selectOptionsScales: Option[] = [{ label: "Major", value: "Major" }];
+  const selectOptionsNote: Option[] = noteNames.map((e) => {
+    return { label: e, value: e };
+  });
+  const selectOptionsScales: Option[] = [
+    { label: "Major", value: "Major" },
+    { label: "Minor", value: "Minor" },
+    { label: "Dorian", value: "Dorian" },
+  ];
+
+  const pianoRollActiveNotes = ["C#1", "F1", "G#1"];
+
+  const pianoClickCallBack = (note: string) => {
+    console.log(note);
+  };
 </script>
 
 <div class="page">
@@ -24,7 +36,7 @@
         </Button>
         <div class="text-container">
           <p class="caption muted">Tools</p>
-          <h1 class="xsmall">Scale Explorer</h1>
+          <h1 class="text-base">Scale Explorer</h1>
         </div>
       </div>
 
@@ -50,6 +62,14 @@
         <hr class="divider" />
 
         <h3>Piano Roll</h3>
+
+        <div class="piano-roll-container">
+          <PianoRoll
+            octaves={2}
+            activeNotes={pianoRollActiveNotes}
+            {pianoClickCallBack}
+          />
+        </div>
       </section>
 
       <section class="card-base chords-card">
@@ -71,6 +91,11 @@
 <style>
   .page {
     display: flex;
+  }
+
+  /* Fixes wierd overflow with flexbox with PianoRoll Component. WTH? */
+  .page :global(> .wrapper) {
+    min-width: 0;
   }
 
   main {
@@ -115,6 +140,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-8);
+  }
+
+  .piano-roll-container {
+    overflow: hidden;
   }
 
   .divider {

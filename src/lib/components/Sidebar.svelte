@@ -1,35 +1,14 @@
-<script lang="ts">
+<script>
   import Button from "./UI/Button.svelte";
   import { page } from "$app/state";
   import { toolsData, exercisesData } from "$lib/data/appData";
-
-  interface LinkEntry {
-    label: string;
-    href: string;
-  }
-
-  let exerciseLinks: LinkEntry[] = [
-    { label: "Scales", href: "/" },
-    { label: "Chords", href: "/exercises/chords" },
-    { label: "Rhythm", href: "/exercises/rhythm" },
-  ];
-
-  let toolLinks: LinkEntry[] = [
-    { label: "Metronome", href: "/tools/metronome" },
-    { label: "Scales Explorer", href: "/tools/scalesexplorer" },
-    { label: "Tap BPM", href: "/tools/tapbpm" },
-    {
-      label: "Chord Progression Creator",
-      href: "/tools/chordprogressioncreator",
-    },
-  ];
 </script>
 
 <aside>
   <div class="wrapper">
     <a href="/" class="container__logo">
       <img src="/images/logo.svg" alt="Music App Logo" width="32" height="32" />
-      <h1 class="small">Music App</h1>
+      <h1 class="text-base">Music App</h1>
     </a>
     <nav aria-label="Main Navigation">
       <h3>Exercises</h3>

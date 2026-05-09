@@ -32,7 +32,7 @@
   select {
     padding: var(--space-8);
 
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-sm);
     color: var(--color-text);
     background-color: transparent;
     border-radius: var(--radius-8);

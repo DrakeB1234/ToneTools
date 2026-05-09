@@ -48,7 +48,7 @@
 
     color: var(--color-text);
     font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-sm);
     cursor: pointer;
     text-decoration: none;
     border: none;

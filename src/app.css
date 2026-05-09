@@ -78,6 +78,7 @@ svg {
   --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
   /* NAMING font-size-16 == 16px == 1rem */
+  --font-size-12: 0.625rem;
   --font-size-14: 0.875rem;
   --font-size-16: 1rem;
   --font-size-20: 1.25rem;
@@ -120,6 +121,14 @@ svg {
 
   --ease-in-sine: cubic-bezier(0.12, 0, 0.39, 0);
   --transition-color: background-color 0.2s var(--ease-in-sine);
+
+  /* font sizes */
+
+  --font-size-xsm: var(--font-size-12);
+  --font-size-sm: var(--font-size-14);
+  --font-size-base: var(--font-size-16);
+  --font-size-lg: var(--font-size-20);
+  --font-size-xlg: var(--font-size-24);
 
   /* app colors */
 
@@ -181,37 +190,39 @@ h3 {
 
 h1 {
   line-height: 1.2;
-  font-size: var(--font-size-24);
+  font-size: var(--font-size-xlg);
   font-weight: var(--font-weight-bold);
 }
 
 h2 {
   line-height: 1.2;
-  font-size: var(--font-size-20);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
 
 }
 
 h3 {
   line-height: 1.2;
-  font-size: var(--font-size-16);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
 
 }
 
-:is(h1, h2, h3).small {
-  font-size: var(--font-size-20);
+.text-large {
+  line-height: 1.2;
+  font-size: var(--font-size-lg);
 }
 
-:is(h1, h2, h3).xsmall {
-  font-size: var(--font-size-16);
+.text-base {
+  line-height: 1.5;
+  font-size: var(--font-size-base);
 }
 
 /* body */
 
 p {
   line-height: 1.5;
-  font-size: var(--font-size-16);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-regular);
   max-width: var(--text-box-width-med);
 }
@@ -223,7 +234,7 @@ p {
 
 p.caption {
   line-height: 1.4;
-  font-size: var(--font-size-14);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
 }
 
@@ -304,44 +315,5 @@ p.caption {
 @media (max-width: 600px) {
   :root {
     --app-padding: var(--space-16) var(--space-12);
-  }
-}
-
-@media (prefers-color-scheme:) {
-  :root {
-    --color-bg-app: var(--palette-slate-900);
-    --color-bg-surface: var(--palette-slate-800);
-    --color-bg-surface-dark: var(--palette-slate-700);
-
-    --color-bg-primary: var(--palette-primary-400);
-    --color-bg-primary-dark: var(--palette-primary-500);
-
-    --color-bg-accent-purple: var(--palette-accent-purple-300);
-    --color-bg-accent-violet: var(--palette-accent-violet-300);
-    --color-bg-accent-blue: var(--palette-accent-blue-300);
-    --color-bg-accent-green: var(--palette-accent-green-300);
-
-    --color-hover-surface: var(--palette-slate-600);
-    --color-hover-primary: var(--palette-primary-300);
-    --color-hover-primary-dark: var(--palette-primary-400);
-
-    --color-active-surface: var(--palette-slate-900);
-    --color-active-primary: var(--palette-primary-500);
-
-    --color-text: var(--palette-slate-100);
-    --color-text-muted: var(--palette-slate-500);
-    --color-text-inverse: var(--palette-white);
-    --color-text-inverse-muted: var(--palette-slate-300);
-    --color-text-primary: var(--palette-primary-300);
-
-    --color-border: var(--palette-slate-600);
-
-    --shadow-elevation-1:
-      rgba(0, 0, 0, 0.3) 0px 1px 3px,
-      rgba(0, 0, 0, 0.4) 0px 1px 2px;
-
-    --shadow-elevation-2:
-      rgba(0, 0, 0, 0.4) 0px 3px 6px,
-      rgba(0, 0, 0, 0.5) 0px 3px 6px;
   }
 }

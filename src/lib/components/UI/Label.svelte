@@ -6,7 +6,7 @@
 
 <style>
   label {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-sm);
     color: var(--color-text-muted);
   }
 </style>
