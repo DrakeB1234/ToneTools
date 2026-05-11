@@ -9,6 +9,8 @@
   import PianoRoll from "$lib/components/PianoRoll.svelte";
 
   const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
+  const scaleNotes = ["D", "E", "F#", "G", "A", "B", "C#"];
+  const pianoRollActiveNotes = ["D1", "E1", "F#1", "G1", "A1", "B1", "C#2"];
 
   const selectOptionsNote: Option[] = noteNames.map((e) => {
     return { label: e, value: e };
@@ -18,8 +20,6 @@
     { label: "Minor", value: "Minor" },
     { label: "Dorian", value: "Dorian" },
   ];
-
-  const pianoRollActiveNotes = ["C#1", "F1", "G#1"];
 
   const pianoClickCallBack = (note: string) => {
     console.log(note);
@@ -43,7 +43,7 @@
       <section class="card-base input-card">
         <div class="input-group">
           <Label text="Root" labelFor="root" />
-          <Select id="root" options={selectOptionsNote} value={"C"} />
+          <Select id="root" options={selectOptionsNote} value={"D"} />
         </div>
         <div class="input-group">
           <Label text="Scale" labelFor="scale" />
@@ -54,7 +54,7 @@
       <section class="card-base scale-card">
         <h3>Scale Notes</h3>
         <div class="scale-notes-container">
-          {#each noteNames as note (note)}
+          {#each scaleNotes as note (note)}
             <Button variant="outline">{note}</Button>
           {/each}
         </div>

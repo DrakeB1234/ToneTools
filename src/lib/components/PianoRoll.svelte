@@ -127,9 +127,7 @@
 
 <style>
   .piano-svg {
-    display: block;
     width: 100%;
-    height: auto;
   }
 
   .key {
@@ -152,6 +150,8 @@
   }
   .key.active {
     fill: var(--color-bg-primary);
+    stroke: var(--color-border-primary);
+    stroke-width: 2;
   }
   .key.active + text {
     fill: var(--color-text-inverse);
