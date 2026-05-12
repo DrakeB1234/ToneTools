@@ -7,22 +7,94 @@
   import Select from "$lib/components/UI/Select.svelte";
   import type { Option } from "$lib/components/UI/Select.svelte";
   import PianoRoll from "$lib/components/PianoRoll.svelte";
+  import {
+    getAllModes,
+    getEnharmonicNotesFromArray,
+    getNoteNamesCircleOfFifths,
+    getModeDiatonicTriads,
+    getScaleNotes,
+    type getModeDiatonicTriadsReturn,
+  } from "$lib/helpers/musicTheory";
 
-  const noteNames = ["C", "D", "E", "F", "G", "A", "B"];
-  const scaleNotes = ["D", "E", "F#", "G", "A", "B", "C#"];
-  const pianoRollActiveNotes = ["D1", "E1", "F#1", "G1", "A1", "B1", "C#2"];
+  const _getScaleNotes = (root: string, scaleType: string): string[] | null => {
+    const notes = getScaleNotes(root, scaleType);
 
-  const selectOptionsNote: Option[] = noteNames.map((e) => {
-    return { label: e, value: e };
-  });
-  const selectOptionsScales: Option[] = [
-    { label: "Major", value: "Major" },
-    { label: "Minor", value: "Minor" },
-    { label: "Dorian", value: "Dorian" },
-  ];
+    if (!notes) {
+      console.error(`Invalid scale provided: ${root}, ${scaleType}`);
+      return null;
+    }
+    return notes;
+  };
+
+  const _getScaleTriads = (
+    root: string,
+    scaleType: string,
+  ): getModeDiatonicTriadsReturn[] | null => {
+    const chords = getModeDiatonicTriads(root, scaleType);
+
+    if (!chords) {
+      console.error(`Invalid scale provided: ${root}, ${scaleType}`);
+      return null;
+    }
+
+    return chords;
+  };
+
+  const getPianoRollNotes = (
+    root: string,
+    scaleType: string,
+  ): string[] | null => {
+    const initialNotes = getScaleNotes(root, scaleType, 1);
+
+    if (!initialNotes) {
+      console.error(`Invalid scale provided: ${root}, ${scaleType}, ${1}`);
+      return null;
+    }
+
+    const enharmnoicNotes = getEnharmonicNotesFromArray(initialNotes, false);
+    return enharmnoicNotes;
+  };
+
+  const selectNoteOptions: Option[] = getNoteNamesCircleOfFifths(true);
+  const selectScaleOptions: Option[] = getAllModes();
+
+  let initialSelectNoteValue = selectNoteOptions[0] as string;
+  let initialSelectScaleValue = selectScaleOptions[0] as string;
+  let initialScaleNotes: string[] =
+    _getScaleNotes(initialSelectNoteValue, initialSelectScaleValue) ?? [];
+  let initialScaleTriads: getModeDiatonicTriadsReturn[] =
+    _getScaleTriads(initialSelectNoteValue, initialSelectScaleValue) ?? [];
+  let initialPianoRollNotes: string[] =
+    getPianoRollNotes(initialSelectNoteValue, initialSelectScaleValue) ?? [];
+
+  let selectNoteValue = $state(initialSelectNoteValue);
+  let selectScaleValue = $state(initialSelectScaleValue);
+
+  let currentScaleNotes: string[] = $state(initialScaleNotes);
+  let currentScaleTriads: getModeDiatonicTriadsReturn[] =
+    $state(initialScaleTriads);
+  let currentPianoRollNotes: string[] = $state(initialPianoRollNotes);
 
   const pianoClickCallBack = (note: string) => {
     console.log(note);
+  };
+
+  const handleInputChange = () => {
+    const notes = _getScaleNotes(selectNoteValue, selectScaleValue);
+    const pianoRollNotes = getPianoRollNotes(selectNoteValue, selectScaleValue);
+    const triads = _getScaleTriads(selectNoteValue, selectScaleValue);
+
+    if (notes === null || pianoRollNotes === null || triads === null) {
+      // Handle Error UI State
+
+      selectNoteValue = initialSelectNoteValue;
+      selectScaleValue = initialSelectScaleValue;
+      return;
+    }
+
+    currentScaleNotes = notes;
+    currentScaleTriads = triads;
+    currentPianoRollNotes = pianoRollNotes;
   };
 </script>
 
@@ -36,25 +108,35 @@
         </Button>
         <div class="text-container">
           <p class="caption muted">Tools</p>
-          <h1 class="text-base">Scale Explorer</h1>
+          <h1 class="header-base">Scale Explorer</h1>
         </div>
       </div>
 
       <section class="card-base input-card">
         <div class="input-group">
           <Label text="Root" labelFor="root" />
-          <Select id="root" options={selectOptionsNote} value={"D"} />
+          <Select
+            id="root"
+            options={selectNoteOptions}
+            bind:value={selectNoteValue}
+            onchange={handleInputChange}
+          />
         </div>
         <div class="input-group">
           <Label text="Scale" labelFor="scale" />
-          <Select id="scale" options={selectOptionsScales} value={"Major"} />
+          <Select
+            id="scale"
+            options={selectScaleOptions}
+            bind:value={selectScaleValue}
+            onchange={handleInputChange}
+          />
         </div>
       </section>
 
       <section class="card-base scale-card">
         <h3>Scale Notes</h3>
         <div class="scale-notes-container">
-          {#each scaleNotes as note (note)}
+          {#each currentScaleNotes as note (note)}
             <Button variant="outline">{note}</Button>
           {/each}
         </div>
@@ -66,7 +148,7 @@
         <div class="piano-roll-container">
           <PianoRoll
             octaves={2}
-            activeNotes={pianoRollActiveNotes}
+            activeNotes={currentPianoRollNotes}
             {pianoClickCallBack}
           />
         </div>
@@ -76,12 +158,12 @@
         <h3>Diatonic Chords</h3>
 
         <div class="chords-container">
-          <div class="inner-card-base clickable">
-            <p>Cmaj</p>
-          </div>
-          <div class="inner-card-base clickable">
-            <p>Dmin</p>
-          </div>
+          {#each currentScaleTriads as triadObj (triadObj.chordName)}
+            <div class="inner-card-base clickable">
+              <p>{triadObj.chordName}</p>
+              <p>{triadObj.notes}</p>
+            </div>
+          {/each}
         </div>
       </section>
     </main>

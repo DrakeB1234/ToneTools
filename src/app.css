@@ -86,7 +86,7 @@ svg {
 
   --font-weight-light: 400;
   --font-weight-regular: 500;
-  --font-weight-bold: 700;
+  --font-weight-bold: 600;
 
   --text-box-width-small: 40ch;
   --text-box-width-med: 50ch;
@@ -208,14 +208,20 @@ h3 {
 
 }
 
-.text-large {
+.header-large {
   line-height: 1.2;
   font-size: var(--font-size-lg);
 }
 
-.text-base {
+.header-base {
   line-height: 1.5;
   font-size: var(--font-size-base);
+}
+
+.header-regular {
+  line-height: 1.5;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
 }
 
 /* body */

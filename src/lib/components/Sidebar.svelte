@@ -8,7 +8,7 @@
   <div class="wrapper">
     <a href="/" class="container__logo">
       <img src="/images/logo.svg" alt="Music App Logo" width="32" height="32" />
-      <h1 class="text-base">Music App</h1>
+      <h1 class="header-base">Music App</h1>
     </a>
     <nav aria-label="Main Navigation">
       <h3>Exercises</h3>

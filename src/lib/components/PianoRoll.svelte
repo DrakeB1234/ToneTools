@@ -1,11 +1,13 @@
 <script lang="ts">
+  import { getEnharmonicNote } from "$lib/helpers/musicTheory";
+
   let {
     octaves = 1,
-    activeNotes,
+    activeNotes = [],
     showNoteNames = true,
     pianoClickCallBack,
   }: {
-    octaves: number;
+    octaves?: number;
     activeNotes?: string[];
     showNoteNames?: boolean;
     pianoClickCallBack?: (note: string) => void;
@@ -19,6 +21,7 @@
   const whiteNoteNameYPos = whiteHeight - 10;
   const whiteNoteNameXOffset = whiteWidth / 3;
   const blackNoteNameYPos = 24;
+  const blackNoteEnharmonicNoteNameYPos = blackNoteNameYPos + 22;
   const blackNoteNameXOffset = blackWidth / 6;
 
   const baseOctave = [
@@ -38,28 +41,28 @@
 
   let keys = $derived(
     Array.from({ length: octaves }).flatMap((_, i) =>
-      baseOctave.map((k) => {
-        const globalWIdx = i * 7 + k.wIdx;
+      baseOctave.map((e) => {
+        const globalWIdx = i * 7 + e.wIdx;
 
-        const x =
-          k.type === "white"
+        const xPos =
+          e.type === "white"
             ? globalWIdx * whiteWidth
             : globalWIdx * whiteWidth + whiteWidth - blackWidth / 2;
 
         return {
-          ...k,
-          note: k.note,
+          ...e,
+          note: e.note,
           octave: i + 1,
-          x,
-          width: k.type === "white" ? whiteWidth : blackWidth,
-          height: k.type === "white" ? whiteHeight : blackHeight,
+          xPos,
+          width: e.type === "white" ? whiteWidth : blackWidth,
+          height: e.type === "white" ? whiteHeight : blackHeight,
         };
       }),
     ),
   );
 
-  let whiteKeys = $derived(keys.filter((k) => k.type === "white"));
-  let blackKeys = $derived(keys.filter((k) => k.type === "black"));
+  let whiteKeys = $derived(keys.filter((e) => e.type === "white"));
+  let blackKeys = $derived(keys.filter((e) => e.type === "black"));
 
   let viewBoxWidth = $derived(octaves * 7 * whiteWidth);
 
@@ -85,7 +88,7 @@
       <rect
         class="key white"
         class:active={activeNotes?.includes(key.note + key.octave)}
-        x={key.x}
+        x={key.xPos}
         y="0"
         width={key.width}
         height={key.height}
@@ -97,7 +100,7 @@
         class="note-text white"
         class:hide={!showNoteNames}
         y={whiteNoteNameYPos}
-        x={key.x + whiteNoteNameXOffset}>{key.note}</text
+        x={key.xPos + whiteNoteNameXOffset}>{key.note}</text
       >
     {/each}
   </g>
@@ -107,7 +110,7 @@
       <rect
         class="key black"
         class:active={activeNotes?.includes(key.note + key.octave)}
-        x={key.x}
+        x={key.xPos}
         y="0"
         width={key.width}
         height={key.height}
@@ -119,7 +122,13 @@
         class="note-text black"
         class:hide={!showNoteNames}
         y={blackNoteNameYPos}
-        x={key.x + blackNoteNameXOffset}>{key.note}</text
+        x={key.xPos + blackNoteNameXOffset}>{key.note}</text
+      >
+      <text
+        class="note-text black"
+        class:hide={!showNoteNames}
+        y={blackNoteEnharmonicNoteNameYPos}
+        x={key.xPos + blackNoteNameXOffset}>{getEnharmonicNote(key.note)}</text
       >
     {/each}
   </g>
@@ -128,6 +137,7 @@
 <style>
   .piano-svg {
     width: 100%;
+    padding: 1px;
   }
 
   .key {

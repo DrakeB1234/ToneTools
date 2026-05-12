@@ -21,6 +21,9 @@
 		"vite": "^8.0.7"
 	},
 	"overrides": {
-		"cookie": "<0.7.0"
+		"cookie": "^0.7.0"
+	},
+	"dependencies": {
+		"tonal": "^6.4.3"
 	}
 }
