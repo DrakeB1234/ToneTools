@@ -1,4 +1,4 @@
-import { Chord, Mode, Note, Scale } from "tonal";
+import { Chord, Midi, Mode, Note, Scale } from "tonal";
 import { modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
 
 function isNoteNameValid(note: string): boolean {
@@ -66,13 +66,16 @@ export function getModeDiatonicTriads(root: string, scaleType: string): getModeD
 
   const result: getModeDiatonicTriadsReturn[] = triads.map((e, index) => {
     const chordObj = Chord.get(e);
-    const chordName = chordObj.tonic + convertChordQualityIntoName(chordObj.quality);
+    const chordName = simplifyNoteAccidental(chordObj.tonic ?? "") + convertChordQualityIntoName(chordObj.quality);
+    const simplifiedNotes = chordObj.notes.map(e => {
+      return simplifyNoteAccidental(e) ?? "";
+    });
 
     return {
       chordName: chordName,
-      notes: chordObj.notes,
+      notes: simplifiedNotes,
       numeral: romanNumerals[index],
-      quality: chordObj.quality
+      quality: chordObj.quality,
     }
   });
 
@@ -116,4 +119,23 @@ export function getEnharmonicNotesFromArray(notes: string[], preferFlat: boolean
       return e.includes("b") ? Note.enharmonic(e) : e;
     }
   })
+}
+
+// Converts ex: 'Bbb' => 'A'
+export function simplifyNoteAccidental(note: string): string | null {
+  const simplifiedNote = Note.simplify(note);
+
+  if (simplifiedNote.length < 1) return null;
+  return simplifiedNote;
+}
+
+export function getChordNotes(chordName: string, tonic: string): string[] {
+  return Chord.notes(chordName, tonic);
+}
+
+export function noteToAbsoluteSemitone(note: string): number | null {
+  const rawValue = Midi.toMidi(note);
+
+  if (!rawValue) return null
+  return rawValue - 12;
 }

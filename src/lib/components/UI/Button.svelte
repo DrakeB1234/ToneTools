@@ -4,7 +4,7 @@
   import type { Snippet } from "svelte";
 
   interface Props {
-    variant?: "primary" | "surface" | "outline" | "text";
+    variant?: "primary" | "surface" | "surface-dark" | "outline" | "text";
     element?: "a" | "button";
     size?: "small" | "medium" | "large" | "icon";
     class?: string;
@@ -78,6 +78,16 @@
   .surface {
     background-color: var(--color-bg-surface);
     box-shadow: var(--shadow-elevation-1);
+  }
+
+  .surface-dark {
+    background-color: var(--color-bg-surface-dark);
+  }
+  .surface-dark:hover {
+    background-color: var(--color-hover-surface);
+  }
+  .surface-dark:active {
+    background-color: var(--color-active-surface);
   }
 
   .outline {

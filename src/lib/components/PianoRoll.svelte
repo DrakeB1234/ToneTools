@@ -2,11 +2,13 @@
   import { getEnharmonicNote } from "$lib/helpers/musicTheory";
 
   let {
-    octaves = 1,
+    visibleOctaves = 1,
+    startingOctave = 4,
     activeNotes = [],
     showNoteNames = true,
   }: {
-    octaves?: number;
+    visibleOctaves: number;
+    startingOctave: number;
     activeNotes?: string[];
     showNoteNames?: boolean;
   } = $props();
@@ -38,7 +40,7 @@
   ];
 
   let keys = $derived(
-    Array.from({ length: octaves }).flatMap((_, i) =>
+    Array.from({ length: visibleOctaves }).flatMap((_, i) =>
       baseOctave.map((e) => {
         const globalWIdx = i * 7 + e.wIdx;
 
@@ -50,7 +52,7 @@
         return {
           ...e,
           note: e.note,
-          octave: i + 1,
+          octave: startingOctave + i,
           xPos,
           width: e.type === "white" ? whiteWidth : blackWidth,
           height: e.type === "white" ? whiteHeight : blackHeight,
@@ -62,21 +64,13 @@
   let whiteKeys = $derived(keys.filter((e) => e.type === "white"));
   let blackKeys = $derived(keys.filter((e) => e.type === "black"));
 
-  let viewBoxWidth = $derived(octaves * 7 * whiteWidth);
-
-  // function handlePianoClick(e: PointerEvent) {
-  //   const target = e.target as SVGElement;
-  //   const note = target.dataset.note;
-
-  //   if (!note) return;
-  // }
+  let viewBoxWidth = $derived(visibleOctaves * 7 * whiteWidth);
 </script>
 
 <svg
   class="piano-svg"
   viewBox="0 0 {viewBoxWidth} {whiteHeight}"
   preserveAspectRatio="xMidYMid meet"
-  // onpointerdown={handlePianoClick}
   role="img"
   aria-label="Piano Roll"
 >
@@ -138,24 +132,14 @@
     border-radius: var(--radius-8);
   }
 
-  .key {
-    /* cursor: pointer; */
-    /* transition: fill 0.15s ease; */
-  }
   .key.white {
     fill: var(--color-bg-surface, #ffffff);
     stroke: var(--color-border, #ccc);
     stroke-width: 1px;
   }
-  /* .key.white:hover {
-    fill: var(--color-hover-surface, #f0f0f0);
-  } */
   .key.black {
     fill: var(--palette-black, #111111);
   }
-  /* .key.black:hover {
-    fill: #333333;
-  } */
   .key.active {
     fill: var(--color-bg-primary);
     stroke: var(--color-border-primary);
@@ -164,9 +148,6 @@
   .key.active + text {
     fill: var(--color-text-inverse);
   }
-  /* .key.active:hover {
-    fill: var(--color-hover-primary);
-  } */
 
   .note-text {
     pointer-events: none;

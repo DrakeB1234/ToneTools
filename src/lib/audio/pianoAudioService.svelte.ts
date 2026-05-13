@@ -1,0 +1,145 @@
+import { noteToAbsoluteSemitone } from '$lib/helpers/musicTheory';
+import { Howl, Howler } from 'howler';
+import { Note } from 'tonal'; // Make sure to import this!
+
+const SPRITE_MAP_ANCHOR_POINTS = [
+  { name: 'C1', val: 12 },
+  { name: 'G1', val: 19 },
+  { name: 'C2', val: 24 },
+  { name: 'G2', val: 31 },
+  { name: 'C3', val: 36 },
+  { name: 'G3', val: 43 },
+  { name: 'C4', val: 48 },
+  { name: 'G4', val: 55 },
+  { name: 'C5', val: 60 },
+  { name: 'G5', val: 67 },
+  { name: 'C6', val: 72 },
+  { name: 'G6', val: 79 },
+  { name: 'C7', val: 84 },
+  { name: 'G7', val: 91 },
+  { name: 'C8', val: 96 }
+];
+
+const SPRITE_MAP: Record<string, [number, number]> = {
+  C1: [0, 3000], G1: [3000, 3000],
+  C2: [6000, 3000], G2: [9000, 3000],
+  C3: [12000, 3000], G3: [15000, 3000],
+  C4: [18000, 3000], G4: [21000, 3000],
+  C5: [24000, 3000], G5: [27000, 3000],
+  C6: [30000, 3000], G6: [33000, 3000],
+  C7: [36000, 3000], G7: [39000, 3000],
+  C8: [42000, 3000],
+};
+
+export const MIN_OCTAVE = 0;
+export const MAX_OCTAVE = 8;
+const MIN_PLAYABLE_SEMITONE = 9;
+const MAX_PLAYABLE_SEMITONE = 96;
+
+class PianoAudioService {
+  private sound: Howl | null = null;
+  private isReady = $state(false);
+  private isLoading = $state(false);
+  private isMuted = $state(false);
+
+  error = $state<string | null>(null);
+
+  async init() {
+    if (this.sound || this.isLoading) return;
+
+    this.isLoading = true;
+
+    return new Promise<void>((resolve, reject) => {
+      this.sound = new Howl({
+        src: ['/audio/PianoSprite.mp3'],
+        sprite: SPRITE_MAP,
+        onload: () => {
+          this.isReady = true;
+          this.isLoading = false;
+          resolve();
+        },
+        onloaderror: (id, err) => {
+          this.isLoading = false;
+          this.error = "Failed to load audio.";
+          console.error("Audio Load Error", err);
+          reject(err);
+        }
+      });
+    });
+  }
+
+  private calculateStrategy(noteName: string) {
+    const targetSemitone = noteToAbsoluteSemitone(noteName);
+    if (targetSemitone === null) return;
+
+    const bestAnchor = SPRITE_MAP_ANCHOR_POINTS.reduce((prev, curr) => {
+      return (Math.abs(curr.val - targetSemitone) < Math.abs(prev.val - targetSemitone)
+        ? curr
+        : prev);
+    });
+
+    const semitoneShift = targetSemitone - bestAnchor.val;
+
+    return {
+      sampleName: bestAnchor.name,
+      semitoneShift
+    };
+  }
+
+  // Changed parameter from an object to a standard string (e.g., "C4")
+  playNote(noteName: string) {
+    if (!this.isReady || !this.sound) {
+      console.warn("Audio requested, but pianoAudioService was never initialized.");
+      return;
+    }
+
+    // Tonal's get() safely parses the string without crashing if it's invalid
+    const parsedNote = Note.get(noteName);
+
+    if (parsedNote.empty) {
+      console.warn(`Invalid note provided: '${noteName}'`);
+      return;
+    }
+
+    if (parsedNote.oct === undefined || parsedNote.oct < MIN_OCTAVE || parsedNote.oct > MAX_OCTAVE) {
+      console.warn(`Invalid octave for note: '${noteName}'`);
+      return;
+    }
+
+    let noteMidi = parsedNote.midi;
+    if (noteMidi === null) return;
+
+    noteMidi = Math.min(Math.max(noteMidi, MIN_PLAYABLE_SEMITONE), MAX_PLAYABLE_SEMITONE);
+
+    const fixedNote = Note.fromMidi(noteMidi);
+
+    const strategy = this.calculateStrategy(fixedNote);
+    if (!strategy) return;
+
+    const soundId = this.sound.play(strategy.sampleName);
+
+    const rate = Math.pow(2, strategy.semitoneShift / 12);
+    this.sound.rate(rate, soundId);
+    this.sound.volume(1.0, soundId);
+  }
+
+  playChord(notes: string[]) {
+    if (!this.isReady || !this.sound) return;
+
+    notes.forEach(note => {
+      this.playNote(note);
+    });
+  }
+
+  muteSounds = () => {
+    Howler.mute(true);
+    this.isMuted = true;
+  }
+
+  unMuteSounds = () => {
+    Howler.mute(false);
+    this.isMuted = false;
+  }
+}
+
+export const pianoAudioService = new PianoAudioService();
