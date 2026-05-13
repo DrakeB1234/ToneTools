@@ -57,16 +57,16 @@ export const toolsData: DataEntry[] = [
     icon: CircleOfFifths
   },
   {
-    name: "Chord Finder",
+    name: "Chord Dictionary",
     description: "Search any chord and play them in app, or lookup how to play it on your instrument.",
     href: "/tools",
     color: "blue",
     icon: CircleOfFifths
   },
   {
-    name: "Scales Explorer",
+    name: "Scales Library",
     description: "Find the notes and diatonic chords in any scale.",
-    href: "/tools/scales-explorer",
+    href: "/tools/scales-library",
     color: "green",
     icon: CircleOfFifths
   },

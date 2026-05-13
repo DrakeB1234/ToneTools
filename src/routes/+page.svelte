@@ -9,51 +9,44 @@
   const lastUsedItems = [exercisesData[0], exercisesData[1], toolsData[0]];
 </script>
 
-<div class="page">
-  <Sidebar />
-  <Wrapper>
-    <main>
-      <HeroCard />
+<Wrapper>
+  <main>
+    <HeroCard />
 
-      <div class="section">
-        <h3>Last Used</h3>
+    <div class="section">
+      <h3>Last Used</h3>
 
-        <div class="cards-container">
-          {#each lastUsedItems as item}
-            <LastUsedCard
-              title={item.name}
-              description={item.description}
-              color={item.color}
-              icon={item.icon}
-            />
-          {/each}
-        </div>
+      <div class="cards-container">
+        {#each lastUsedItems as item}
+          <LastUsedCard
+            title={item.name}
+            description={item.description}
+            color={item.color}
+            icon={item.icon}
+          />
+        {/each}
       </div>
+    </div>
 
-      <div class="section">
-        <h3>Tools</h3>
+    <div class="section">
+      <h3>Tools</h3>
 
-        <div class="cards-grid">
-          {#each toolsData as item}
-            <ToolCard
-              title={item.name}
-              description={item.description}
-              href={item.href}
-              color={item.color}
-              icon={item.icon}
-            />
-          {/each}
-        </div>
+      <div class="cards-grid">
+        {#each toolsData as item}
+          <ToolCard
+            title={item.name}
+            description={item.description}
+            href={item.href}
+            color={item.color}
+            icon={item.icon}
+          />
+        {/each}
       </div>
-    </main>
-  </Wrapper>
-</div>
+    </div>
+  </main>
+</Wrapper>
 
 <style>
-  .page {
-    display: flex;
-  }
-
   main {
     width: 100%;
     padding: var(--app-padding);

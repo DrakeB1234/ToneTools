@@ -1,13 +1,46 @@
 import { Chord, Mode, Note, Scale } from "tonal";
-
-const naturalNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
+import { modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
 
 function isNoteNameValid(note: string): boolean {
   const noteObj = Note.get(note);
-  console.log(noteObj);
 
   return false;
 }
+
+function convertChordQualityIntoName(quality: string): string {
+  switch (quality) {
+    case "Major":
+      return "maj"
+    case "Minor":
+      return "min"
+    case "Diminished":
+      return "dim"
+    default:
+      return "maj"
+  };
+}
+
+export function getNumeralsFromMode(scaleType: string): string[] | null {
+  try {
+    const romanNumerals = modeNumeralMap[scaleType];
+
+    return romanNumerals;
+  }
+  catch {
+    return null;
+  }
+};
+
+export function getFormulaFromMode(scaleType: string): string[] | null {
+  try {
+    const formula = modeFormulaMap[scaleType];
+
+    return formula;
+  }
+  catch {
+    return null;
+  }
+};
 
 export function getScaleNotes(root: String, scaleType: string, startingOctave?: number): string[] | null {
   const rootNote = root + (startingOctave ? startingOctave.toString() : "");
@@ -22,20 +55,24 @@ export function getScaleNotes(root: String, scaleType: string, startingOctave?: 
 export type getModeDiatonicTriadsReturn = {
   chordName: string;
   notes: string[];
+  numeral: string;
+  quality: string;
 };
 export function getModeDiatonicTriads(root: string, scaleType: string): getModeDiatonicTriadsReturn[] | null {
   const triads = Mode.triads(scaleType, root);
+  const romanNumerals = getNumeralsFromMode(scaleType);
 
-  console.log(triads)
+  if (triads.length < 1 || !romanNumerals) return null;
 
-  if (triads.length < 1) return null;
-
-  const result: getModeDiatonicTriadsReturn[] = triads.map(e => {
+  const result: getModeDiatonicTriadsReturn[] = triads.map((e, index) => {
     const chordObj = Chord.get(e);
+    const chordName = chordObj.tonic + convertChordQualityIntoName(chordObj.quality);
 
     return {
-      chordName: chordObj.name,
-      notes: chordObj.notes
+      chordName: chordName,
+      notes: chordObj.notes,
+      numeral: romanNumerals[index],
+      quality: chordObj.quality
     }
   });
 

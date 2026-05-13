@@ -1,0 +1,31 @@
+export const naturalNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
+
+export const modeNumeralMap: Record<string, string[]> = {
+  "major": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],
+  "ionian": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],
+  "dorian": ["i", "ii", "III", "IV", "v", "vi°", "VII"],
+  "phrygian": ["i", "II", "III", "iv", "v°", "VI", "vii"],
+  "lydian": ["I", "II", "iii", "iv°", "V", "vi", "vii"],
+  "mixolydian": ["I", "ii", "iii°", "IV", "v", "vi", "VII"],
+  "minor": ["i", "ii°", "III", "iv", "v", "VI", "VII"],
+  "aeolian": ["i", "ii°", "III", "iv", "v", "VI", "VII"],
+  "locrian": ["i°", "II", "iii", "iv", "V", "VI", "vii"],
+
+  "harmonic minor": ["i", "ii°", "III+", "iv", "V", "VI", "vii°"],
+  "melodic minor": ["i", "ii", "III+", "IV", "V", "vi°", "vii°"],
+};
+
+export const modeFormulaMap: Record<string, string[]> = {
+  "major": ["1", "2", "3", "4", "5", "6", "7"],
+  "ionian": ["1", "2", "3", "4", "5", "6", "7"],
+  "dorian": ["1", "2", "b3", "4", "5", "6", "7"],
+  "phrygian": ["1", "b2", "b3", "4", "5", "b6", "b7"],
+  "lydian": ["1", "2", "3", "#4", "5", "6", "7"],
+  "mixolydian": ["1", "2", "3", "4", "5", "6", "b7"],
+  "minor": ["1", "2", "b3", "4", "5", "b6", "b7"],
+  "aeolian": ["1", "2", "b3", "4", "5", "b6", "b7"],
+  "locrian": ["1", "b2", "b3", "4", "5", "6", "7"],
+
+  "harmonic minor": ["1", "2", "b3", "4", "5", "b6", "7"],
+  "melodic minor": ["1", "2", "b3", "4", "5", "6", "7"],
+};

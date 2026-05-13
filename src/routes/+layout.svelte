@@ -1,6 +1,7 @@
 <script lang="ts">
 	import "../app.css";
 	import favicon from "$lib/assets/favicon.svg";
+	import Sidebar from "$lib/components/Sidebar.svelte";
 
 	let { children } = $props();
 </script>
@@ -9,4 +10,13 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-{@render children()}
+<div class="page">
+	<Sidebar />
+	{@render children()}
+</div>
+
+<style>
+	.page {
+		display: flex;
+	}
+</style>

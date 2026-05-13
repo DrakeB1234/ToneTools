@@ -5,12 +5,10 @@
     octaves = 1,
     activeNotes = [],
     showNoteNames = true,
-    pianoClickCallBack,
   }: {
     octaves?: number;
     activeNotes?: string[];
     showNoteNames?: boolean;
-    pianoClickCallBack?: (note: string) => void;
   } = $props();
 
   const whiteWidth = 44;
@@ -66,20 +64,19 @@
 
   let viewBoxWidth = $derived(octaves * 7 * whiteWidth);
 
-  function handlePianoClick(e: PointerEvent) {
-    const target = e.target as SVGElement;
-    const note = target.dataset.note;
+  // function handlePianoClick(e: PointerEvent) {
+  //   const target = e.target as SVGElement;
+  //   const note = target.dataset.note;
 
-    if (!note) return;
-    if (pianoClickCallBack) pianoClickCallBack(note);
-  }
+  //   if (!note) return;
+  // }
 </script>
 
 <svg
   class="piano-svg"
   viewBox="0 0 {viewBoxWidth} {whiteHeight}"
   preserveAspectRatio="xMidYMid meet"
-  onpointerdown={handlePianoClick}
+  // onpointerdown={handlePianoClick}
   role="img"
   aria-label="Piano Roll"
 >
@@ -137,27 +134,28 @@
 <style>
   .piano-svg {
     width: 100%;
-    padding: 1px;
+    border: 1px solid var(--color-border, #ccc);
+    border-radius: var(--radius-8);
   }
 
   .key {
-    cursor: pointer;
-    transition: fill 0.15s ease;
+    /* cursor: pointer; */
+    /* transition: fill 0.15s ease; */
   }
   .key.white {
     fill: var(--color-bg-surface, #ffffff);
     stroke: var(--color-border, #ccc);
     stroke-width: 1px;
   }
-  .key.white:hover {
+  /* .key.white:hover {
     fill: var(--color-hover-surface, #f0f0f0);
-  }
+  } */
   .key.black {
     fill: var(--palette-black, #111111);
   }
-  .key.black:hover {
+  /* .key.black:hover {
     fill: #333333;
-  }
+  } */
   .key.active {
     fill: var(--color-bg-primary);
     stroke: var(--color-border-primary);
@@ -166,9 +164,9 @@
   .key.active + text {
     fill: var(--color-text-inverse);
   }
-  .key.active:hover {
+  /* .key.active:hover {
     fill: var(--color-hover-primary);
-  }
+  } */
 
   .note-text {
     pointer-events: none;

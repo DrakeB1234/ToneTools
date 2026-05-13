@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 /* ==== CSS RESET ==== */
 /* https://piccalil.li/blog/a-modern-css-reset */
 
@@ -58,7 +60,7 @@ svg {
   --palette-primary-400: #1488E6;
   --palette-primary-500: #0D5DC6;
 
-  --palette-accent-blue-100: #E1ECFD;
+  --palette-accent-blue-100: #e1ebfa;
   --palette-accent-blue-200: #3B82F6;
   --palette-accent-blue-300: #005BF0;
 
@@ -84,8 +86,8 @@ svg {
   --font-size-20: 1.25rem;
   --font-size-24: 1.5rem;
 
-  --font-weight-light: 400;
-  --font-weight-regular: 500;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
   --font-weight-bold: 600;
 
   --text-box-width-small: 40ch;
@@ -137,10 +139,14 @@ svg {
   --color-bg-surface-dark: var(--palette-slate-200);
   --color-bg-primary: var(--palette-primary-300);
   --color-bg-primary-dark: var(--palette-primary-400);
+
   --color-bg-accent-purple: var(--palette-accent-purple-200);
+  --color-bg-accent-purple-light: var(--palette-accent-purple-100);
   --color-bg-accent-violet: var(--palette-accent-violet-200);
   --color-bg-accent-blue: var(--palette-accent-blue-200);
+  --color-bg-accent-blue-light: var(--palette-accent-blue-100);
   --color-bg-accent-green: var(--palette-accent-green-200);
+  --color-bg-accent-green-light: var(--palette-accent-green-100);
 
   --color-hover-surface: var(--palette-slate-300);
   --color-hover-primary: var(--palette-primary-200);
@@ -154,6 +160,10 @@ svg {
   --color-text-inverse: var(--palette-white);
   --color-text-inverse-muted: var(--palette-slate-400);
   --color-text-primary: var(--palette-primary-500);
+
+  --color-text-accent-blue: var(--palette-accent-blue-300);
+  --color-text-accent-purple: var(--palette-accent-purple-300);
+  --color-text-accent-green: var(--palette-accent-green-300);
 
   --color-border: var(--palette-slate-500);
   --color-border-light: var(--palette-slate-400);
@@ -202,7 +212,7 @@ h2 {
 }
 
 h3 {
-  line-height: 1.2;
+  line-height: 1.5;
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
 
@@ -226,7 +236,8 @@ h3 {
 
 /* body */
 
-p {
+p,
+span {
   line-height: 1.5;
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-regular);
@@ -238,7 +249,8 @@ p {
   color: var(--color-text-muted);
 }
 
-p.caption {
+p.caption,
+span.caption {
   line-height: 1.4;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);

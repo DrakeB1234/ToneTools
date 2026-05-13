@@ -85,6 +85,9 @@
     background-color: transparent;
   }
 
+  .text {
+    background-color: transparent;
+  }
   .text.active {
     background-color: var(--color-bg-primary);
     color: var(--color-text-inverse);
