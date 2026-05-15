@@ -8,178 +8,152 @@
   import PianoRoll from "$lib/components/PianoRoll.svelte";
   import {
     getAllModes,
-    getEnharmonicNotesFromArray,
     getNoteNamesCircleOfFifths,
     getModeDiatonicTriads,
     getScaleNotes,
-    type getModeDiatonicTriadsReturn,
     getNumeralsFromMode,
     getFormulaFromMode,
-    getChordNotes,
-    simplifyNoteAccidental,
+    getEnharmonicNote,
   } from "$lib/helpers/musicTheory";
   import { onMount } from "svelte";
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
+  import type {
+    GeneralChord,
+    GeneralNote,
+  } from "$lib/helpers/musicTheoryTypes";
 
-  const _getScaleNotes = (root: string, scaleType: string): string[] | null => {
-    const notes = getScaleNotes(root, scaleType);
-
-    if (!notes) {
-      console.error(`Invalid scale provided: ${root}, ${scaleType}`);
-      return null;
-    }
-
-    const simplifiedNotes = notes.map((e) => {
-      return simplifyNoteAccidental(e) ?? "";
-    });
-
-    return simplifiedNotes;
-  };
-
-  const _getScaleTriads = (
-    root: string,
-    scaleType: string,
-  ): getModeDiatonicTriadsReturn[] | null => {
-    const chords = getModeDiatonicTriads(root, scaleType);
-
-    if (!chords) {
-      console.error(`Invalid scale provided: ${root}, ${scaleType}`);
-      return null;
-    }
-
-    return chords;
-  };
-
-  const getOctaveNotes = (root: string, scaleType: string): string[] | null => {
-    const initialNotes = getScaleNotes(root, scaleType, startingOctave);
-
-    if (!initialNotes) {
-      console.error(
-        `Invalid scale provided: ${root}, ${scaleType}, ${startingOctave}`,
-      );
-      return null;
-    }
-
-    const enharmnoicNotes = getEnharmonicNotesFromArray(initialNotes, false);
-
-    return enharmnoicNotes;
-  };
+  // Page Specific Types
 
   interface uiState {
     selectNoteValue: string;
     selectScaleValue: string;
 
-    scaleNotes: string[];
-    scaleTriads: getModeDiatonicTriadsReturn[];
+    scaleNotes: GeneralNote[];
+    scaleTriads: GeneralChord[];
     scaleNumerals: string[];
     scaleFormula: string[];
-    octaveNotes: string[];
+
+    pianoRollNotes: string[];
   }
 
-  const startingOctave = 4;
+  // Constants
 
   const selectNoteOptions: Option[] = getNoteNamesCircleOfFifths(true);
   const selectScaleOptions: Option[] = getAllModes();
-
   const initialSelectNoteValue = selectNoteOptions[0] as string;
   const initialSelectScaleValue = selectScaleOptions[0] as string;
-
+  const startingOctave = 4;
   const playScaleDelayMs: number = 500;
-  let playScaleInterval: ReturnType<typeof setInterval> | null = null;
-  let currentPlayedScaleIdx: number | null = $state(null);
+
+  // State
 
   let uiState: uiState = $state({
     selectNoteValue: initialSelectNoteValue,
     selectScaleValue: initialSelectScaleValue,
 
-    scaleNotes:
-      _getScaleNotes(initialSelectNoteValue, initialSelectScaleValue) ?? [],
-    scaleTriads:
-      _getScaleTriads(initialSelectNoteValue, initialSelectScaleValue) ?? [],
-    scaleNumerals: getNumeralsFromMode(initialSelectScaleValue) ?? [],
-    scaleFormula: getFormulaFromMode(initialSelectScaleValue) ?? [],
-    octaveNotes:
-      getOctaveNotes(initialSelectNoteValue, initialSelectScaleValue) ?? [],
+    scaleNotes: [],
+    scaleTriads: [],
+    scaleNumerals: [],
+    scaleFormula: [],
+    pianoRollNotes: [],
   });
+  let currentPlayedScaleIdx: number | null = $state(null);
+  let playScaleInterval: ReturnType<typeof setInterval> | null = null;
+
+  // Input Handlers
 
   const handleInputChange = () => {
-    const notes = _getScaleNotes(
+    if (!uiState.selectNoteValue || !uiState.selectScaleValue) return;
+
+    setScaleData();
+  };
+
+  // Methods for getting notes / data for page
+
+  function setScaleData() {
+    const notes = getScaleNotes(
       uiState.selectNoteValue,
       uiState.selectScaleValue,
+      startingOctave,
     );
-    const pianoRollNotes = getOctaveNotes(
+    const triads = getModeDiatonicTriads(
       uiState.selectNoteValue,
       uiState.selectScaleValue,
-    );
-    const triads = _getScaleTriads(
-      uiState.selectNoteValue,
-      uiState.selectScaleValue,
+      startingOctave,
     );
     const numerals = getNumeralsFromMode(uiState.selectScaleValue);
     const formula = getFormulaFromMode(uiState.selectScaleValue);
 
-    if (!notes || !pianoRollNotes || !triads || !numerals || !formula) {
+    if (!notes || !triads || !numerals || !formula) {
       // Handle Error UI State
-
       uiState.selectNoteValue = initialSelectNoteValue;
       uiState.selectScaleValue = initialSelectScaleValue;
       return;
     }
 
+    const pianoRollNotes = notes.map((e) => {
+      return getEnharmonicNote(e.tonalJsName);
+    });
+
     uiState = {
       ...uiState,
       scaleNotes: notes,
-      octaveNotes: pianoRollNotes,
       scaleTriads: triads,
       scaleNumerals: numerals,
       scaleFormula: formula,
+      pianoRollNotes: pianoRollNotes,
     };
-  };
 
-  function handlePlayNote(note: string) {
-    pianoAudioService.playNote(note);
+    resetPlayScaleInterval();
   }
 
-  // Uses the octave notes already stored in the uiState obj for tonal.js to determine the correct octaved notes to
-  // play in a chord. The triadIndex corresponds to the 'tonic' of the chord, which with combined the octave on that tonic
-  // will play a chord with the correct 'ascending' notes in the diatonic chords
+  // Audio player handlers
+
+  function handlePlayNote(index: number) {
+    const note = uiState.scaleNotes[index];
+
+    pianoAudioService.playNote(note, "med");
+  }
+
   function handlePlayChord(triadIndex: number) {
     const triad = uiState.scaleTriads[triadIndex];
-    const startingOctavedNote = uiState.octaveNotes[triadIndex];
 
-    if (!triad || !startingOctavedNote) return;
+    if (!triad) return;
 
-    const octaveNotes = getChordNotes(triad.chordName, startingOctavedNote);
-
-    pianoAudioService.playChord(octaveNotes);
+    pianoAudioService.playChord(triad.notes, "med");
   }
 
-  function handlePlayScale() {
+  // Play Scale Interval - Play all notes in scale
+
+  function resetPlayScaleInterval() {
     if (playScaleInterval) {
       clearInterval(playScaleInterval);
       playScaleInterval = null;
       currentPlayedScaleIdx = null;
     }
+  }
 
-    currentPlayedScaleIdx = 0;
+  function handlePlayScale() {
+    resetPlayScaleInterval();
 
     playScaleInterval = setInterval(() => {
-      if (
-        currentPlayedScaleIdx === null ||
-        currentPlayedScaleIdx >= uiState.octaveNotes.length
-      ) {
-        clearInterval(playScaleInterval!);
-        playScaleInterval = null;
-        currentPlayedScaleIdx = null;
-        return;
+      if (currentPlayedScaleIdx === null) currentPlayedScaleIdx = 0;
+      if (currentPlayedScaleIdx >= uiState.scaleNotes.length)
+        resetPlayScaleInterval();
+
+      const currentNote = uiState.scaleNotes[currentPlayedScaleIdx];
+      if (currentNote.octave) {
+        pianoAudioService.playNote(currentNote, "low");
       }
 
-      pianoAudioService.playNote(uiState.octaveNotes[currentPlayedScaleIdx]);
       currentPlayedScaleIdx++;
     }, playScaleDelayMs);
   }
 
+  // Svelte Methods
+
   onMount(() => {
+    setScaleData();
     pianoAudioService.init();
   });
 </script>
@@ -227,8 +201,10 @@
       <div class="scale-notes-container">
         {#each uiState.scaleNotes as note, index (note)}
           <Button
-            onclick={() => handlePlayNote(uiState.octaveNotes[index])}
-            variant="text">{note}</Button
+            onclick={() => handlePlayNote(index)}
+            variant="text"
+            class={currentPlayedScaleIdx === index + 1 ? "active" : ""}
+            >{note.simplifiedFullName}</Button
           >
         {/each}
       </div>
@@ -237,14 +213,14 @@
         <PianoRoll
           visibleOctaves={2}
           startingOctave={4}
-          activeNotes={uiState.octaveNotes}
+          activeNotes={uiState.pianoRollNotes}
         />
       </div>
 
       <hr class="divider" />
 
       <div class="inner-card-base">
-        <h2 class="header-base space-below">Numerals</h2>
+        <h3 class="header-regular space-below">Numerals</h3>
         <p>
           {#each uiState.scaleNumerals as note, i (note)}
             {note}
@@ -256,17 +232,18 @@
 
         <hr class="divider" />
 
-        <h2 class="header-base space-below">
+        <h3 class="header-regular space-below">
           Formula <span class="caption">(relative to major)</span>
-        </h2>
+        </h3>
         <p>
-          {#each uiState.scaleFormula as note, i (note)}
-            {note}
-            {#if i < uiState.scaleFormula.length - 1}
-              {" - "}
-            {/if}
+          {#each uiState.scaleFormula as note (note)}
+            {note}&nbsp;&nbsp;
           {/each}
         </p>
+
+        <hr class="divider" />
+        <h3 class="header-regular space-below">Equivalent Modes</h3>
+        <p class="caption">A Minor, D Dorian</p>
       </div>
     </section>
 
@@ -274,17 +251,17 @@
       <h2 class="header-base">Diatonic Chords</h2>
 
       <div class="chords-container">
-        {#each uiState.scaleTriads as triadObj, index (triadObj.chordName)}
+        {#each uiState.scaleTriads as triadObj, index (triadObj.name)}
           <Button onclick={() => handlePlayChord(index)} variant="surface-dark">
             <div class="chord-card">
               <div class="pill" data-quality={triadObj.quality}>
-                <h3>{triadObj.numeral}</h3>
+                <h3>{uiState.scaleNumerals[index]}</h3>
               </div>
               <div class="text-container">
-                <h3>{triadObj.chordName}</h3>
+                <h3>{triadObj.name}</h3>
                 <p class="caption muted">
                   {#each triadObj.notes as note, i (note)}
-                    {note}
+                    {note.simplifiedFullName}
                     {#if i < triadObj.notes.length - 1}
                       {" - "}
                     {/if}
@@ -373,8 +350,8 @@
   .pill {
     text-align: center;
 
-    width: fit-content;
-    min-width: 2em;
+    width: 100%;
+    max-width: 3em;
     padding: var(--space-4) var(--space-8);
     height: fit-content;
 

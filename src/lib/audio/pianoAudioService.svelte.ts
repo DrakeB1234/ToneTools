@@ -1,23 +1,23 @@
-import { noteToAbsoluteSemitone } from '$lib/helpers/musicTheory';
+import { convertNoteToMidi } from '$lib/helpers/musicTheory';
+import type { GeneralNote } from '$lib/helpers/musicTheoryTypes';
 import { Howl, Howler } from 'howler';
-import { Note } from 'tonal'; // Make sure to import this!
 
-const SPRITE_MAP_ANCHOR_POINTS = [
-  { name: 'C1', val: 12 },
-  { name: 'G1', val: 19 },
-  { name: 'C2', val: 24 },
-  { name: 'G2', val: 31 },
-  { name: 'C3', val: 36 },
-  { name: 'G3', val: 43 },
-  { name: 'C4', val: 48 },
-  { name: 'G4', val: 55 },
-  { name: 'C5', val: 60 },
-  { name: 'G5', val: 67 },
-  { name: 'C6', val: 72 },
-  { name: 'G6', val: 79 },
-  { name: 'C7', val: 84 },
-  { name: 'G7', val: 91 },
-  { name: 'C8', val: 96 }
+const SPRITE_MAP_MIDI = [
+  { name: 'C1', val: 24 },
+  { name: 'G1', val: 31 },
+  { name: 'C2', val: 36 },
+  { name: 'G2', val: 43 },
+  { name: 'C3', val: 48 },
+  { name: 'G3', val: 55 },
+  { name: 'C4', val: 60 },
+  { name: 'G4', val: 67 },
+  { name: 'C5', val: 72 },
+  { name: 'G5', val: 79 },
+  { name: 'C6', val: 84 },
+  { name: 'G6', val: 91 },
+  { name: 'C7', val: 96 },
+  { name: 'G7', val: 103 },
+  { name: 'C8', val: 108 }
 ];
 
 const SPRITE_MAP: Record<string, [number, number]> = {
@@ -31,10 +31,18 @@ const SPRITE_MAP: Record<string, [number, number]> = {
   C8: [42000, 3000],
 };
 
-export const MIN_OCTAVE = 0;
-export const MAX_OCTAVE = 8;
-const MIN_PLAYABLE_SEMITONE = 9;
-const MAX_PLAYABLE_SEMITONE = 96;
+type sustainFadeMsTypes = "high" | "med" | "low";
+
+const SUSTAIN_FADE_MS_MAP: Record<sustainFadeMsTypes, number> = {
+  high: 3000,
+  med: 800,
+  low: 500
+};
+
+const MIN_OCTAVE = 0;
+const MAX_OCTAVE = 8;
+const MIN_PLAYABLE_MIDI = 21;
+const MAX_PLAYABLE_MIDI = 108;
 
 class PianoAudioService {
   private sound: Howl | null = null;
@@ -68,17 +76,15 @@ class PianoAudioService {
     });
   }
 
-  private calculateStrategy(noteName: string) {
-    const targetSemitone = noteToAbsoluteSemitone(noteName);
-    if (targetSemitone === null) return;
+  private calculateStrategy(midiNum: number) {
 
-    const bestAnchor = SPRITE_MAP_ANCHOR_POINTS.reduce((prev, curr) => {
-      return (Math.abs(curr.val - targetSemitone) < Math.abs(prev.val - targetSemitone)
+    const bestAnchor = SPRITE_MAP_MIDI.reduce((prev, curr) => {
+      return (Math.abs(curr.val - midiNum) < Math.abs(prev.val - midiNum)
         ? curr
         : prev);
     });
 
-    const semitoneShift = targetSemitone - bestAnchor.val;
+    const semitoneShift = midiNum - bestAnchor.val;
 
     return {
       sampleName: bestAnchor.name,
@@ -86,48 +92,42 @@ class PianoAudioService {
     };
   }
 
-  // Changed parameter from an object to a standard string (e.g., "C4")
-  playNote(noteName: string) {
+  playNote(note: GeneralNote, sustainType: sustainFadeMsTypes = "high") {
     if (!this.isReady || !this.sound) {
       console.warn("Audio requested, but pianoAudioService was never initialized.");
       return;
     }
 
-    // Tonal's get() safely parses the string without crashing if it's invalid
-    const parsedNote = Note.get(noteName);
-
-    if (parsedNote.empty) {
-      console.warn(`Invalid note provided: '${noteName}'`);
+    if (note.octave === null || note.octave < MIN_OCTAVE || note.octave > MAX_OCTAVE) {
+      console.warn(`Invalid octave for note: '${note.tonalJsName}'`);
       return;
     }
 
-    if (parsedNote.oct === undefined || parsedNote.oct < MIN_OCTAVE || parsedNote.oct > MAX_OCTAVE) {
-      console.warn(`Invalid octave for note: '${noteName}'`);
+    let noteMidi = convertNoteToMidi(note);
+    if (noteMidi === null || noteMidi < MIN_PLAYABLE_MIDI || noteMidi > MAX_PLAYABLE_MIDI) {
+      console.warn(`Invalid MIDI value for note: '${note.tonalJsName}'`);
       return;
     }
 
-    let noteMidi = parsedNote.midi;
-    if (noteMidi === null) return;
-
-    noteMidi = Math.min(Math.max(noteMidi, MIN_PLAYABLE_SEMITONE), MAX_PLAYABLE_SEMITONE);
-
-    const fixedNote = Note.fromMidi(noteMidi);
-
-    const strategy = this.calculateStrategy(fixedNote);
+    const strategy = this.calculateStrategy(noteMidi);
     if (!strategy) return;
 
-    const soundId = this.sound.play(strategy.sampleName);
+    const noteSoundId = this.sound.play(strategy.sampleName);
 
     const rate = Math.pow(2, strategy.semitoneShift / 12);
-    this.sound.rate(rate, soundId);
-    this.sound.volume(1.0, soundId);
+    this.sound.rate(rate, noteSoundId);
+    this.sound.volume(1.0, noteSoundId);
+
+    if (sustainType !== "high") {
+      this.sound.fade(1.0, 0, SUSTAIN_FADE_MS_MAP[sustainType], noteSoundId);
+    }
   }
 
-  playChord(notes: string[]) {
+  playChord(notes: GeneralNote[], sustainType: sustainFadeMsTypes = "high") {
     if (!this.isReady || !this.sound) return;
 
     notes.forEach(note => {
-      this.playNote(note);
+      this.playNote(note, sustainType);
     });
   }
 

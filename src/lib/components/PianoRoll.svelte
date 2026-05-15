@@ -119,7 +119,8 @@
         class="note-text black"
         class:hide={!showNoteNames}
         y={blackNoteEnharmonicNoteNameYPos}
-        x={key.xPos + blackNoteNameXOffset}>{getEnharmonicNote(key.note)}</text
+        x={key.xPos + blackNoteNameXOffset}
+        >{getEnharmonicNote(key.note, true)}</text
       >
     {/each}
   </g>

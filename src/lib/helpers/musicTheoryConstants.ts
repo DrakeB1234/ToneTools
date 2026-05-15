@@ -1,5 +1,7 @@
 export const naturalNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
 
+type chordQualities = "maj" | "m" | "dim" | "aug"
+
 export const modeNumeralMap: Record<string, string[]> = {
   "major": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],
   "ionian": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],
@@ -18,7 +20,7 @@ export const modeNumeralMap: Record<string, string[]> = {
 export const modeFormulaMap: Record<string, string[]> = {
   "major": ["1", "2", "3", "4", "5", "6", "7"],
   "ionian": ["1", "2", "3", "4", "5", "6", "7"],
-  "dorian": ["1", "2", "b3", "4", "5", "6", "7"],
+  "dorian": ["1", "2", "b3", "4", "5", "6", "b7"],
   "phrygian": ["1", "b2", "b3", "4", "5", "b6", "b7"],
   "lydian": ["1", "2", "3", "#4", "5", "6", "7"],
   "mixolydian": ["1", "2", "3", "4", "5", "6", "b7"],

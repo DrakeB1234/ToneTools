@@ -70,11 +70,11 @@ svg {
 
   --palette-accent-violet-100: #dcdcfa;
   --palette-accent-violet-200: #6366F1;
-  --palette-accent-violet-300: #191DDC;
+  --palette-accent-violet-300: #2d19dc;
 
-  --palette-accent-green-100: #E2FDF4;
+  --palette-accent-green-100: #dcf7ee;
   --palette-accent-green-200: #10B981;
-  --palette-accent-green-300: #008459;
+  --palette-accent-green-300: #008357;
 
   /* System UI Font Stack */
   --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";

@@ -1,11 +1,6 @@
 import { Chord, Midi, Mode, Note, Scale } from "tonal";
 import { modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
-
-function isNoteNameValid(note: string): boolean {
-  const noteObj = Note.get(note);
-
-  return false;
-}
+import type { GeneralChord, GeneralNote } from "./musicTheoryTypes";
 
 function convertChordQualityIntoName(quality: string): string {
   switch (quality) {
@@ -42,46 +37,46 @@ export function getFormulaFromMode(scaleType: string): string[] | null {
   }
 };
 
-export function getScaleNotes(root: String, scaleType: string, startingOctave?: number): string[] | null {
-  const rootNote = root + (startingOctave ? startingOctave.toString() : "");
+export function getScaleNotes(noteLetter: String, scaleType: string, startingOctave: number = 4): GeneralNote[] | null {
+  const rootNote = noteLetter + startingOctave.toString();
   const fullScale = `${rootNote} ${scaleType}`;
   const scaleObj = Scale.get(fullScale);
 
   if (scaleObj.empty) return null;
 
-  return scaleObj.notes;
+  const generalNoteObjs: GeneralNote[] = scaleObj.notes.map(e => convertNoteStringToObj(e));
+
+  return generalNoteObjs;
 };
 
-export type getModeDiatonicTriadsReturn = {
-  chordName: string;
-  notes: string[];
-  numeral: string;
-  quality: string;
-};
-export function getModeDiatonicTriads(root: string, scaleType: string): getModeDiatonicTriadsReturn[] | null {
-  const triads = Mode.triads(scaleType, root);
-  const romanNumerals = getNumeralsFromMode(scaleType);
+export function getModeDiatonicTriads(noteLetter: string, scaleType: string, startingOctave: number = 4): GeneralChord[] | null {
+  const triads = Mode.triads(scaleType, noteLetter);
+  const scaleName = `${noteLetter + startingOctave} ${scaleType}`;
+  const scaleNotes = Scale.get(scaleName).notes;
 
-  if (triads.length < 1 || !romanNumerals) return null;
+  if (triads.length < 1) return null;
 
-  const result: getModeDiatonicTriadsReturn[] = triads.map((e, index) => {
+  const result: GeneralChord[] = triads.map((e, index) => {
     const chordObj = Chord.get(e);
-    const chordName = simplifyNoteAccidental(chordObj.tonic ?? "") + convertChordQualityIntoName(chordObj.quality);
-    const simplifiedNotes = chordObj.notes.map(e => {
-      return simplifyNoteAccidental(e) ?? "";
-    });
+    const chordTonic = chordObj.tonic ?? "";
+    const simplifiedTonic = simplifyNoteAccidental(chordTonic) ?? "";
+    const chordName = simplifiedTonic + convertChordQualityIntoName(chordObj.quality);
+
+    const chordNotes = Chord.notes(e, scaleNotes[index]);
+    const noteObjs = chordNotes.map(e => convertNoteStringToObj(e));
 
     return {
-      chordName: chordName,
-      notes: simplifiedNotes,
-      numeral: romanNumerals[index],
+      name: chordName,
+      tonic: chordTonic,
+      accidental: null,
       quality: chordObj.quality,
+      notes: noteObjs,
+      simplifiedTonic: simplifiedTonic
     }
   });
 
   return result;
 }
-
 
 export function getAllModes(): string[] {
   let tempValues = Mode.names();
@@ -106,19 +101,17 @@ export function getNoteNamesCircleOfFifths(preferFlat: boolean): string[] {
   return ["C", "D", "E", "F", "G", "A", "B", "F#", "C#", "G#", "D#", "A#"];
 }
 
-export function getEnharmonicNote(note: string): string {
-  return Note.enharmonic(note);
+export function getEnharmonicNote(note: string, preferFlat: boolean = false): string {
+  if (preferFlat) {
+    return note.includes("#") ? Note.enharmonic(note) : note;
+  }
+  else {
+    return note.includes("b") ? Note.enharmonic(note) : note;
+  }
 }
 
-export function getEnharmonicNotesFromArray(notes: string[], preferFlat: boolean): string[] {
-  return notes.map(e => {
-    if (preferFlat) {
-      return e.includes("#") ? Note.enharmonic(e) : e;
-    }
-    else {
-      return e.includes("b") ? Note.enharmonic(e) : e;
-    }
-  })
+export function getEnharmonicNotesFromArray(notes: string[], preferFlat: boolean = false): string[] {
+  return notes.map(e => getEnharmonicNote(e, preferFlat));
 }
 
 // Converts ex: 'Bbb' => 'A'
@@ -129,13 +122,30 @@ export function simplifyNoteAccidental(note: string): string | null {
   return simplifiedNote;
 }
 
-export function getChordNotes(chordName: string, tonic: string): string[] {
-  return Chord.notes(chordName, tonic);
-}
-
-export function noteToAbsoluteSemitone(note: string): number | null {
-  const rawValue = Midi.toMidi(note);
+export function noteToAbsoluteSemitone(note: GeneralNote): number | null {
+  const rawValue = Midi.toMidi(note.tonalJsName);
 
   if (!rawValue) return null
   return rawValue - 12;
 }
+
+export function convertNoteStringToObj(note: string): GeneralNote {
+  const tonalNoteObj = Note.get(note);
+  const tonalNoteAccidental = tonalNoteObj.acc;
+  const simplifiedFullName = simplifyNoteAccidental(tonalNoteObj.letter + tonalNoteAccidental);
+
+  const res: GeneralNote = {
+    letter: tonalNoteObj.letter,
+    accidental: null,
+    octave: tonalNoteObj.oct ?? null,
+    simplifiedFullName: tonalNoteObj.name,
+    tonalJsName: tonalNoteObj.name
+  }
+
+  if (simplifiedFullName) res.simplifiedFullName = simplifiedFullName;
+  if (tonalNoteAccidental.length > 1) res.accidental = tonalNoteAccidental;
+
+  return res;
+}
+
+export function convertNoteToMidi(note: GeneralNote) { return Note.midi(note.tonalJsName) }
