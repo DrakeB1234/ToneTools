@@ -98,14 +98,16 @@
   .text {
     background-color: transparent;
   }
-  .text.active {
+
+  .active {
     background-color: var(--color-bg-primary);
     color: var(--color-text-inverse);
+    border-color: transparent;
   }
-  .text.active :global(.muted) {
+  .active :global(.muted) {
     color: var(--color-text-inverse);
   }
-  .text.active:hover {
+  .active:hover {
     background-color: var(--color-bg-primary);
   }
 

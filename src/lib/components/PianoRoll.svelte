@@ -70,7 +70,6 @@
 <svg
   class="piano-svg"
   viewBox="0 0 {viewBoxWidth} {whiteHeight}"
-  preserveAspectRatio="xMidYMid meet"
   role="img"
   aria-label="Piano Roll"
 >
@@ -128,7 +127,7 @@
 
 <style>
   .piano-svg {
-    width: 100%;
+    max-height: 11em;
     border: 1px solid var(--color-border, #ccc);
     border-radius: var(--radius-8);
   }

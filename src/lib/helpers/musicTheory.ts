@@ -42,12 +42,26 @@ export function getScaleNotes(noteLetter: String, scaleType: string, startingOct
   const fullScale = `${rootNote} ${scaleType}`;
   const scaleObj = Scale.get(fullScale);
 
+  getRelativeMajorMinorScales(noteLetter, scaleType);
+
   if (scaleObj.empty) return null;
 
   const generalNoteObjs: GeneralNote[] = scaleObj.notes.map(e => convertNoteStringToObj(e));
 
   return generalNoteObjs;
 };
+
+export function getRelativeMajorMinorScales(noteLetter: String, scaleType: string) {
+  const modes = Scale.modeNames(`${noteLetter} ${scaleType}`);
+  const minorMode = modes.find(e => e[1] === "minor");
+  const majorMode = modes.find(e => e[1] === "major");
+  if (!minorMode || !majorMode) return null;
+
+  return {
+    majorMode: `${majorMode[0]} ${majorMode[1]}`,
+    minorMode: `${minorMode[0]} ${minorMode[1]}`
+  };
+}
 
 export function getModeDiatonicTriads(noteLetter: string, scaleType: string, startingOctave: number = 4): GeneralChord[] | null {
   const triads = Mode.triads(scaleType, noteLetter);

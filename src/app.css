@@ -180,6 +180,10 @@ svg {
 
 /* ==== GLOBAL ELEMENTS ==== */
 
+html {
+  font-size: 16px;
+}
+
 body {
   font-family: var(--inter);
   background-color: var(--color-bg-app);
@@ -333,5 +337,9 @@ span.caption {
 @media (max-width: 600px) {
   :root {
     --app-padding: var(--space-16) var(--space-12);
+  }
+
+  html {
+    /* font-size: 15px; */
   }
 }

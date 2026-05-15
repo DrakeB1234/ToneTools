@@ -14,6 +14,7 @@
     getNumeralsFromMode,
     getFormulaFromMode,
     getEnharmonicNote,
+    getRelativeMajorMinorScales,
   } from "$lib/helpers/musicTheory";
   import { onMount } from "svelte";
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
@@ -32,6 +33,7 @@
     scaleTriads: GeneralChord[];
     scaleNumerals: string[];
     scaleFormula: string[];
+    scaleRelativeModes: ReturnType<typeof getRelativeMajorMinorScales>;
 
     pianoRollNotes: string[];
   }
@@ -55,6 +57,8 @@
     scaleTriads: [],
     scaleNumerals: [],
     scaleFormula: [],
+    scaleRelativeModes: null,
+
     pianoRollNotes: [],
   });
   let currentPlayedScaleIdx: number | null = $state(null);
@@ -83,6 +87,10 @@
     );
     const numerals = getNumeralsFromMode(uiState.selectScaleValue);
     const formula = getFormulaFromMode(uiState.selectScaleValue);
+    const relativeModes = getRelativeMajorMinorScales(
+      uiState.selectNoteValue,
+      uiState.selectScaleValue,
+    );
 
     if (!notes || !triads || !numerals || !formula) {
       // Handle Error UI State
@@ -101,6 +109,8 @@
       scaleTriads: triads,
       scaleNumerals: numerals,
       scaleFormula: formula,
+      scaleRelativeModes: relativeModes,
+
       pianoRollNotes: pianoRollNotes,
     };
 
@@ -138,8 +148,10 @@
 
     playScaleInterval = setInterval(() => {
       if (currentPlayedScaleIdx === null) currentPlayedScaleIdx = 0;
-      if (currentPlayedScaleIdx >= uiState.scaleNotes.length)
+      if (currentPlayedScaleIdx >= uiState.scaleNotes.length) {
         resetPlayScaleInterval();
+        return;
+      }
 
       const currentNote = uiState.scaleNotes[currentPlayedScaleIdx];
       if (currentNote.octave) {
@@ -192,9 +204,9 @@
     </section>
 
     <section class="card-base scale-card">
-      <div class="scale-notes-header space-below">
+      <div class="scale-notes-header">
         <h2 class="header-base">Scale Notes</h2>
-        <Button onclick={handlePlayScale} variant="primary" size="icon">
+        <Button onclick={handlePlayScale} variant="text" size="icon">
           <MaterialIcon name="playArrow" />
         </Button>
       </div>
@@ -242,17 +254,20 @@
         </p>
 
         <hr class="divider" />
-        <h3 class="header-regular space-below">Equivalent Modes</h3>
-        <p class="caption">A Minor, D Dorian</p>
+        <h3 class="header-regular space-below">Relative Modes</h3>
+        <p>
+          {uiState.scaleRelativeModes?.majorMode}&nbsp;|&nbsp;{uiState
+            .scaleRelativeModes?.minorMode}
+        </p>
       </div>
     </section>
 
     <section class="card-base chords-card">
-      <h2 class="header-base">Diatonic Chords</h2>
+      <h2 class="header-base space-below">Diatonic Chords</h2>
 
-      <div class="chords-container">
+      <div class="inner-card-base chords-container">
         {#each uiState.scaleTriads as triadObj, index (triadObj.name)}
-          <Button onclick={() => handlePlayChord(index)} variant="surface-dark">
+          <Button onclick={() => handlePlayChord(index)} variant="text">
             <div class="chord-card">
               <div class="pill" data-quality={triadObj.quality}>
                 <h3>{uiState.scaleNumerals[index]}</h3>
@@ -302,7 +317,7 @@
   }
 
   .space-below {
-    margin-bottom: var(--space-16);
+    margin-bottom: var(--space-12);
   }
 
   .text-container {
@@ -333,9 +348,14 @@
     margin-block: var(--space-16);
   }
 
+  .piano-roll-container {
+    padding: var(--space-12);
+  }
+
   .chords-container {
     display: grid;
     gap: var(--space-8);
+    padding: 0;
   }
 
   .chord-card {
