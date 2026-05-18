@@ -1,5 +1,6 @@
 <script>
   import MaterialIcon from "../Icons/MaterialIcon.svelte";
+  import Button from "../UI/Button.svelte";
 
   let {
     title = "Title",
@@ -9,26 +10,33 @@
   } = $props();
 </script>
 
-<a href="/" class="card-base clickable">
-  <div
-    class="icon-container"
-    style="background-color: var(--color-bg-accent-{color});"
-  >
-    <Icon size={"var(--icon-size-med"} />
-  </div>
-  <div class="text-container">
-    <h3>{title}</h3>
-    <p class="caption muted">{description}</p>
-  </div>
+<Button element="a" variant="surface" size="large" href="/">
+  <div class="container">
+    <div
+      class="icon-container"
+      style="background-color: var(--color-bg-accent-{color});"
+    >
+      <Icon size={"var(--icon-size-med"} />
+    </div>
+    <div class="text-container">
+      <h3>{title}</h3>
+      <p class="caption muted">{description}</p>
+    </div>
 
-  <MaterialIcon name="arrowRightAlt" />
-</a>
+    <MaterialIcon name="arrowRightAlt" color="var(--color-text-muted)" />
+  </div>
+</Button>
 
 <style>
-  .card-base {
+  .container {
     display: flex;
     align-items: center;
     gap: var(--space-12);
+    width: 100%;
+  }
+
+  .icon-container {
+    margin-bottom: auto;
   }
 
   .text-container {

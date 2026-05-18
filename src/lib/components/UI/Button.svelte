@@ -26,15 +26,9 @@
   );
 </script>
 
-{#if element === "a"}
-  <a class={classes} {...rest}>
-    {@render children?.()}
-  </a>
-{:else}
-  <button class={classes} {...rest}>
-    {@render children?.()}
-  </button>
-{/if}
+<svelte:element this={element} class={classes} {...rest}>
+  {@render children?.()}
+</svelte:element>
 
 <style>
   .btn {
@@ -57,7 +51,10 @@
     transition: var(--transition-color);
   }
   .btn.small {
-    padding: var(--space-12);
+    padding: var(--space-8);
+  }
+  .btn.large {
+    padding: var(--space-16);
   }
   .btn.icon {
     padding: var(--space-8);

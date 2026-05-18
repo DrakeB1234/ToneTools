@@ -260,6 +260,12 @@ span.caption {
   font-weight: var(--font-weight-regular);
 }
 
+a {
+  line-height: 1.4;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+}
+
 /* ==== GLOBAL SEMANTIC CLASSES, USE SPARINGLY ==== */
 
 .icon-container {
@@ -295,41 +301,11 @@ span.caption {
   background-color: var(--color-bg-surface);
 }
 
-.card-base.clickable {
-  cursor: pointer;
-
-  -webkit-tap-highlight-color: transparent;
-  transition: var(--transition-color);
-}
-
-.card-base.clickable:hover {
-  background-color: var(--color-hover-surface);
-}
-
-.card-base.clickable:active {
-  background-color: var(--color-active-surface);
-}
-
 .inner-card-base {
   padding: var(--space-16) var(--space-16);
 
   border-radius: var(--radius-8);
   background-color: var(--color-bg-surface-dark);
-}
-
-.inner-card-base.clickable {
-  cursor: pointer;
-
-  -webkit-tap-highlight-color: transparent;
-  transition: var(--transition-color);
-}
-
-.inner-card-base.clickable:hover {
-  background-color: var(--color-hover-surface);
-}
-
-.inner-card-base.clickable:active {
-  background-color: var(--color-active-surface);
 }
 
 /* ==== GLOBAL MEDIA QUERIES ==== */
@@ -340,6 +316,6 @@ span.caption {
   }
 
   html {
-    /* font-size: 15px; */
+    font-size: 94%;
   }
 }

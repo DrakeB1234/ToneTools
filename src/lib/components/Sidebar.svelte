@@ -1,5 +1,4 @@
 <script>
-  import Button from "./UI/Button.svelte";
   import { page } from "$app/state";
   import { toolsData, exercisesData } from "$lib/data/appData";
 </script>
@@ -15,15 +14,11 @@
       <ul role="list">
         {#each exercisesData as data (data.name)}
           <li>
-            <Button
-              element="a"
-              variant="text"
-              size="small"
-              href={data.href}
-              class={page.url.pathname === data.href ? "active" : ""}
+            <a
+              class="nav-link"
+              class:active={data.href === page.url.pathname}
+              href={data.href}>{data.name}</a
             >
-              <p class="caption muted">{data.name}</p>
-            </Button>
           </li>
         {/each}
       </ul>
@@ -31,15 +26,11 @@
       <ul role="list">
         {#each toolsData as data (data.name)}
           <li>
-            <Button
-              element="a"
-              variant="text"
-              size="small"
-              href={data.href}
-              class={page.url.pathname === data.href ? "active" : ""}
+            <a
+              class="nav-link"
+              class:active={data.href === page.url.pathname}
+              href={data.href}>{data.name}</a
             >
-              <p class="caption muted">{data.name}</p>
-            </Button>
           </li>
         {/each}
       </ul>
@@ -84,9 +75,22 @@
     margin-top: var(--space-12);
   }
 
-  li :global(.btn) {
-    justify-content: flex-start;
-    width: 100%;
+  a.nav-link {
+    display: block;
+
+    padding: var(--space-12);
+    border-radius: var(--radius-8);
+
+    color: var(--color-text-muted);
+    transition: var(--transition-color);
+  }
+
+  a.nav-link:hover:not(.active) {
+    background-color: var(--color-hover-surface);
+  }
+  a.nav-link.active {
+    color: var(--color-text-inverse);
+    background-color: var(--color-bg-primary);
   }
 
   @media (max-width: 600px) {

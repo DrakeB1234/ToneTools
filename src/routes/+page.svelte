@@ -2,7 +2,6 @@
   import HeroCard from "$lib/components/Cards/HeroCard.svelte";
   import LastUsedCard from "$lib/components/Cards/LastUsedCard.svelte";
   import ToolCard from "$lib/components/Cards/ToolCard.svelte";
-  import Sidebar from "$lib/components/Sidebar.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { exercisesData, toolsData } from "$lib/data/appData";
 

@@ -16,7 +16,7 @@
     getEnharmonicNote,
     getRelativeMajorMinorScales,
   } from "$lib/helpers/musicTheory";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import type {
     GeneralChord,
@@ -103,16 +103,12 @@
       return getEnharmonicNote(e.tonalJsName);
     });
 
-    uiState = {
-      ...uiState,
-      scaleNotes: notes,
-      scaleTriads: triads,
-      scaleNumerals: numerals,
-      scaleFormula: formula,
-      scaleRelativeModes: relativeModes,
-
-      pianoRollNotes: pianoRollNotes,
-    };
+    uiState.scaleNotes = notes;
+    uiState.scaleTriads = triads;
+    uiState.scaleNumerals = numerals;
+    uiState.scaleFormula = formula;
+    uiState.scaleRelativeModes = relativeModes;
+    uiState.pianoRollNotes = pianoRollNotes;
 
     resetPlayScaleInterval();
   }
@@ -167,6 +163,10 @@
   onMount(() => {
     setScaleData();
     pianoAudioService.init();
+  });
+
+  onDestroy(() => {
+    resetPlayScaleInterval();
   });
 </script>
 
