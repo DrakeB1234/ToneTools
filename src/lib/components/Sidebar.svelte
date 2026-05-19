@@ -17,8 +17,9 @@
           <li>
             <Button
               element="a"
+              color="surface"
               variant="text"
-              size="small"
+              style="width: 100%;"
               href={data.href}
               class={page.url.pathname === data.href ? "active" : ""}
             >
@@ -33,8 +34,9 @@
           <li>
             <Button
               element="a"
+              color="surface"
               variant="text"
-              size="small"
+              style="width: 100%;"
               href={data.href}
               class={page.url.pathname === data.href ? "active" : ""}
             >
@@ -82,11 +84,6 @@
     gap: var(--space-4);
 
     margin-top: var(--space-12);
-  }
-
-  li :global(.btn) {
-    justify-content: flex-start;
-    width: 100%;
   }
 
   @media (max-width: 600px) {

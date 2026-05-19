@@ -10,9 +10,9 @@
     many areas of focus today!
   </p>
 
-  <Button element="a" variant="surface" href="/exercises">
-    <MaterialIcon name="arrowRightAlt" color="var(--color-text-primary)" />
-    <p class="button-text">View Exercises</p>
+  <Button element="a" variant="raised" color="surface" href="/exercises">
+    View Exercises
+    <MaterialIcon name="arrowRightAlt" />
   </Button>
 </div>
 
@@ -21,7 +21,7 @@
     padding: var(--space-24) var(--space-24);
 
     box-shadow: var(--shadow-elevation-2);
-    background-color: var(--color-bg-primary-dark);
+    background-color: var(--color-bg-brand);
     color: var(--color-text-primary);
   }
 
@@ -39,9 +39,5 @@
     margin-bottom: var(--space-24);
 
     max-width: var(--text-box-width-small);
-  }
-
-  p.button-text {
-    color: var(--color-text-primary);
   }
 </style>

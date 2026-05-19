@@ -173,7 +173,7 @@
 <Wrapper>
   <main>
     <div class="header-container">
-      <Button element="a" variant="text" size="icon" href="/">
+      <Button element="a" color="app" variant="text" size="icon" href="/">
         <MaterialIcon name="arrowLeftAlt" />
       </Button>
       <div class="text-container">
@@ -206,7 +206,12 @@
     <section class="card-base scale-card">
       <div class="scale-notes-header">
         <h2 class="header-base">Scale Notes</h2>
-        <Button onclick={handlePlayScale} variant="text" size="icon">
+        <Button
+          onclick={handlePlayScale}
+          color="surface"
+          variant="text"
+          size="icon"
+        >
           <MaterialIcon name="playArrow" />
         </Button>
       </div>
@@ -214,6 +219,7 @@
         {#each uiState.scaleNotes as note, index (note)}
           <Button
             onclick={() => handlePlayNote(index)}
+            color="surface"
             variant="text"
             class={currentPlayedScaleIdx === index + 1 ? "active" : ""}
             >{note.simplifiedFullName}</Button
@@ -267,7 +273,11 @@
 
       <div class="inner-card-base chords-container">
         {#each uiState.scaleTriads as triadObj, index (triadObj.name)}
-          <Button onclick={() => handlePlayChord(index)} variant="text">
+          <Button
+            onclick={() => handlePlayChord(index)}
+            color="transparent"
+            variant="text"
+          >
             <div class="chord-card">
               <div class="pill" data-quality={triadObj.quality}>
                 <h3>{uiState.scaleNumerals[index]}</h3>
@@ -309,13 +319,6 @@
     margin-bottom: var(--space-16);
   }
 
-  .scale-notes-header {
-    display: flex;
-    gap: var(--space-16);
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .space-below {
     margin-bottom: var(--space-12);
   }
@@ -338,9 +341,18 @@
     gap: var(--space-4);
   }
 
+  .scale-notes-header {
+    display: flex;
+    gap: var(--space-16);
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .scale-notes-container {
     display: flex;
     flex-wrap: wrap;
+    gap: var(--space-4);
+
     margin-bottom: var(--space-16);
   }
 
@@ -375,27 +387,27 @@
     padding: var(--space-4) var(--space-8);
     height: fit-content;
 
-    background-color: var(--color-bg-accent-blue-light);
+    background-color: var(--color-deco-blue-light);
     border-radius: var(--radius-8);
   }
 
   .pill h3 {
-    color: var(--color-text-accent-blue);
+    color: var(--color-deco-blue-dark);
   }
 
   .pill[data-quality="Minor"] {
-    background-color: var(--color-bg-accent-purple-light);
+    background-color: var(--color-deco-purple-light);
 
     & h3 {
-      color: var(--color-text-accent-purple);
+      color: var(--color-deco-purple-dark);
     }
   }
 
   .pill[data-quality="Diminished"] {
-    background-color: var(--color-bg-accent-green-light);
+    background-color: var(--color-deco-green-light);
 
     & h3 {
-      color: var(--color-text-accent-green);
+      color: var(--color-deco-green-dark);
     }
   }
 </style>
