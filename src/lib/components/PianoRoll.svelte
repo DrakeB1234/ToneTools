@@ -141,8 +141,8 @@
     fill: var(--palette-black, #111111);
   }
   .key.active {
-    fill: var(--color-bg-primary);
-    stroke: var(--color-border-primary);
+    fill: var(--color-bg-brand);
+    stroke: var(--color-border-brand);
     stroke-width: 2;
   }
   .key.active + text {

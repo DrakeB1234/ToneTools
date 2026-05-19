@@ -4,8 +4,9 @@
   import type { Snippet } from "svelte";
 
   interface Props {
-    variant?: "primary" | "surface" | "surface-dark" | "outline" | "text";
     element?: "a" | "button";
+    color?: "brand" | "surface" | "app" | "transparent";
+    variant?: "raised" | "outline" | "text";
     size?: "small" | "medium" | "large" | "icon";
     class?: string;
     [key: string]: any;
@@ -13,8 +14,9 @@
   }
 
   let {
-    variant = "primary",
     element = "button",
+    color = "brand",
+    variant = "raised",
     size = "medium",
     class: className = "",
     children,
@@ -22,7 +24,7 @@
   }: Props = $props();
 
   let classes = $derived(
-    ["btn", size, variant, className].filter(Boolean).join(" "),
+    ["btn", size, variant, color, className].filter(Boolean).join(" "),
   );
 </script>
 
@@ -34,18 +36,18 @@
   .btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: var(--space-4);
 
     padding: var(--space-8) var(--space-12);
     border-radius: var(--radius-8);
 
     color: var(--color-text);
+    border-color: var(--color-border);
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-sm);
     cursor: pointer;
     text-decoration: none;
-    border: none;
+    border: 1px solid transparent;
 
     -webkit-tap-highlight-color: transparent;
     transition: var(--transition-color);
@@ -60,64 +62,38 @@
     padding: var(--space-8);
   }
 
-  .primary {
-    background-color: var(--color-bg-primary);
-    box-shadow: var(--shadow-elevation-1);
+  .btn.brand {
+    background-color: var(--color-bg-brand);
+    border-color: var(--color-border-brand);
     color: var(--color-text-inverse);
   }
-  .primary:hover {
-    background-color: var(--color-hover-primary);
-  }
-  .primary:active {
-    background-color: var(--color-active-primary);
-  }
-
-  .surface {
+  .btn.surface {
     background-color: var(--color-bg-surface);
+  }
+  .btn.app {
+    background-color: var(--color-bg-app);
+  }
+  .btn.transparent {
+    background-color: transparent;
+  }
+
+  .btn.brand:hover {
+    background-color: var(--color-brand-hover);
+  }
+  .btn.surface:hover,
+  .btn.transparent:hover {
+    background-color: var(--color-surface-hover);
+  }
+  .btn.app:hover {
+    background-color: var(--color-app-hover);
+  }
+
+  .btn.text {
+    border: 1px solid transparent;
+  }
+
+  .btn.raised {
+    border: 1px solid transparent;
     box-shadow: var(--shadow-elevation-1);
-  }
-
-  .surface-dark {
-    background-color: var(--color-bg-surface-dark);
-  }
-  .surface-dark:hover {
-    background-color: var(--color-hover-surface);
-  }
-  .surface-dark:active {
-    background-color: var(--color-active-surface);
-  }
-
-  .outline {
-    border: 1px solid var(--color-border);
-    background-color: transparent;
-  }
-
-  .text {
-    background-color: transparent;
-  }
-
-  .active {
-    background-color: var(--color-bg-primary);
-    color: var(--color-text-inverse);
-    border-color: transparent;
-  }
-  .active :global(.muted) {
-    color: var(--color-text-inverse);
-  }
-  .active:hover {
-    background-color: var(--color-bg-primary);
-  }
-
-  /* Hover / Active states */
-  .surface:hover,
-  .outline:hover,
-  .text:hover {
-    background-color: var(--color-hover-surface);
-  }
-
-  .surface:active,
-  .outline:active,
-  .text:active {
-    background-color: var(--color-active-surface);
   }
 </style>

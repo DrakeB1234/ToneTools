@@ -86,11 +86,11 @@
   }
 
   a.nav-link:hover:not(.active) {
-    background-color: var(--color-hover-surface);
+    background-color: var(--color-surface-hover);
   }
   a.nav-link.active {
     color: var(--color-text-inverse);
-    background-color: var(--color-bg-primary);
+    background-color: var(--color-bg-brand);
   }
 
   @media (max-width: 600px) {

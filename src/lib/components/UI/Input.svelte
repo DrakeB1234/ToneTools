@@ -35,9 +35,6 @@
     border-radius: var(--radius-8);
     border: 1px solid var(--color-border);
   }
-  input:focus {
-    outline: 1px solid var(--color-border-primary);
-  }
   input::placeholder {
     color: var(--color-text-muted);
   }

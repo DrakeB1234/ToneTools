@@ -44,37 +44,41 @@ svg {
   --palette-white: #ffffff;
   --palette-black: #000000;
 
-  --palette-slate-100: #fbfbfc;
-  --palette-slate-200: #F7F7FA;
-  --palette-slate-300: #EFEFF4;
-  --palette-slate-400: #E1E1EB;
-  --palette-slate-500: #CACADC;
-  --palette-slate-600: #6F6F95;
-  --palette-slate-700: #3D3D5C;
-  --palette-slate-800: #282842;
-  --palette-slate-900: #191929;
+  --palette-grey-100: #F9FAFB;
+  --palette-grey-200: #F3F4F6;
+  --palette-grey-300: #E5E7EB;
+  --palette-grey-400: #D1D5DB;
+  --palette-grey-500: #9CA3AF;
+  --palette-grey-600: #6B7280;
+  --palette-grey-700: #4B5563;
+  --palette-grey-800: #1F2937;
+  --palette-grey-900: #111827;
 
-  --palette-primary-100: #E2F1FD;
-  --palette-primary-200: #65CBFE;
-  --palette-primary-300: #2DAFEF;
-  --palette-primary-400: #1488E6;
-  --palette-primary-500: #0D5DC6;
+  --palette-brand-100: #EAF7FD;
+  --palette-brand-200: #D5EFFC;
+  --palette-brand-300: #ABDFF9;
+  --palette-brand-400: #81CFF5;
+  --palette-brand-500: #2DAFEF;
+  --palette-brand-600: #248CBF;
+  --palette-brand-700: #1B698F;
+  --palette-brand-800: #124660;
+  --palette-brand-900: #0D2D3C;
 
-  --palette-accent-blue-100: #e1ebfa;
-  --palette-accent-blue-200: #3B82F6;
-  --palette-accent-blue-300: #005BF0;
+  --palette-blue-100: #e1ebfa;
+  --palette-blue-200: #3B82F6;
+  --palette-blue-300: #005BF0;
 
-  --palette-accent-purple-100: #EBE3FD;
-  --palette-accent-purple-200: #8B5CF6;
-  --palette-accent-purple-300: #6B2AFF;
+  --palette-purple-100: #EBE3FD;
+  --palette-purple-200: #8B5CF6;
+  --palette-purple-300: #6B2AFF;
 
-  --palette-accent-violet-100: #dcdcfa;
-  --palette-accent-violet-200: #6366F1;
-  --palette-accent-violet-300: #2d19dc;
+  --palette-violet-100: #dcdcfa;
+  --palette-violet-200: #6366F1;
+  --palette-violet-300: #2d19dc;
 
-  --palette-accent-green-100: #dcf7ee;
-  --palette-accent-green-200: #10B981;
-  --palette-accent-green-300: #008357;
+  --palette-green-100: #dcf7ee;
+  --palette-green-200: #10B981;
+  --palette-green-300: #008357;
 
   /* System UI Font Stack */
   --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -134,40 +138,41 @@ svg {
 
   /* app colors */
 
-  --color-bg-app: var(--palette-slate-200);
+  --color-bg-brand: var(--palette-brand-500);
+  --color-bg-brand-sunken: var(--palette-brand-600);
+  --color-bg-app: var(--palette-grey-200);
+  --color-bg-app-sunken: var(--palette-grey-300);
   --color-bg-surface: var(--palette-white);
-  --color-bg-surface-dark: var(--palette-slate-200);
-  --color-bg-primary: var(--palette-primary-300);
-  --color-bg-primary-dark: var(--palette-primary-400);
+  --color-bg-surface-sunken: var(--palette-grey-100);
 
-  --color-bg-accent-purple: var(--palette-accent-purple-200);
-  --color-bg-accent-purple-light: var(--palette-accent-purple-100);
-  --color-bg-accent-violet: var(--palette-accent-violet-200);
-  --color-bg-accent-blue: var(--palette-accent-blue-200);
-  --color-bg-accent-blue-light: var(--palette-accent-blue-100);
-  --color-bg-accent-green: var(--palette-accent-green-200);
-  --color-bg-accent-green-light: var(--palette-accent-green-100);
+  --color-brand-hover: var(--palette-brand-600);
+  --color-app-hover: var(--palette-grey-300);
+  --color-surface-hover: var(--palette-grey-200);
 
-  --color-hover-surface: var(--palette-slate-300);
-  --color-hover-primary: var(--palette-primary-200);
-  --color-hover-primary-dark: var(--palette-primary-300);
-
-  --color-active-surface: var(--palette-slate-400);
+  --color-active-surface: var(--palette-grey-400);
   --color-active-primary: var(--palette-primary-400);
 
-  --color-text: var(--palette-slate-900);
-  --color-text-muted: var(--palette-slate-600);
+  --color-text: var(--palette-grey-900);
+  --color-text-muted: var(--palette-grey-600);
   --color-text-inverse: var(--palette-white);
-  --color-text-inverse-muted: var(--palette-slate-400);
-  --color-text-primary: var(--palette-primary-500);
+  --color-text-inverse-muted: var(--palette-grey-300);
 
-  --color-text-accent-blue: var(--palette-accent-blue-300);
-  --color-text-accent-purple: var(--palette-accent-purple-300);
-  --color-text-accent-green: var(--palette-accent-green-300);
+  --color-border: var(--palette-grey-400);
+  --color-border-light: var(--palette-grey-300);
+  --color-border-brand: var(--palette-brand-600);
 
-  --color-border: var(--palette-slate-500);
-  --color-border-light: var(--palette-slate-400);
-  --color-border-primary: var(--palette-primary-400);
+  --color-deco-blue-light: var(--palette-blue-100);
+  --color-deco-blue-base: var(--palette-blue-200);
+  --color-deco-blue-dark: var(--palette-blue-300);
+  --color-deco-purple-light: var(--palette-purple-100);
+  --color-deco-purple-base: var(--palette-purple-200);
+  --color-deco-purple-dark: var(--palette-purple-300);
+  --color-deco-violet-light: var(--palette-violet-100);
+  --color-deco-violet-base: var(--palette-violet-200);
+  --color-deco-violet-dark: var(--palette-violet-300);
+  --color-deco-green-light: var(--palette-green-100);
+  --color-deco-green-base: var(--palette-green-200);
+  --color-deco-green-dark: var(--palette-green-300);
 
   --shadow-elevation-1:
     rgba(0, 0, 0, 0.12) 0px 1px 3px,
@@ -198,6 +203,10 @@ h1,
 h2,
 h3 {
   color: var(--color-text);
+}
+
+:is(input, select, button, textarea):focus {
+  outline: 2px solid var(--palette-brand-400);
 }
 
 /* headers */
@@ -305,7 +314,7 @@ a {
   padding: var(--space-16) var(--space-16);
 
   border-radius: var(--radius-8);
-  background-color: var(--color-bg-surface-dark);
+  background-color: var(--color-bg-surface-sunken);
 }
 
 /* ==== GLOBAL MEDIA QUERIES ==== */

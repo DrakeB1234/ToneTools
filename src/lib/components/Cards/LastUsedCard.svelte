@@ -10,11 +10,11 @@
   } = $props();
 </script>
 
-<Button element="a" variant="surface" size="large" href="/">
+<Button element="a" color="surface" size="large" href="/">
   <div class="container">
     <div
       class="icon-container"
-      style="background-color: var(--color-bg-accent-{color});"
+      style="background-color: var(--color-deco-{color}-base);"
     >
       <Icon size={"var(--icon-size-med"} />
     </div>

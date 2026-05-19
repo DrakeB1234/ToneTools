@@ -40,9 +40,6 @@
 
     transition: var(--transition-color);
   }
-  select:focus {
-    outline: 1px solid var(--color-border-primary);
-  }
   select:hover {
     background-color: var(--color-hover-surface);
   }
