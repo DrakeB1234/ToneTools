@@ -18,5 +18,12 @@
 <style>
 	.page {
 		display: flex;
+		min-height: 100dvh;
+	}
+
+	@media (max-width: 768px) {
+		.page {
+			flex-direction: column;
+		}
 	}
 </style>

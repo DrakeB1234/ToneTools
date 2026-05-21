@@ -1,5 +1,5 @@
 import { Chord, Midi, Mode, Note, Scale } from "tonal";
-import { modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
+import { modeFormulaMap, modeNumeralMap, naturalNoteNames, simpleChordSymbols } from "./musicTheoryConstants";
 import type { GeneralChord, GeneralNote } from "./musicTheoryTypes";
 
 function convertChordQualityIntoName(quality: string): string {
@@ -13,6 +13,53 @@ function convertChordQualityIntoName(quality: string): string {
     default:
       return "maj"
   };
+}
+
+export function getAllChordInversions(note: string, chordSymbol: string, startingOctave: number = 4) {
+  const chordObj = Chord.getChord(chordSymbol, note);
+  const getDegree = Chord.degrees(chordSymbol, note + startingOctave);
+
+  const numNotes = chordObj.intervals.length;
+  const inversions: GeneralNote[][] = [];
+
+  for (let i = 0; i < numNotes; i++) {
+    const currentInversion: GeneralNote[] = [];
+
+    for (let degree = 1; degree <= numNotes; degree++) {
+      const noteString = getDegree(i + degree);
+
+      currentInversion.push(convertNoteStringToObj(noteString));
+    }
+
+    inversions.push(currentInversion);
+  }
+
+  console.log(inversions);
+
+  return inversions;
+}
+
+export function findChord(note: string, _chordSymbol: string, startingOctave: number = 4) {
+  const chordObj = Chord.getChord(_chordSymbol, note);
+  const chordNotes = Chord.notes(chordObj.symbol, note + startingOctave);
+
+  const notes: GeneralNote[] = chordNotes.map(e => {
+    return convertNoteStringToObj(e);
+  });
+
+  // This gets the tonal.js preferred symbol, I prefer the M to be alias[3], so I force that here
+  let chordSymbol = chordObj.aliases[0];
+  if (chordSymbol.endsWith("M")) chordSymbol = chordObj.aliases[3];
+
+  return {
+    name: chordObj.name,
+    symbol: chordSymbol,
+    tonic: note,
+    simplifiedTonic: simplifyNoteAccidental(note),
+    quality: chordObj.quality,
+    notes: notes,
+
+  } as GeneralChord;
 }
 
 export function getNumeralsFromMode(scaleType: string): string[] | null {
@@ -57,9 +104,12 @@ export function getRelativeMajorMinorScales(noteLetter: String, scaleType: strin
   const majorMode = modes.find(e => e[1] === "major");
   if (!minorMode || !majorMode) return null;
 
+  const simplifiedNoteAccidentalMajor = simplifyNoteAccidental(majorMode[0]);
+  const simplifiedNoteAccidentalMinor = simplifyNoteAccidental(minorMode[0]);
+
   return {
-    majorMode: `${majorMode[0]} ${majorMode[1]}`,
-    minorMode: `${minorMode[0]} ${minorMode[1]}`
+    majorMode: `${simplifiedNoteAccidentalMajor} ${majorMode[1]}`,
+    minorMode: `${simplifiedNoteAccidentalMinor} ${minorMode[1]}`
   };
 }
 
@@ -79,13 +129,16 @@ export function getModeDiatonicTriads(noteLetter: string, scaleType: string, sta
     const chordNotes = Chord.notes(e, scaleNotes[index]);
     const noteObjs = chordNotes.map(e => convertNoteStringToObj(e));
 
+    let chordSymbol = chordObj.aliases[0];
+    if (chordSymbol.endsWith("M")) chordSymbol = chordObj.aliases[3];
+
     return {
       name: chordName,
+      symbol: chordSymbol,
       tonic: chordTonic,
-      accidental: null,
+      simplifiedTonic: simplifiedTonic,
       quality: chordObj.quality,
       notes: noteObjs,
-      simplifiedTonic: simplifiedTonic
     }
   });
 
@@ -150,7 +203,7 @@ export function convertNoteStringToObj(note: string): GeneralNote {
 
   const res: GeneralNote = {
     letter: tonalNoteObj.letter,
-    accidental: null,
+    accidental: tonalNoteObj.acc,
     octave: tonalNoteObj.oct ?? null,
     simplifiedFullName: tonalNoteObj.name,
     tonalJsName: tonalNoteObj.name

@@ -140,6 +140,10 @@ class PianoAudioService {
     Howler.mute(false);
     this.isMuted = false;
   }
+
+  stopAll = () => {
+    Howler.stop();
+  }
 }
 
 export const pianoAudioService = new PianoAudioService();

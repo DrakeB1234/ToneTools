@@ -1,8 +1,10 @@
 <script lang="ts">
-  let { text = "d", labelFor = "d" } = $props();
+  let { labelFor = "", children } = $props();
 </script>
 
-<label class="input-label" for={labelFor}>{text}</label>
+<label class="input-label" for={labelFor}>
+  {@render children?.()}
+</label>
 
 <style>
   label {

@@ -10,7 +10,13 @@
     many areas of focus today!
   </p>
 
-  <Button element="a" variant="raised" color="surface" href="/exercises">
+  <Button
+    element="a"
+    color="surface"
+    variant="raised"
+    size="large"
+    href="/exercises"
+  >
     View Exercises
     <MaterialIcon name="arrowRightAlt" />
   </Button>
@@ -19,6 +25,7 @@
 <style>
   .card-base {
     padding: var(--space-24) var(--space-24);
+    padding-bottom: var(--space-16);
 
     box-shadow: var(--shadow-elevation-2);
     background-color: var(--color-bg-brand);

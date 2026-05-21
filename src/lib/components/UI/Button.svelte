@@ -5,7 +5,7 @@
 
   interface Props {
     element?: "a" | "button";
-    color?: "brand" | "surface" | "app" | "transparent";
+    color?: "brand" | "surface" | "app";
     variant?: "raised" | "outline" | "text";
     size?: "small" | "medium" | "large" | "icon";
     class?: string;
@@ -33,33 +33,19 @@
 </svelte:element>
 
 <style>
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-4);
+  /* base btn class hoisted to global css file */
 
-    padding: var(--space-8) var(--space-12);
-    border-radius: var(--radius-8);
-
-    color: var(--color-text);
-    border-color: var(--color-border);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-sm);
-    cursor: pointer;
-    text-decoration: none;
-    border: 1px solid transparent;
-
-    -webkit-tap-highlight-color: transparent;
-    transition: var(--transition-color);
-  }
   .btn.small {
-    padding: var(--space-8);
+    padding: var(--space-4);
+  }
+  .btn.medium {
+    padding: var(--space-4) var(--space-8);
   }
   .btn.large {
-    padding: var(--space-16);
+    padding: var(--space-8) var(--space-12);
   }
   .btn.icon {
-    padding: var(--space-8);
+    padding: var(--space-4);
   }
 
   .btn.brand {
@@ -69,31 +55,35 @@
   }
   .btn.surface {
     background-color: var(--color-bg-surface);
+    border-color: var(--color-border);
   }
   .btn.app {
     background-color: var(--color-bg-app);
-  }
-  .btn.transparent {
-    background-color: transparent;
+    border-color: var(--color-border);
   }
 
   .btn.brand:hover {
     background-color: var(--color-brand-hover);
   }
-  .btn.surface:hover,
-  .btn.transparent:hover {
+  .btn.surface:hover {
     background-color: var(--color-surface-hover);
   }
   .btn.app:hover {
     background-color: var(--color-app-hover);
   }
 
-  .btn.text {
-    border: 1px solid transparent;
+  .btn.active {
+    background-color: var(--color-bg-brand);
+    border-color: var(--color-border-brand);
+    color: var(--color-text-inverse);
   }
 
   .btn.raised {
     border: 1px solid transparent;
     box-shadow: var(--shadow-elevation-1);
+  }
+
+  .btn.text {
+    border: 1px solid transparent;
   }
 </style>

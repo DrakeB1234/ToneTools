@@ -1,7 +1,5 @@
 export const naturalNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
 
-type chordQualities = "maj" | "m" | "dim" | "aug"
-
 export const modeNumeralMap: Record<string, string[]> = {
   "major": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],
   "ionian": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],
@@ -31,3 +29,31 @@ export const modeFormulaMap: Record<string, string[]> = {
   "harmonic minor": ["1", "2", "b3", "4", "5", "b6", "7"],
   "melodic minor": ["1", "2", "b3", "4", "5", "6", "7"],
 };
+
+export const simpleChordSymbols = [
+  "major",
+  "minor",
+  "diminished",
+  "augmented",
+  "sus2",
+  "sus4",
+  "7",
+  "m7",
+  "maj7",
+  "dim7",
+  "m7b5",
+  "7sus4",
+  "6",
+  "m6",
+  "9",
+  "m9",
+  "maj9",
+  "11",
+  "m11",
+  "maj11",
+  "13",
+  "m13",
+  "maj13",
+  "add9",
+  "6/9",
+];

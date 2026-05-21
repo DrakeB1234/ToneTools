@@ -10,27 +10,26 @@
   } = $props();
 </script>
 
-<Button element="a" color="surface" size="large" href="/">
-  <div class="container">
-    <div
-      class="icon-container"
-      style="background-color: var(--color-deco-{color}-base);"
-    >
-      <Icon size={"var(--icon-size-med"} />
-    </div>
-    <div class="text-container">
-      <h3>{title}</h3>
-      <p class="caption muted">{description}</p>
-    </div>
+<a href="/" class="card-base container">
+  <div
+    class="icon-container"
+    style="background-color: var(--color-deco-{color}-base);"
+  >
+    <Icon size={"var(--icon-size-med"} />
+  </div>
+  <div class="text-container">
+    <h3>{title}</h3>
+    <p class="caption muted">{description}</p>
+  </div>
 
+  <div class="arrow-container">
     <MaterialIcon name="arrowRightAlt" color="var(--color-text-muted)" />
   </div>
-</Button>
+</a>
 
 <style>
   .container {
     display: flex;
-    align-items: center;
     gap: var(--space-12);
     width: 100%;
   }
@@ -41,8 +40,9 @@
 
   .text-container {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
+  }
+
+  .arrow-container {
+    margin-block: auto;
   }
 </style>

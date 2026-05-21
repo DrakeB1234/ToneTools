@@ -1,14 +1,80 @@
-<script>
+<script lang="ts">
+  import { onNavigate } from "$app/navigation";
   import { page } from "$app/state";
   import { toolsData, exercisesData } from "$lib/data/appData";
+  import MaterialIcon from "./Icons/MaterialIcon.svelte";
+  import Button from "./UI/Button.svelte";
+
+  let isOpen = $state(false);
+
+  function toggleSidebar() {
+    isOpen = !isOpen;
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+  }
+
+  onNavigate(() => {
+    closeSidebar();
+  });
 </script>
 
-<aside>
+<header class="mobile-navbar">
+  <a href="/" class="logo-container">
+    <img src="/images/logo.svg" alt="Music App Logo" width="32" height="32" />
+    <h1 class="header-large">Music App</h1>
+  </a>
+  <Button
+    color="surface"
+    variant="text"
+    size="icon"
+    onclick={toggleSidebar}
+    aria-label="Open menu"
+  >
+    <MaterialIcon name="menu" />
+  </Button>
+</header>
+
+{#if isOpen}
+  <div class="backdrop" onclick={closeSidebar} role="none"></div>
+{/if}
+
+<aside class:open={isOpen}>
   <div class="wrapper">
-    <a href="/" class="container__logo">
-      <img src="/images/logo.svg" alt="Music App Logo" width="32" height="32" />
-      <h1 class="header-base">Music App</h1>
-    </a>
+    <div class="desktop-header">
+      <a href="/" class="logo-container">
+        <img
+          src="/images/logo.svg"
+          alt="Music App Logo"
+          width="32"
+          height="32"
+        />
+        <h1 class="header-large">Music App</h1>
+      </a>
+    </div>
+
+    <div class="mobile-header">
+      <a href="/" class="logo-container">
+        <img
+          src="/images/logo.svg"
+          alt="Music App Logo"
+          width="32"
+          height="32"
+        />
+        <h1 class="header-large">Music App</h1>
+      </a>
+      <Button
+        color="surface"
+        variant="text"
+        size="icon"
+        onclick={closeSidebar}
+        aria-label="Close menu"
+      >
+        <MaterialIcon name="close" />
+      </Button>
+    </div>
+
     <nav aria-label="Main Navigation">
       <h3>Exercises</h3>
       <ul role="list">
@@ -17,11 +83,14 @@
             <a
               class="nav-link"
               class:active={data.href === page.url.pathname}
-              href={data.href}>{data.name}</a
+              href={data.href}
             >
+              {data.name}
+            </a>
           </li>
         {/each}
       </ul>
+
       <h3>Tools</h3>
       <ul role="list">
         {#each toolsData as data (data.name)}
@@ -29,8 +98,10 @@
             <a
               class="nav-link"
               class:active={data.href === page.url.pathname}
-              href={data.href}>{data.name}</a
+              href={data.href}
             >
+              {data.name}
+            </a>
           </li>
         {/each}
       </ul>
@@ -39,40 +110,54 @@
 </aside>
 
 <style>
+  .mobile-navbar,
+  .mobile-header,
+  .backdrop {
+    display: none;
+  }
+
+  .desktop-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+
+    margin-bottom: var(--space-24);
+  }
+
   aside {
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
+
+    position: sticky;
+    top: 0;
+    z-index: 10;
 
     height: 100dvh;
-    width: 26dvw;
+    width: 25dvw;
     max-width: 300px;
-    min-width: 180px;
     padding: var(--space-12);
+    overflow-y: auto;
 
     border-right: 1px solid var(--color-border);
     background-color: var(--color-bg-surface);
   }
 
-  .container__logo {
+  .logo-container {
     display: flex;
     align-items: center;
     gap: var(--space-12);
   }
 
-  nav {
+  nav > h3 {
     margin-top: var(--space-24);
-  }
-
-  nav > h3:not(:first-child) {
-    margin-top: var(--space-24);
+    margin-bottom: var(--space-8);
   }
 
   ul {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-
-    margin-top: var(--space-12);
   }
 
   a.nav-link {
@@ -81,7 +166,6 @@
     padding: var(--space-12);
     border-radius: var(--radius-8);
 
-    color: var(--color-text-muted);
     transition: var(--transition-color);
   }
 
@@ -93,9 +177,55 @@
     background-color: var(--color-bg-brand);
   }
 
-  @media (max-width: 600px) {
-    aside {
+  @media (max-width: 768px) {
+    .mobile-navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: var(--space-12) var(--space-16);
+      width: 100%;
+
+      background-color: var(--color-bg-surface);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .desktop-header {
       display: none;
+    }
+
+    .mobile-header {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    aside {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+
+      width: 80dvw;
+      max-width: 320px;
+
+      border-right: 1px solid var(--color-border);
+
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    aside.open {
+      transform: translateX(0);
+    }
+
+    .backdrop {
+      display: block;
+
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+
+      background-color: rgba(0, 0, 0, 0.4);
     }
   }
 </style>

@@ -14,7 +14,7 @@ export const exercisesData: DataEntry[] = [
   {
     name: "Note Identification",
     description: "Master reading notes on treble, bass, and alto clefs.",
-    href: "/",
+    href: "/exercises",
     color: "purple",
     icon: NoteGlasses
   },
@@ -44,7 +44,7 @@ export const exercisesData: DataEntry[] = [
 export const toolsData: DataEntry[] = [
   {
     name: "Metronome",
-    description: "Easy to use and customize metronome with many options.",
+    description: "Easy to use and customize metronome with many options, including polyrhythms!",
     href: "/tools",
     color: "purple",
     icon: CircleOfFifths
@@ -57,9 +57,16 @@ export const toolsData: DataEntry[] = [
     icon: CircleOfFifths
   },
   {
-    name: "Chord Dictionary",
-    description: "Search any chord and play them in app, or lookup how to play it on your instrument.",
+    name: "Indentify Chord",
+    description: "Lookup a chord that you know the notes to on a piano roll, then view the details on it!",
     href: "/tools",
+    color: "violet",
+    icon: CircleOfFifths
+  },
+  {
+    name: "Chord Library",
+    description: "Search any chord and play them in app, or lookup how to play it on your instrument.",
+    href: "/tools/chord-library",
     color: "blue",
     icon: CircleOfFifths
   },

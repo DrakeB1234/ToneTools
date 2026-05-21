@@ -2,19 +2,18 @@
   import Button from "$lib/components/UI/Button.svelte";
   import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
-  import Label from "$lib/components/UI/Label.svelte";
   import Select from "$lib/components/UI/Select.svelte";
   import type { Option } from "$lib/components/UI/Select.svelte";
   import PianoRoll from "$lib/components/PianoRoll.svelte";
   import {
     getAllModes,
-    getNoteNamesCircleOfFifths,
     getModeDiatonicTriads,
     getScaleNotes,
     getNumeralsFromMode,
     getFormulaFromMode,
     getEnharmonicNote,
     getRelativeMajorMinorScales,
+    getNoteNamesCircleOfFifths,
   } from "$lib/helpers/musicTheory";
   import { onDestroy, onMount } from "svelte";
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
@@ -22,6 +21,8 @@
     GeneralChord,
     GeneralNote,
   } from "$lib/helpers/musicTheoryTypes";
+  import Label from "$lib/components/UI/Label.svelte";
+  import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
 
   // Page Specific Types
 
@@ -167,48 +168,45 @@
 
   onDestroy(() => {
     resetPlayScaleInterval();
+    pianoAudioService.stopAll();
   });
 </script>
 
 <Wrapper>
   <main>
-    <div class="header-container">
-      <Button element="a" color="app" variant="text" size="icon" href="/">
-        <MaterialIcon name="arrowLeftAlt" />
-      </Button>
-      <div class="text-container">
-        <p class="caption muted">Tools</p>
-        <h1 class="header-base">Scale Library</h1>
-      </div>
-    </div>
+    <PageHeaderDetails subText="Tools" headerText="Scales Library" href="/" />
 
     <section class="card-base input-card">
-      <div class="input-group">
-        <Label text="Root" labelFor="root" />
-        <Select
-          id="root"
-          options={selectNoteOptions}
-          bind:value={uiState.selectNoteValue}
-          onchange={handleInputChange}
-        />
-      </div>
-      <div class="input-group">
-        <Label text="Scale" labelFor="scale" />
-        <Select
-          id="scale"
-          options={selectScaleOptions}
-          bind:value={uiState.selectScaleValue}
-          onchange={handleInputChange}
-        />
+      <div class="input-container">
+        <div class="input-group">
+          <Label labelFor="note">Note</Label>
+          <Select
+            id="note"
+            options={selectNoteOptions}
+            bind:value={uiState.selectNoteValue}
+            onchange={handleInputChange}
+          />
+        </div>
+        <div class="input-group">
+          <Label labelFor="note">Scale</Label>
+          <Select
+            id="scale"
+            options={selectScaleOptions}
+            bind:value={uiState.selectScaleValue}
+            onchange={handleInputChange}
+          />
+        </div>
       </div>
     </section>
 
     <section class="card-base scale-card">
-      <div class="scale-notes-header">
-        <h2 class="header-base">Scale Notes</h2>
+      <div class="scale-notes-header space-below">
+        <h2 class="header-xlarge">
+          {uiState.selectNoteValue}&nbsp;{uiState.selectScaleValue}
+        </h2>
         <Button
           onclick={handlePlayScale}
-          color="surface"
+          color="brand"
           variant="text"
           size="icon"
         >
@@ -220,7 +218,8 @@
           <Button
             onclick={() => handlePlayNote(index)}
             color="surface"
-            variant="text"
+            variant="outline"
+            size="large"
             class={currentPlayedScaleIdx === index + 1 ? "active" : ""}
             >{note.simplifiedFullName}</Button
           >
@@ -268,33 +267,30 @@
       </div>
     </section>
 
-    <section class="card-base chords-card">
-      <h2 class="header-base space-below">Diatonic Chords</h2>
+    <section class="card-base diatonic-card">
+      <h2 class="space-below">Diatonic Chords</h2>
 
       <div class="inner-card-base chords-container">
         {#each uiState.scaleTriads as triadObj, index (triadObj.name)}
-          <Button
+          <button
+            class="btn chord-button"
             onclick={() => handlePlayChord(index)}
-            color="transparent"
-            variant="text"
           >
-            <div class="chord-card">
-              <div class="pill" data-quality={triadObj.quality}>
-                <h3>{uiState.scaleNumerals[index]}</h3>
-              </div>
-              <div class="text-container">
-                <h3>{triadObj.name}</h3>
-                <p class="caption muted">
-                  {#each triadObj.notes as note, i (note)}
-                    {note.simplifiedFullName}
-                    {#if i < triadObj.notes.length - 1}
-                      {" - "}
-                    {/if}
-                  {/each}
-                </p>
-              </div>
+            <div class="pill" data-quality={triadObj.quality}>
+              <h3>{uiState.scaleNumerals[index]}</h3>
             </div>
-          </Button>
+            <div class="text-container">
+              <h3>{triadObj.name}</h3>
+              <p class="caption muted">
+                {#each triadObj.notes as note, i (note)}
+                  {note.simplifiedFullName}
+                  {#if i < triadObj.notes.length - 1}
+                    {" - "}
+                  {/if}
+                {/each}
+              </p>
+            </div>
+          </button>
         {/each}
       </div>
     </section>
@@ -311,14 +307,6 @@
     padding: var(--app-padding);
   }
 
-  .header-container {
-    display: flex;
-    gap: var(--space-16);
-    align-items: center;
-
-    margin-bottom: var(--space-16);
-  }
-
   .space-below {
     margin-bottom: var(--space-12);
   }
@@ -329,7 +317,7 @@
     text-align: left;
   }
 
-  .input-card {
+  .input-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
     gap: var(--space-12);
@@ -339,6 +327,10 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+  }
+
+  .scale-card {
+    padding-block: var(--space-16);
   }
 
   .scale-notes-header {
@@ -364,19 +356,28 @@
     padding: var(--space-12);
   }
 
-  .chords-container {
-    display: grid;
-    gap: var(--space-8);
-    padding: 0;
+  .diatonic-card {
+    padding-block: var(--space-16);
   }
 
-  .chord-card {
+  .chords-container {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0;
+    margin-top: var(--space-16);
+  }
+
+  .chord-button {
     display: flex;
     align-items: center;
     gap: var(--space-16);
+    background-color: transparent;
 
     padding: var(--space-12);
     width: 100%;
+  }
+  .chord-button:hover {
+    background-color: var(--color-surface-hover);
   }
 
   .pill {

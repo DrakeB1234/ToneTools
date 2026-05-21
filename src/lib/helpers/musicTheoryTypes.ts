@@ -7,10 +7,12 @@ export type GeneralNote = {
 }
 
 export type GeneralChord = {
-  name: string | null;
+  name: string;
+  symbol: string;
   tonic: string;
-  accidental: string | null;
+  simplifiedTonic: string;
   quality: string | null;
   notes: GeneralNote[];
-  simplifiedTonic: string;
 }
+
+type chordSymbolsCategories = "Basic" | "Seventh" | "Ninth"
