@@ -23,7 +23,7 @@
 <header class="mobile-navbar">
   <a href="/" class="logo-container">
     <img src="/images/logo.svg" alt="Music App Logo" width="32" height="32" />
-    <h1 class="header-large">Music App</h1>
+    <h1 class="text-large">Music App</h1>
   </a>
   <Button
     color="surface"
@@ -50,7 +50,7 @@
           width="32"
           height="32"
         />
-        <h1 class="header-large">Music App</h1>
+        <h1 class="text-large">Music App</h1>
       </a>
     </div>
 
@@ -62,7 +62,7 @@
           width="32"
           height="32"
         />
-        <h1 class="header-large">Music App</h1>
+        <h1 class="text-large">Music App</h1>
       </a>
       <Button
         color="surface"

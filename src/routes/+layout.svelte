@@ -12,13 +12,20 @@
 
 <div class="page">
 	<Sidebar />
-	{@render children()}
+	<div class="content-container">
+		{@render children()}
+	</div>
 </div>
 
 <style>
 	.page {
 		display: flex;
 		min-height: 100dvh;
+	}
+
+	.content-container {
+		flex: 1;
+		min-width: 0;
 	}
 
 	@media (max-width: 768px) {

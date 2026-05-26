@@ -11,7 +11,7 @@
   </Button>
   <div class="text-container">
     <p class="caption muted">{subText}</p>
-    <h1 class="header-base">{headerText}</h1>
+    <h1 class="text-base">{headerText}</h1>
   </div>
 </div>
 

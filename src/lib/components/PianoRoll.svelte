@@ -1,135 +1,144 @@
 <script lang="ts">
-  import { getEnharmonicNote } from "$lib/helpers/musicTheory";
-
   let {
     visibleOctaves = 1,
     startingOctave = 4,
     activeNotes = [],
     showNoteNames = true,
   }: {
-    visibleOctaves: number;
-    startingOctave: number;
+    visibleOctaves?: number;
+    startingOctave?: number;
     activeNotes?: string[];
     showNoteNames?: boolean;
   } = $props();
 
-  const whiteWidth = 44;
-  const whiteHeight = 180;
-  const blackWidth = 26;
-  const blackHeight = 110;
+  let activeNotesSet = $derived(new Set(activeNotes));
 
-  const whiteNoteNameYPos = whiteHeight - 10;
-  const whiteNoteNameXOffset = whiteWidth / 3;
-  const blackNoteNameYPos = 24;
-  const blackNoteEnharmonicNoteNameYPos = blackNoteNameYPos + 22;
-  const blackNoteNameXOffset = blackWidth / 6;
+  const config = {
+    white: { width: 44, height: 180, radius: 4 },
+    black: { width: 28, height: 110, radius: 3 },
+  };
 
   const baseOctave = [
-    { note: "C", type: "white", wIdx: 0 },
-    { note: "C#", type: "black", wIdx: 0 },
-    { note: "D", type: "white", wIdx: 1 },
-    { note: "D#", type: "black", wIdx: 1 },
-    { note: "E", type: "white", wIdx: 2 },
-    { note: "F", type: "white", wIdx: 3 },
-    { note: "F#", type: "black", wIdx: 3 },
-    { note: "G", type: "white", wIdx: 4 },
-    { note: "G#", type: "black", wIdx: 4 },
-    { note: "A", type: "white", wIdx: 5 },
-    { note: "A#", type: "black", wIdx: 5 },
-    { note: "B", type: "white", wIdx: 6 },
+    { name: "C", type: "white", whiteOffset: 0 },
+    { name: "C#", type: "black", whiteOffset: 0 },
+    { name: "D", type: "white", whiteOffset: 1 },
+    { name: "D#", type: "black", whiteOffset: 1 },
+    { name: "E", type: "white", whiteOffset: 2 },
+    { name: "F", type: "white", whiteOffset: 3 },
+    { name: "F#", type: "black", whiteOffset: 3 },
+    { name: "G", type: "white", whiteOffset: 4 },
+    { name: "G#", type: "black", whiteOffset: 4 },
+    { name: "A", type: "white", whiteOffset: 5 },
+    { name: "A#", type: "black", whiteOffset: 5 },
+    { name: "B", type: "white", whiteOffset: 6 },
   ];
 
   let keys = $derived(
-    Array.from({ length: visibleOctaves }).flatMap((_, i) =>
-      baseOctave.map((e) => {
-        const globalWIdx = i * 7 + e.wIdx;
+    Array.from({ length: visibleOctaves }).flatMap((_, octaveIndex) =>
+      baseOctave.map((baseKey) => {
+        const currentOctave = startingOctave + octaveIndex;
 
-        const xPos =
-          e.type === "white"
-            ? globalWIdx * whiteWidth
-            : globalWIdx * whiteWidth + whiteWidth - blackWidth / 2;
+        const absoluteWhiteIndex = octaveIndex * 7 + baseKey.whiteOffset;
+        let xPos = absoluteWhiteIndex * config.white.width;
+
+        if (baseKey.type === "black") {
+          xPos += config.white.width - config.black.width / 2;
+        }
+
+        const baseKeyType = config[baseKey.type as "white" | "black"];
 
         return {
-          ...e,
-          note: e.note,
-          octave: startingOctave + i,
-          xPos,
-          width: e.type === "white" ? whiteWidth : blackWidth,
-          height: e.type === "white" ? whiteHeight : blackHeight,
+          id: `${baseKey.name}${currentOctave}`,
+          name: baseKey.name,
+          type: baseKey.type,
+          octave: currentOctave,
+          x: xPos,
+          width: baseKeyType.width,
+          height: baseKeyType.height,
+          radius: baseKeyType.radius,
         };
       }),
     ),
   );
 
-  let whiteKeys = $derived(keys.filter((e) => e.type === "white"));
-  let blackKeys = $derived(keys.filter((e) => e.type === "black"));
+  let whiteKeys = $derived(keys.filter((k) => k.type === "white"));
+  let blackKeys = $derived(keys.filter((k) => k.type === "black"));
 
-  let viewBoxWidth = $derived(visibleOctaves * 7 * whiteWidth);
+  let viewBoxWidth = $derived(visibleOctaves * 7 * config.white.width);
 </script>
 
-<svg
-  class="piano-svg"
-  viewBox="0 0 {viewBoxWidth} {whiteHeight}"
-  role="img"
-  aria-label="Piano Roll"
->
-  <g class="white-keys">
-    {#each whiteKeys as key (`${key.note}${key.octave}`)}
-      <rect
-        class="key white"
-        class:active={activeNotes?.includes(key.note + key.octave)}
-        x={key.xPos}
-        y="0"
-        width={key.width}
-        height={key.height}
-        data-note={key.note}
-        data-octave={key.octave}
-        rx="4"
-      />
-      <text
-        class="note-text white"
-        class:hide={!showNoteNames}
-        y={whiteNoteNameYPos}
-        x={key.xPos + whiteNoteNameXOffset}>{key.note}</text
-      >
-    {/each}
-  </g>
+<div class="scroll-wrapper">
+  <svg
+    class="piano-svg"
+    viewBox="0 0 {viewBoxWidth} {config.white.height}"
+    role="img"
+    aria-label="Piano Roll"
+  >
+    <g class="keys-layer">
+      {#each whiteKeys as key (key.id)}
+        {@const isActive = activeNotesSet.has(key.id)}
+        <g class="key-group">
+          <rect
+            class="key white"
+            class:active={isActive}
+            x={key.x}
+            y="0"
+            width={key.width}
+            height={key.height}
+            rx={key.radius}
+            data-note={key.name}
+          />
+          <text
+            class="note-text white"
+            class:hide={!showNoteNames}
+            x={key.x + key.width / 2}
+            y={key.height - 12}
+          >
+            {key.name}
+          </text>
+        </g>
+      {/each}
+    </g>
 
-  <g class="black-keys">
-    {#each blackKeys as key (`${key.note}${key.octave}`)}
-      <rect
-        class="key black"
-        class:active={activeNotes?.includes(key.note + key.octave)}
-        x={key.xPos}
-        y="0"
-        width={key.width}
-        height={key.height}
-        data-note={key.note}
-        data-octave={key.octave}
-        rx="3"
-      />
-      <text
-        class="note-text black"
-        class:hide={!showNoteNames}
-        y={blackNoteNameYPos}
-        x={key.xPos + blackNoteNameXOffset}>{key.note}</text
-      >
-      <text
-        class="note-text black"
-        class:hide={!showNoteNames}
-        y={blackNoteEnharmonicNoteNameYPos}
-        x={key.xPos + blackNoteNameXOffset}
-        >{getEnharmonicNote(key.note, true)}</text
-      >
-    {/each}
-  </g>
-</svg>
+    <g class="keys-layer">
+      {#each blackKeys as key (key.id)}
+        {@const isActive = activeNotesSet.has(key.id)}
+        <g class="key-group">
+          <rect
+            class="key black"
+            class:active={isActive}
+            x={key.x}
+            y="0"
+            width={key.width}
+            height={key.height}
+            rx={key.radius}
+            data-note={key.name}
+          />
+          <text
+            class="note-text black"
+            class:hide={!showNoteNames}
+            x={key.x + key.width / 2}
+            y={26}
+          >
+            {key.name}
+          </text>
+        </g>
+      {/each}
+    </g>
+  </svg>
+</div>
 
 <style>
+  .scroll-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+  }
+
   .piano-svg {
-    max-height: 11em;
-    border: 1px solid var(--color-border, #ccc);
-    border-radius: var(--radius-8);
+    max-width: unset;
+    min-height: 9em;
+    max-height: 12em;
   }
 
   .key.white {
@@ -137,30 +146,37 @@
     stroke: var(--color-border, #ccc);
     stroke-width: 1px;
   }
+
   .key.black {
     fill: var(--palette-black, #111111);
   }
+
   .key.active {
     fill: var(--color-bg-brand);
     stroke: var(--color-border-brand);
-    stroke-width: 2;
+    stroke-width: 2px;
   }
-  .key.active + text {
-    fill: var(--color-text-inverse);
+
+  .key.active ~ text {
+    fill: var(--color-text-inverse, #ffffff);
+  }
+
+  .hide {
+    display: none;
   }
 
   .note-text {
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-base);
     pointer-events: none;
+    text-anchor: middle;
   }
-  .note-text.hide {
-    display: none;
-  }
+
   .note-text.white {
     fill: var(--color-text);
-    font-size: var(--font-size-base);
   }
+
   .note-text.black {
-    fill: var(--color-text-inverse);
-    font-size: var(--font-size-sm);
+    fill: var(--color-text-inverse, #ffffff);
   }
 </style>

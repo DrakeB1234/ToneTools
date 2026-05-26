@@ -8,6 +8,7 @@
     color?: "brand" | "surface" | "app";
     variant?: "raised" | "outline" | "text";
     size?: "small" | "medium" | "large" | "icon";
+    active?: boolean;
     class?: string;
     [key: string]: any;
     children?: Snippet;
@@ -19,6 +20,7 @@
     variant = "raised",
     size = "medium",
     class: className = "",
+    active = false,
     children,
     ...rest
   }: Props = $props();
@@ -28,12 +30,16 @@
   );
 </script>
 
-<svelte:element this={element} class={classes} {...rest}>
+<svelte:element this={element} class={classes} class:active {...rest}>
   {@render children?.()}
 </svelte:element>
 
 <style>
   /* base btn class hoisted to global css file */
+
+  a.btn:focus {
+    outline: 2px solid var(--palette-brand-400);
+  }
 
   .btn.small {
     padding: var(--space-4);
@@ -76,6 +82,9 @@
     background-color: var(--color-bg-brand);
     border-color: var(--color-border-brand);
     color: var(--color-text-inverse);
+  }
+  .btn.active:hover {
+    background-color: var(--color-bg-brand);
   }
 
   .btn.raised {

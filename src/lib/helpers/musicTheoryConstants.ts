@@ -1,4 +1,51 @@
+import type { SimpleChordEntry } from "./musicTheoryTypes";
+
+export const regexChordSymbolToken = /^(?<note>[A-Ga-g]?)(?<accidental>(?:sharp|flat)?)-?(?<symbol>.*)$/;
+export const regexScaleToken = /^(?<note>[A-Ga-g]?)(?<accidental>(?:sharp|flat)?)-?(?<scale>.*)$/;
+
 export const naturalNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
+export const chordCategories = ["Common", "Major", "Minor"];
+
+export const chordCategoryEntries: Record<string, SimpleChordEntry[]> = {
+  "Common": [
+    { name: "major", symbol: "maj" },
+    { name: "minor", symbol: "min" },
+    { name: "augmented", symbol: "aug" },
+    { name: "diminished", symbol: "dim" },
+    { name: "suspended second", symbol: "sus2" },
+    { name: "suspended fourth", symbol: "sus4" },
+    { name: "major seventh", symbol: "maj7" },
+    { name: "minor seventh", symbol: "min7" },
+    { name: "dominant seventh", symbol: "7" },
+    { name: "half diminished", symbol: "7b5" },
+  ],
+  "Major": [
+    { name: "major", symbol: "maj" },
+    { name: "major seventh", symbol: "maj7" },
+    { name: "major ninth", symbol: "maj9" },
+    { name: "major eleventh", symbol: "maj11" },
+    { name: "major thirteenth", symbol: "maj13" },
+    { name: "added ninth", symbol: "add9" },
+    { name: "added eleventh", symbol: "add11" },
+    { name: "added thirteenth", symbol: "add13" },
+    { name: "sixth", symbol: "6" },
+    { name: "dominant seventh", symbol: "7" },
+    { name: "ninth", symbol: "9" },
+    { name: "eleventh", symbol: "11" },
+    { name: "thirteenth", symbol: "13" },
+  ],
+  "Minor": [
+    { name: "minor", symbol: "min" },
+    { name: "minor sixth", symbol: "min6" },
+    { name: "minor seventh", symbol: "min7" },
+    { name: "minor ninth", symbol: "min9" },
+    { name: "minor eleventh", symbol: "min11" },
+    { name: "minor thirteenth", symbol: "min13" },
+  ]
+}
+
+// COMMENTED OUT FOR NOW, UNTIL NEEDED TO HELP MEM
+// export const allChords = getAllChords();
 
 export const modeNumeralMap: Record<string, string[]> = {
   "major": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],

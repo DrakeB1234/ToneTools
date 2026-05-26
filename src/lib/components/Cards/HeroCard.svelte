@@ -4,7 +4,7 @@
 </script>
 
 <div class="card-base">
-  <h1 class="header-large">Music Training Exercises</h1>
+  <h1 class="text-large">Music Training Exercises</h1>
   <p class="caption">
     There's a lot to master when it comes to music. Start working on some of the
     many areas of focus today!

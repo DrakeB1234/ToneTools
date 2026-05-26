@@ -1,84 +1,62 @@
 <script lang="ts">
   import Wrapper from "$lib/components/Wrapper.svelte";
-  import Select, { type Option } from "$lib/components/UI/Select.svelte";
-  import Label from "$lib/components/UI/Label.svelte";
-  import {
-    findChord,
-    getAllChordInversions,
-    getEnharmonicNote,
-    getNoteNamesCircleOfFifths,
-  } from "$lib/helpers/musicTheory";
+  import { getSimpleChordsByCategory } from "$lib/helpers/musicTheory";
   import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
-  import { simpleChordSymbols } from "$lib/helpers/musicTheoryConstants";
+  import { chordCategories } from "$lib/helpers/musicTheoryConstants";
   import { onDestroy, onMount } from "svelte";
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
-  import type { GeneralChord } from "$lib/helpers/musicTheoryTypes";
+  import type {
+    GeneralChord,
+    SimpleChordEntry,
+  } from "$lib/helpers/musicTheoryTypes";
   import Button from "$lib/components/UI/Button.svelte";
-  import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
-  import PianoRoll from "$lib/components/PianoRoll.svelte";
-  import ChordLibraryInversions from "$lib/components/ChordLibraryInversions.svelte";
+  import RootNoteInput from "$lib/components/RootNoteInput.svelte";
+  import { encodeUrlChord } from "$lib/helpers/helpers";
 
   // Page Specific Types
 
   interface uiState {
-    selectNoteValue: string;
-    selectChordValue: string;
+    inputNote: string;
+    inputChordCategory: string;
 
-    chordObj: GeneralChord;
-    pianoRollNotes: string[];
+    categoryChords: SimpleChordEntry[];
   }
-
-  // Constants
-
-  const selectNoteOptions: Option[] = getNoteNamesCircleOfFifths(true);
-  const selectChordOptions: Option[] = simpleChordSymbols;
-  const initialSelectNoteValue = selectNoteOptions[0] as string;
-  const initialSelectChordValue = selectChordOptions[0] as string;
-  const startingOctave = 4;
 
   // State
 
   let uiState: uiState = $state({
-    selectNoteValue: initialSelectNoteValue,
-    selectChordValue: initialSelectChordValue,
+    inputNote: "C",
+    inputChordCategory: "Major",
+
+    categoryChords: [],
 
     chordObj: {} as GeneralChord,
     pianoRollNotes: [],
+    chordInversions: [],
+
+    currentInversionSelected: 0,
   });
 
   // Functions
 
   function setData() {
-    if (!uiState.selectNoteValue || !uiState.selectChordValue) return;
+    if (!uiState.inputNote || !uiState.inputChordCategory) return;
 
-    const chordObj = findChord(
-      uiState.selectNoteValue,
-      uiState.selectChordValue,
-      startingOctave,
+    const categoryChords = getSimpleChordsByCategory(
+      uiState.inputChordCategory,
     );
 
-    const pianoRollNotes = chordObj.notes.map((e) => {
-      return getEnharmonicNote(e.tonalJsName);
-    });
-
-    uiState.chordObj = chordObj;
-    uiState.pianoRollNotes = pianoRollNotes;
+    uiState.categoryChords = categoryChords;
   }
 
   function handleInputChange() {
     setData();
   }
 
-  function handlePlayNote(index: number) {
-    const note = uiState.chordObj.notes[index];
+  function handleChordCategoryButtonPressed(category: string) {
+    uiState.inputChordCategory = category;
 
-    pianoAudioService.playNote(note, "med");
-  }
-
-  function handlePlayChord() {
-    if (!uiState.chordObj.notes) return;
-
-    pianoAudioService.playChord(uiState.chordObj.notes);
+    setData();
   }
 
   onMount(() => {
@@ -97,77 +75,40 @@
 
     <section class="card-base input-card">
       <div class="input-group">
-        <Label labelFor="note">Note</Label>
-        <Select
-          id="note"
-          options={selectNoteOptions}
-          bind:value={uiState.selectNoteValue}
-          onchange={handleInputChange}
+        <RootNoteInput
+          bind:value={uiState.inputNote}
+          onChange={handleInputChange}
         />
       </div>
-      <div class="input-group">
-        <Label labelFor="chord">Chord</Label>
-        <Select
-          id="chord"
-          options={selectChordOptions}
-          bind:value={uiState.selectChordValue}
-          onchange={handleInputChange}
-        />
-      </div>
-    </section>
 
-    <section class="card-base chord-card">
-      <div class="chord-header">
-        <div>
-          <h2 class="header-xlarge">
-            {uiState.chordObj.tonic + uiState.chordObj.symbol}
-          </h2>
-          <p class="muted">{uiState.chordObj.name}</p>
-        </div>
-        <Button
-          onclick={handlePlayChord}
-          color="brand"
-          variant="text"
-          size="icon"
-        >
-          <MaterialIcon name="playArrow" />
-        </Button>
-      </div>
-
-      <hr class="divider" />
-
-      <div class="note-buttons-container">
-        {#each uiState.chordObj.notes as note, index (note)}
+      <div class="toggle-buttons-container">
+        {#each chordCategories as category (category)}
           <Button
-            onclick={() => handlePlayNote(index)}
             color="surface"
             variant="outline"
-            size="large">{note.simplifiedFullName}</Button
+            active={uiState.inputChordCategory === category}
+            onclick={() => handleChordCategoryButtonPressed(category)}
+            >{category}</Button
           >
         {/each}
       </div>
 
-      <div class="inner-card-base piano-roll-card">
-        <PianoRoll
-          startingOctave={4}
-          activeNotes={uiState.pianoRollNotes}
-          visibleOctaves={2}
-        />
+      <div class="chord-categories-container">
+        {#each uiState.categoryChords as chord (chord.symbol)}
+          <Button
+            element="a"
+            color="surface"
+            variant="outline"
+            size="large"
+            href={encodeUrlChord(uiState.inputNote, chord.symbol)}
+          >
+            <div class="chord-category-item">
+              <h2 class="text-base">{uiState.inputNote + chord.symbol}</h2>
+              <p class="caption muted">{chord.name}</p>
+            </div>
+          </Button>
+        {/each}
       </div>
-
-      <hr class="divider" />
-
-      <h3>Inversions</h3>
-      <div class="inner-card-base">
-        <p>inversion 1</p>
-      </div>
-      <Button
-        onclick={() =>
-          getAllChordInversions(
-            uiState.selectNoteValue,
-            uiState.chordObj.symbol,
-          )}>TEST</Button
-      >
     </section>
   </main>
 </Wrapper>
@@ -182,39 +123,38 @@
     padding: var(--app-padding);
   }
 
-  .input-card {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(7em, 1fr));
-    gap: var(--space-12);
-  }
-
   .input-group {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
   }
 
-  .chord-card {
-    padding-block: var(--space-16);
+  .toggle-buttons-container {
+    display: flex;
+    overflow-x: auto;
+    gap: var(--space-8);
+
+    padding-top: 2px;
+    padding-bottom: var(--space-12);
+    margin-top: var(--space-36);
   }
 
-  .chord-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
+  .chord-categories-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    gap: var(--space-8);
 
-    margin-bottom: var(--space-12);
+    margin-top: var(--space-16);
   }
 
-  .note-buttons-container {
-    display: flex;
+  .chord-category-item {
+    display: grid;
     gap: var(--space-4);
-    flex-wrap: wrap;
-
-    margin-block: var(--space-12);
   }
 
-  .piano-roll-card {
-    margin-bottom: var(--space-16);
+  @media (max-width: 768px) {
+    .chord-categories-container {
+      grid-template-columns: repeat(auto-fill, minmax(8em, 1fr));
+    }
   }
 </style>

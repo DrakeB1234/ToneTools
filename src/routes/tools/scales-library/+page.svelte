@@ -1,175 +1,13 @@
 <script lang="ts">
-  import Button from "$lib/components/UI/Button.svelte";
-  import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
-  import Wrapper from "$lib/components/Wrapper.svelte";
-  import Select from "$lib/components/UI/Select.svelte";
-  import type { Option } from "$lib/components/UI/Select.svelte";
-  import PianoRoll from "$lib/components/PianoRoll.svelte";
-  import {
-    getAllModes,
-    getModeDiatonicTriads,
-    getScaleNotes,
-    getNumeralsFromMode,
-    getFormulaFromMode,
-    getEnharmonicNote,
-    getRelativeMajorMinorScales,
-    getNoteNamesCircleOfFifths,
-  } from "$lib/helpers/musicTheory";
-  import { onDestroy, onMount } from "svelte";
-  import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
-  import type {
-    GeneralChord,
-    GeneralNote,
-  } from "$lib/helpers/musicTheoryTypes";
-  import Label from "$lib/components/UI/Label.svelte";
   import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
+  import RootNoteInput from "$lib/components/RootNoteInput.svelte";
+  import Button from "$lib/components/UI/Button.svelte";
+  import Wrapper from "$lib/components/Wrapper.svelte";
+  import { encodeUrlScale } from "$lib/helpers/helpers";
+  import { getAllModes } from "$lib/helpers/musicTheory";
 
-  // Page Specific Types
-
-  interface uiState {
-    selectNoteValue: string;
-    selectScaleValue: string;
-
-    scaleNotes: GeneralNote[];
-    scaleTriads: GeneralChord[];
-    scaleNumerals: string[];
-    scaleFormula: string[];
-    scaleRelativeModes: ReturnType<typeof getRelativeMajorMinorScales>;
-
-    pianoRollNotes: string[];
-  }
-
-  // Constants
-
-  const selectNoteOptions: Option[] = getNoteNamesCircleOfFifths(true);
-  const selectScaleOptions: Option[] = getAllModes();
-  const initialSelectNoteValue = selectNoteOptions[0] as string;
-  const initialSelectScaleValue = selectScaleOptions[0] as string;
-  const startingOctave = 4;
-  const playScaleDelayMs: number = 500;
-
-  // State
-
-  let uiState: uiState = $state({
-    selectNoteValue: initialSelectNoteValue,
-    selectScaleValue: initialSelectScaleValue,
-
-    scaleNotes: [],
-    scaleTriads: [],
-    scaleNumerals: [],
-    scaleFormula: [],
-    scaleRelativeModes: null,
-
-    pianoRollNotes: [],
-  });
-  let currentPlayedScaleIdx: number | null = $state(null);
-  let playScaleInterval: ReturnType<typeof setInterval> | null = null;
-
-  // Input Handlers
-
-  const handleInputChange = () => {
-    if (!uiState.selectNoteValue || !uiState.selectScaleValue) return;
-
-    setScaleData();
-  };
-
-  // Methods for getting notes / data for page
-
-  function setScaleData() {
-    const notes = getScaleNotes(
-      uiState.selectNoteValue,
-      uiState.selectScaleValue,
-      startingOctave,
-    );
-    const triads = getModeDiatonicTriads(
-      uiState.selectNoteValue,
-      uiState.selectScaleValue,
-      startingOctave,
-    );
-    const numerals = getNumeralsFromMode(uiState.selectScaleValue);
-    const formula = getFormulaFromMode(uiState.selectScaleValue);
-    const relativeModes = getRelativeMajorMinorScales(
-      uiState.selectNoteValue,
-      uiState.selectScaleValue,
-    );
-
-    if (!notes || !triads || !numerals || !formula) {
-      // Handle Error UI State
-      uiState.selectNoteValue = initialSelectNoteValue;
-      uiState.selectScaleValue = initialSelectScaleValue;
-      return;
-    }
-
-    const pianoRollNotes = notes.map((e) => {
-      return getEnharmonicNote(e.tonalJsName);
-    });
-
-    uiState.scaleNotes = notes;
-    uiState.scaleTriads = triads;
-    uiState.scaleNumerals = numerals;
-    uiState.scaleFormula = formula;
-    uiState.scaleRelativeModes = relativeModes;
-    uiState.pianoRollNotes = pianoRollNotes;
-
-    resetPlayScaleInterval();
-  }
-
-  // Audio player handlers
-
-  function handlePlayNote(index: number) {
-    const note = uiState.scaleNotes[index];
-
-    pianoAudioService.playNote(note, "med");
-  }
-
-  function handlePlayChord(triadIndex: number) {
-    const triad = uiState.scaleTriads[triadIndex];
-
-    if (!triad) return;
-
-    pianoAudioService.playChord(triad.notes, "med");
-  }
-
-  // Play Scale Interval - Play all notes in scale
-
-  function resetPlayScaleInterval() {
-    if (playScaleInterval) {
-      clearInterval(playScaleInterval);
-      playScaleInterval = null;
-      currentPlayedScaleIdx = null;
-    }
-  }
-
-  function handlePlayScale() {
-    resetPlayScaleInterval();
-
-    playScaleInterval = setInterval(() => {
-      if (currentPlayedScaleIdx === null) currentPlayedScaleIdx = 0;
-      if (currentPlayedScaleIdx >= uiState.scaleNotes.length) {
-        resetPlayScaleInterval();
-        return;
-      }
-
-      const currentNote = uiState.scaleNotes[currentPlayedScaleIdx];
-      if (currentNote.octave) {
-        pianoAudioService.playNote(currentNote, "low");
-      }
-
-      currentPlayedScaleIdx++;
-    }, playScaleDelayMs);
-  }
-
-  // Svelte Methods
-
-  onMount(() => {
-    setScaleData();
-    pianoAudioService.init();
-  });
-
-  onDestroy(() => {
-    resetPlayScaleInterval();
-    pianoAudioService.stopAll();
-  });
+  let scales = getAllModes();
+  let inputNote = $state("C");
 </script>
 
 <Wrapper>
@@ -177,120 +15,22 @@
     <PageHeaderDetails subText="Tools" headerText="Scales Library" href="/" />
 
     <section class="card-base input-card">
-      <div class="input-container">
-        <div class="input-group">
-          <Label labelFor="note">Note</Label>
-          <Select
-            id="note"
-            options={selectNoteOptions}
-            bind:value={uiState.selectNoteValue}
-            onchange={handleInputChange}
-          />
-        </div>
-        <div class="input-group">
-          <Label labelFor="note">Scale</Label>
-          <Select
-            id="scale"
-            options={selectScaleOptions}
-            bind:value={uiState.selectScaleValue}
-            onchange={handleInputChange}
-          />
-        </div>
-      </div>
-    </section>
+      <RootNoteInput bind:value={inputNote} />
 
-    <section class="card-base scale-card">
-      <div class="scale-notes-header space-below">
-        <h2 class="header-xlarge">
-          {uiState.selectNoteValue}&nbsp;{uiState.selectScaleValue}
-        </h2>
-        <Button
-          onclick={handlePlayScale}
-          color="brand"
-          variant="text"
-          size="icon"
-        >
-          <MaterialIcon name="playArrow" />
-        </Button>
-      </div>
-      <div class="scale-notes-container">
-        {#each uiState.scaleNotes as note, index (note)}
+      <div class="scales-container">
+        {#each scales as scale (scale)}
           <Button
-            onclick={() => handlePlayNote(index)}
+            element="a"
             color="surface"
             variant="outline"
             size="large"
-            class={currentPlayedScaleIdx === index + 1 ? "active" : ""}
-            >{note.simplifiedFullName}</Button
+            href={encodeUrlScale(inputNote, scale)}
           >
-        {/each}
-      </div>
-
-      <div class="inner-card-base piano-roll-container">
-        <PianoRoll
-          visibleOctaves={2}
-          startingOctave={4}
-          activeNotes={uiState.pianoRollNotes}
-        />
-      </div>
-
-      <hr class="divider" />
-
-      <div class="inner-card-base">
-        <h3 class="header-regular space-below">Numerals</h3>
-        <p>
-          {#each uiState.scaleNumerals as note, i (note)}
-            {note}
-            {#if i < uiState.scaleNumerals.length - 1}
-              {" - "}
-            {/if}
-          {/each}
-        </p>
-
-        <hr class="divider" />
-
-        <h3 class="header-regular space-below">
-          Formula <span class="caption">(relative to major)</span>
-        </h3>
-        <p>
-          {#each uiState.scaleFormula as note (note)}
-            {note}&nbsp;&nbsp;
-          {/each}
-        </p>
-
-        <hr class="divider" />
-        <h3 class="header-regular space-below">Relative Modes</h3>
-        <p>
-          {uiState.scaleRelativeModes?.majorMode}&nbsp;|&nbsp;{uiState
-            .scaleRelativeModes?.minorMode}
-        </p>
-      </div>
-    </section>
-
-    <section class="card-base diatonic-card">
-      <h2 class="space-below">Diatonic Chords</h2>
-
-      <div class="inner-card-base chords-container">
-        {#each uiState.scaleTriads as triadObj, index (triadObj.name)}
-          <button
-            class="btn chord-button"
-            onclick={() => handlePlayChord(index)}
-          >
-            <div class="pill" data-quality={triadObj.quality}>
-              <h3>{uiState.scaleNumerals[index]}</h3>
+            <div class="scales-item">
+              <h2 class="text-base">{inputNote}&nbsp;{scale}</h2>
+              <p class="caption muted">{scale}</p>
             </div>
-            <div class="text-container">
-              <h3>{triadObj.name}</h3>
-              <p class="caption muted">
-                {#each triadObj.notes as note, i (note)}
-                  {note.simplifiedFullName}
-                  {#if i < triadObj.notes.length - 1}
-                    {" - "}
-                  {/if}
-                {/each}
-              </p>
-            </div>
-          </button>
+          </Button>
         {/each}
       </div>
     </section>
@@ -307,108 +47,22 @@
     padding: var(--app-padding);
   }
 
-  .space-below {
-    margin-bottom: var(--space-12);
-  }
-
-  .text-container {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-
-  .input-container {
+  .scales-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
-    gap: var(--space-12);
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    gap: var(--space-8);
+
+    margin-top: var(--space-24);
   }
 
-  .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .scale-card {
-    padding-block: var(--space-16);
-  }
-
-  .scale-notes-header {
-    display: flex;
-    gap: var(--space-16);
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .scale-notes-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-
-    margin-bottom: var(--space-16);
-  }
-
-  .divider {
-    margin-block: var(--space-16);
-  }
-
-  .piano-roll-container {
-    padding: var(--space-12);
-  }
-
-  .diatonic-card {
-    padding-block: var(--space-16);
-  }
-
-  .chords-container {
+  .scales-item {
     display: grid;
     gap: var(--space-4);
-    padding: 0;
-    margin-top: var(--space-16);
   }
 
-  .chord-button {
-    display: flex;
-    align-items: center;
-    gap: var(--space-16);
-    background-color: transparent;
-
-    padding: var(--space-12);
-    width: 100%;
-  }
-  .chord-button:hover {
-    background-color: var(--color-surface-hover);
-  }
-
-  .pill {
-    text-align: center;
-
-    width: 100%;
-    max-width: 3em;
-    padding: var(--space-4) var(--space-8);
-    height: fit-content;
-
-    background-color: var(--color-deco-blue-light);
-    border-radius: var(--radius-8);
-  }
-
-  .pill h3 {
-    color: var(--color-deco-blue-dark);
-  }
-
-  .pill[data-quality="Minor"] {
-    background-color: var(--color-deco-purple-light);
-
-    & h3 {
-      color: var(--color-deco-purple-dark);
-    }
-  }
-
-  .pill[data-quality="Diminished"] {
-    background-color: var(--color-deco-green-light);
-
-    & h3 {
-      color: var(--color-deco-green-dark);
+  @media (max-width: 768px) {
+    .scales-container {
+      grid-template-columns: repeat(auto-fill, minmax(8em, 1fr));
     }
   }
 </style>

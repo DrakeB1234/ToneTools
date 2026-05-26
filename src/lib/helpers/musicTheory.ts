@@ -1,6 +1,6 @@
-import { Chord, Midi, Mode, Note, Scale } from "tonal";
-import { modeFormulaMap, modeNumeralMap, naturalNoteNames, simpleChordSymbols } from "./musicTheoryConstants";
-import type { GeneralChord, GeneralNote } from "./musicTheoryTypes";
+import { Chord, ChordType, Midi, Mode, Note, Scale } from "tonal";
+import { chordCategoryEntries, modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
+import { ChordInversionNames, type GeneralChord, type GeneralChordInversion, type GeneralNote, type SimpleChordEntry } from "./musicTheoryTypes";
 
 function convertChordQualityIntoName(quality: string): string {
   switch (quality) {
@@ -15,26 +15,35 @@ function convertChordQualityIntoName(quality: string): string {
   };
 }
 
-export function getAllChordInversions(note: string, chordSymbol: string, startingOctave: number = 4) {
-  const chordObj = Chord.getChord(chordSymbol, note);
-  const getDegree = Chord.degrees(chordSymbol, note + startingOctave);
+export function getAllChords() {
+  return ChordType.symbols().map((e) => Chord.get(e));
+}
 
-  const numNotes = chordObj.intervals.length;
-  const inversions: GeneralNote[][] = [];
+export function getSimpleChordsByCategory(category: string): SimpleChordEntry[] {
+  return chordCategoryEntries[category];
+}
+
+export function getAllChordInversions(chordObj: GeneralChord) {
+  const getDegree = Chord.degrees(chordObj.symbol, chordObj.tonic + chordObj.tonicOctave);
+
+  const inversions: GeneralChordInversion[] = [];
+  const numNotes = chordObj.notes.length;
 
   for (let i = 0; i < numNotes; i++) {
-    const currentInversion: GeneralNote[] = [];
+    const inversionName = ChordInversionNames[i];
+    const inversionNotes: GeneralNote[] = [];
 
     for (let degree = 1; degree <= numNotes; degree++) {
       const noteString = getDegree(i + degree);
 
-      currentInversion.push(convertNoteStringToObj(noteString));
+      inversionNotes.push(convertNoteStringToObj(noteString));
     }
 
-    inversions.push(currentInversion);
+    inversions.push({
+      name: inversionName,
+      notes: inversionNotes
+    });
   }
-
-  console.log(inversions);
 
   return inversions;
 }
@@ -56,6 +65,7 @@ export function findChord(note: string, _chordSymbol: string, startingOctave: nu
     symbol: chordSymbol,
     tonic: note,
     simplifiedTonic: simplifyNoteAccidental(note),
+    tonicOctave: startingOctave,
     quality: chordObj.quality,
     notes: notes,
 
@@ -88,8 +98,6 @@ export function getScaleNotes(noteLetter: String, scaleType: string, startingOct
   const rootNote = noteLetter + startingOctave.toString();
   const fullScale = `${rootNote} ${scaleType}`;
   const scaleObj = Scale.get(fullScale);
-
-  getRelativeMajorMinorScales(noteLetter, scaleType);
 
   if (scaleObj.empty) return null;
 
@@ -137,6 +145,7 @@ export function getModeDiatonicTriads(noteLetter: string, scaleType: string, sta
       symbol: chordSymbol,
       tonic: chordTonic,
       simplifiedTonic: simplifiedTonic,
+      tonicOctave: startingOctave,
       quality: chordObj.quality,
       notes: noteObjs,
     }
