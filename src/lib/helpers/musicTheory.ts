@@ -224,4 +224,13 @@ export function convertNoteStringToObj(note: string): GeneralNote {
   return res;
 }
 
-export function convertNoteToMidi(note: GeneralNote) { return Note.midi(note.tonalJsName) }
+export function convertNoteNameToMidi(noteName: string): number | null { return Note.midi(noteName) ?? null }
+
+export function convertMidiToNoteName(midiNum: number): string {
+  return Midi.midiToNoteName(midiNum);
+}
+
+export function convertNoteNameToChroma(note: string): number | null {
+  const chroma = Note.chroma(note);
+  return !Number.isNaN(chroma) ? chroma : null;
+}

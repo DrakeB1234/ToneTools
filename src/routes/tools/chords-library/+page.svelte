@@ -26,7 +26,7 @@
 
   let uiState: uiState = $state({
     inputNote: "C",
-    inputChordCategory: "Major",
+    inputChordCategory: "Common",
 
     categoryChords: [],
 

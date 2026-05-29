@@ -47,9 +47,12 @@
     padding: var(--app-padding);
   }
 
+  .input-card {
+    padding-block: var(--space-16);
+  }
+
   .scales-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
     gap: var(--space-8);
 
     margin-top: var(--space-24);
@@ -58,11 +61,5 @@
   .scales-item {
     display: grid;
     gap: var(--space-4);
-  }
-
-  @media (max-width: 768px) {
-    .scales-container {
-      grid-template-columns: repeat(auto-fill, minmax(8em, 1fr));
-    }
   }
 </style>

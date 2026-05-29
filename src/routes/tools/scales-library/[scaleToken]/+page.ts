@@ -18,17 +18,17 @@ export const load: PageLoad = ({ params }) => {
   if (accidental === "sharp") fixedNote += "#";
   else if (accidental === "flat") fixedNote += "b";
 
-  console.log(note, accidental, scale, fixedNote);
+  const startingOctave = 4;
 
   const notes = getScaleNotes(
     fixedNote,
     scale,
-    4,
+    startingOctave,
   );
   const triads = getModeDiatonicTriads(
     fixedNote,
     scale,
-    4,
+    startingOctave,
   );
   const numerals = getNumeralsFromMode(scale);
   const formula = getFormulaFromMode(scale);
@@ -37,17 +37,19 @@ export const load: PageLoad = ({ params }) => {
     scale,
   );
 
+
   if (!notes || !triads || !numerals || !formula || !relativeModes) {
     throw error(404, "Scale not found in library");
   };
 
+  const pianoRollNotes = notes.map(e => e.tonalJsName);
+
   return {
     noteToken: fixedNote,
     scaleToken: scale,
+    pianoRollNotes: pianoRollNotes,
 
     scaleNotes: notes,
-    pianoRollNotes: notes.map(e => e.tonalJsName),
-
     triads: triads,
     numerals: numerals,
     formula: formula,

@@ -1,5 +1,5 @@
 const toolScalesLibraryBaseURL = "/tools/scales-library/";
-const toolChordLibraryBaseURL = "/tools/chord-library/";
+const toolChordLibraryBaseURL = "/tools/chords-library/";
 
 export const encodeUrlScale = (note: string, scale: string) => {
   let url = toolScalesLibraryBaseURL + note[0];

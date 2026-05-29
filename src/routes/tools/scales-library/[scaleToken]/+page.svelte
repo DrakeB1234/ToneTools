@@ -2,15 +2,13 @@
   import Button from "$lib/components/UI/Button.svelte";
   import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
-  import PianoRoll from "$lib/components/PianoRoll.svelte";
   import { onDestroy, onMount } from "svelte";
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
   import type { PageProps } from "./$types";
+  import PianoSnapshot from "$lib/components/PianoSnapshot.svelte";
 
   // Constants
-
-  const startingOctave = 4;
 
   const playScaleDelayMs: number = 500;
   let playScaleInterval: ReturnType<typeof setInterval> | null = null;
@@ -105,16 +103,18 @@
             variant="outline"
             size="large"
             active={currentPlayedScaleIdx === index + 1}
-            >{note.simplifiedFullName}</Button
+            >{note.letter + note.accidental}</Button
           >
         {/each}
       </div>
 
-      <div class="inner-card-base piano-roll-container">
-        <PianoRoll
-          visibleOctaves={2}
-          startingOctave={4}
+      <div class="piano-roll-container">
+        <PianoSnapshot
           activeNotes={data.pianoRollNotes}
+          range={{
+            start: "C4",
+            end: "B5",
+          }}
         />
       </div>
 
@@ -167,7 +167,7 @@
               <h3>{triadObj.name}</h3>
               <p class="caption muted">
                 {#each triadObj.notes as note, i (note)}
-                  {note.simplifiedFullName}
+                  {note.letter + note.accidental}
                   {#if i < triadObj.notes.length - 1}
                     {" - "}
                   {/if}
@@ -220,12 +220,15 @@
     margin-bottom: var(--space-16);
   }
 
-  .divider {
-    margin-block: var(--space-16);
+  .piano-roll-container {
+    width: 100%;
+    padding-bottom: var(--space-4);
+
+    overflow-x: auto;
   }
 
-  .piano-roll-container {
-    padding: var(--space-12);
+  .divider {
+    margin-block: var(--space-16);
   }
 
   .diatonic-card {

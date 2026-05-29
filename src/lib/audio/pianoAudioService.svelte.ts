@@ -1,4 +1,4 @@
-import { convertNoteToMidi } from '$lib/helpers/musicTheory';
+import { convertNoteNameToMidi } from '$lib/helpers/musicTheory';
 import type { GeneralNote } from '$lib/helpers/musicTheoryTypes';
 import { Howl, Howler } from 'howler';
 
@@ -103,7 +103,7 @@ class PianoAudioService {
       return;
     }
 
-    let noteMidi = convertNoteToMidi(note);
+    let noteMidi = convertNoteNameToMidi(note.tonalJsName);
     if (noteMidi === null || noteMidi < MIN_PLAYABLE_MIDI || noteMidi > MAX_PLAYABLE_MIDI) {
       console.warn(`Invalid MIDI value for note: '${note.tonalJsName}'`);
       return;

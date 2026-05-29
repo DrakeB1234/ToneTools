@@ -2,15 +2,15 @@
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
   import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
-  import PianoRoll from "$lib/components/PianoRoll.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import {
+    convertNoteNameToMidi,
     getAllChordInversions,
-    getEnharmonicNote,
   } from "$lib/helpers/musicTheory";
   import { onDestroy, onMount } from "svelte";
   import type { PageProps } from "./$types";
+  import PianoSnapshot from "$lib/components/PianoSnapshot.svelte";
 
   // Page Specific Types
 
@@ -31,11 +31,7 @@
 
   let chordObj = $derived(data.chordObj);
   let chordInversions = $derived(getAllChordInversions(data.chordObj));
-  let pianoRollNotes = $derived(
-    chordInversions[uiState.currentInversionSelected]?.notes.map(
-      (n) => n.tonalJsName,
-    ) || [],
-  );
+  let pianoSnapshotNotes = $derived(getPianoSnapshotNotes());
 
   $effect.pre(() => {
     data.chordObj;
@@ -48,14 +44,7 @@
     const note = chordObj.notes[index];
     if (note.octave === null) return;
 
-    const fixedOctave = note.octave + startingOctave;
-    const newNote = {
-      ...note,
-      octave: fixedOctave,
-      tonalJsName: note.letter + fixedOctave,
-    };
-
-    pianoAudioService.playNote(newNote, "med");
+    pianoAudioService.playNote(note, "med");
   }
 
   // Considers currently selected chord inversion, then plays those notes. Root inversion is set by default
@@ -63,10 +52,15 @@
     const selectedInversion = chordInversions[uiState.currentInversionSelected];
     selectedInversion.notes.forEach((e) => {
       if (e.octave === null) return;
-      e.octave += startingOctave;
+      return e;
     });
 
     pianoAudioService.playChord(selectedInversion.notes);
+  }
+
+  function getPianoSnapshotNotes(): string[] {
+    const selectedInversion = chordInversions[uiState.currentInversionSelected];
+    return selectedInversion.notes.map((e) => e.tonalJsName);
   }
 
   function handleInversionPressed(i: number) {
@@ -75,13 +69,6 @@
       return;
     }
 
-    const selectedInversion = chordInversions[i];
-
-    const newPianoRollNotes = selectedInversion.notes.map((e) => {
-      return getEnharmonicNote(e.tonalJsName);
-    });
-
-    pianoRollNotes = newPianoRollNotes;
     uiState.currentInversionSelected = i;
   }
 
@@ -99,7 +86,7 @@
     <PageHeaderDetails
       subText="Chord"
       headerText="Back"
-      href="/tools/chord-library"
+      href="/tools/chords-library"
     />
 
     <section class="card-base chord-card">
@@ -134,10 +121,12 @@
       </div>
 
       <div class="piano-roll-container">
-        <PianoRoll
-          startingOctave={0}
-          activeNotes={pianoRollNotes}
-          visibleOctaves={3}
+        <PianoSnapshot
+          activeNotes={pianoSnapshotNotes}
+          range={{
+            start: "C4",
+            end: "E6",
+          }}
         />
       </div>
 
@@ -195,6 +184,9 @@
   }
 
   .piano-roll-container {
+    width: 100%;
+    overflow-x: auto;
+
     margin-block: var(--space-16);
   }
 

@@ -81,8 +81,8 @@
         {#each exercisesData as data (data.name)}
           <li>
             <a
-              class="nav-link"
-              class:active={data.href === page.url.pathname}
+              class="nav-link muted"
+              class:active={page.url.pathname.includes(data.urlName)}
               href={data.href}
             >
               {data.name}
@@ -96,8 +96,8 @@
         {#each toolsData as data (data.name)}
           <li>
             <a
-              class="nav-link"
-              class:active={data.href === page.url.pathname}
+              class="nav-link muted"
+              class:active={page.url.pathname.includes(data.urlName)}
               href={data.href}
             >
               {data.name}
