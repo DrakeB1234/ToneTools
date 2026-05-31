@@ -15,6 +15,23 @@ function convertChordQualityIntoName(quality: string): string {
   };
 }
 
+export function getChordsByNoteNames(notes: string[]) {
+  const chordTokens = Chord.detect(notes);
+
+  if (chordTokens) {
+    const chordObjs = chordTokens.map(e => Chord.get(e));
+    return chordObjs.map(e => {
+      const symbolWithoutTonic = e.symbol.slice(e.symbol.indexOf(e.tonic ?? "") + 1);
+      return {
+        tonic: e.tonic,
+        symbol: symbolWithoutTonic,
+        notes: e.notes
+      }
+    });
+  }
+  else return null;
+}
+
 export function getAllChords() {
   return ChordType.symbols().map((e) => Chord.get(e));
 }
@@ -36,7 +53,7 @@ export function getAllChordInversions(chordObj: GeneralChord) {
     for (let degree = 1; degree <= numNotes; degree++) {
       const noteString = getDegree(i + degree);
 
-      inversionNotes.push(convertNoteStringToObj(noteString));
+      inversionNotes.push(convertNoteNameToObj(noteString));
     }
 
     inversions.push({
@@ -53,7 +70,7 @@ export function findChord(note: string, _chordSymbol: string, startingOctave: nu
   const chordNotes = Chord.notes(chordObj.symbol, note + startingOctave);
 
   const notes: GeneralNote[] = chordNotes.map(e => {
-    return convertNoteStringToObj(e);
+    return convertNoteNameToObj(e);
   });
 
   // This gets the tonal.js preferred symbol, I prefer the M to be alias[3], so I force that here
@@ -101,7 +118,7 @@ export function getScaleNotes(noteLetter: String, scaleType: string, startingOct
 
   if (scaleObj.empty) return null;
 
-  const generalNoteObjs: GeneralNote[] = scaleObj.notes.map(e => convertNoteStringToObj(e));
+  const generalNoteObjs: GeneralNote[] = scaleObj.notes.map(e => convertNoteNameToObj(e));
 
   return generalNoteObjs;
 };
@@ -135,7 +152,7 @@ export function getModeDiatonicTriads(noteLetter: string, scaleType: string, sta
     const chordName = simplifiedTonic + convertChordQualityIntoName(chordObj.quality);
 
     const chordNotes = Chord.notes(e, scaleNotes[index]);
-    const noteObjs = chordNotes.map(e => convertNoteStringToObj(e));
+    const noteObjs = chordNotes.map(e => convertNoteNameToObj(e));
 
     let chordSymbol = chordObj.aliases[0];
     if (chordSymbol.endsWith("M")) chordSymbol = chordObj.aliases[3];
@@ -205,7 +222,7 @@ export function noteToAbsoluteSemitone(note: GeneralNote): number | null {
   return rawValue - 12;
 }
 
-export function convertNoteStringToObj(note: string): GeneralNote {
+export function convertNoteNameToObj(note: string): GeneralNote {
   const tonalNoteObj = Note.get(note);
   const tonalNoteAccidental = tonalNoteObj.acc;
   const simplifiedFullName = simplifyNoteAccidental(tonalNoteObj.letter + tonalNoteAccidental);

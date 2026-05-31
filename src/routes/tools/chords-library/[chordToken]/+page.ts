@@ -1,5 +1,5 @@
-import { error, redirect } from '@sveltejs/kit';
-import { convertNoteNameToMidi, findChord } from '$lib/helpers/musicTheory';
+import { redirect } from '@sveltejs/kit';
+import { findChord } from '$lib/helpers/musicTheory';
 import type { PageLoad } from './$types';
 import { regexChordSymbolToken } from '$lib/helpers/musicTheoryConstants';
 

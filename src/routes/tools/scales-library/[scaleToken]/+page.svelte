@@ -6,7 +6,7 @@
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
   import type { PageProps } from "./$types";
-  import PianoSnapshot from "$lib/components/PianoSnapshot.svelte";
+  import PianoSnapshot from "$lib/components/Piano/PianoSnapshot.svelte";
 
   // Constants
 
@@ -73,6 +73,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>{data.noteToken}&nbsp;{data.scaleToken} | Music App</title>
+</svelte:head>
+
 <Wrapper>
   <main>
     <PageHeaderDetails
@@ -112,8 +116,8 @@
         <PianoSnapshot
           activeNotes={data.pianoRollNotes}
           range={{
-            start: "C4",
-            end: "B5",
+            startNote: "C4",
+            endNote: "B5",
           }}
         />
       </div>

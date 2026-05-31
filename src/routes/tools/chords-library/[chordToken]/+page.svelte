@@ -10,7 +10,7 @@
   } from "$lib/helpers/musicTheory";
   import { onDestroy, onMount } from "svelte";
   import type { PageProps } from "./$types";
-  import PianoSnapshot from "$lib/components/PianoSnapshot.svelte";
+  import PianoSnapshot from "$lib/components/Piano/PianoSnapshot.svelte";
 
   // Page Specific Types
 
@@ -81,6 +81,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>{data.chordObj.tonic}{data.chordObj.symbol} | Music App</title>
+</svelte:head>
+
 <Wrapper>
   <main>
     <PageHeaderDetails
@@ -124,8 +128,8 @@
         <PianoSnapshot
           activeNotes={pianoSnapshotNotes}
           range={{
-            start: "C4",
-            end: "E6",
+            startNote: "C4",
+            endNote: "E6",
           }}
         />
       </div>

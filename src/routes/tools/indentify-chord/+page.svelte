@@ -1,13 +1,43 @@
 <script lang="ts">
+  import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
-  import PianoSnapshot from "$lib/components/PianoSnapshot.svelte";
+  import PianoInteractive from "$lib/components/Piano/PianoInteractive.svelte";
+  import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
+  import { encodeUrlChord } from "$lib/helpers/helpers";
+  import {
+    convertMidiToNoteName,
+    convertNoteNameToObj,
+    getChordsByNoteNames,
+  } from "$lib/helpers/musicTheory";
+  import { onDestroy, onMount } from "svelte";
 
-  const cmaj13 = ["C4", "E4", "G4", "B4", "D5", "F5", "A5"];
-  const dmaj13 = ["D4", "F#4", "A4", "C#5", "E5", "G5", "B5"];
-  const emaj13 = ["E4", "G#4", "B4", "D#5", "F#5", "A5", "C#6"];
-  const fmaj13 = ["F4", "A4", "C5", "E5", "G5", "B5", "D6"];
-  const e3maj13 = ["E3", "G#3", "B3", "D#4", "F#4", "A4", "C#5"];
+  let selectedNotes: string[] = $state([]);
+  let identifiedChords = $derived(getChordsByNoteNames(selectedNotes));
+
+  function handlePianoNoteClick(midi: number) {
+    const noteName = convertMidiToNoteName(midi);
+
+    if (noteName) {
+      if (selectedNotes.includes(noteName)) {
+        selectedNotes = selectedNotes.filter((n) => n !== noteName);
+      } else {
+        selectedNotes = [...selectedNotes, noteName];
+
+        pianoAudioService.playNote(convertNoteNameToObj(noteName), "low");
+      }
+    }
+  }
+
+  // Svelte Methods
+
+  onMount(() => {
+    pianoAudioService.init();
+  });
+
+  onDestroy(() => {
+    pianoAudioService.stopAll();
+  });
 </script>
 
 <Wrapper>
@@ -15,14 +45,49 @@
     <PageHeaderDetails subText="Tools" headerText="Indentify Chord" href="/" />
 
     <section class="card-base input-card">
-      <div class="piano-roll-container">
-        <PianoSnapshot
-          activeNotes={cmaj13}
-          range={{
-            start: "C4",
-            end: "C6",
-          }}
-        />
+      <PianoInteractive
+        activeNotes={selectedNotes}
+        range={{
+          startNote: "C4",
+          endNote: "E7",
+        }}
+        onNoteClick={handlePianoNoteClick}
+      />
+
+      <h2 class="text-regular header">Selected Notes:</h2>
+      <div class="notes-container">
+        {#each selectedNotes as note}
+          <p>{note}</p>
+        {/each}
+      </div>
+    </section>
+
+    <section class="card-base chords-card">
+      <h2>Results</h2>
+      <hr />
+      <div class="chords-container">
+        {#each identifiedChords as chord}
+          <Button
+            element="a"
+            color="surface"
+            variant="outline"
+            size="large"
+            href={chord.tonic && encodeUrlChord(chord.tonic, chord.symbol)}
+          >
+            <div class="chord-link">
+              <p>{chord.tonic + chord.symbol}</p>
+              <div class="notes-container">
+                {#each selectedNotes as note}
+                  <p class="muted">{note}</p>
+                {/each}
+              </div>
+            </div>
+          </Button>
+        {:else}
+          <div class="empty-container">
+            <p class="muted">No chords found</p>
+          </div>
+        {/each}
       </div>
     </section>
   </main>
@@ -40,15 +105,43 @@
 
   .input-card {
     display: grid;
-    place-items: center;
 
     width: 100%;
   }
 
-  .piano-roll-container {
-    width: 100%;
-    padding-bottom: var(--space-4);
+  .header {
+    margin-top: var(--space-24);
+  }
 
-    overflow-x: auto;
+  .notes-container {
+    display: flex;
+    gap: var(--space-8);
+    flex-wrap: wrap;
+
+    width: 100%;
+    min-height: 21px;
+    margin-top: var(--space-8);
+  }
+
+  .chords-card h2 {
+    margin-bottom: var(--space-8);
+  }
+
+  .chords-container {
+    display: grid;
+    gap: var(--space-8);
+
+    margin-top: var(--space-8);
+  }
+
+  .chord-link {
+    display: grid;
+  }
+
+  .empty-container {
+    display: flex;
+    justify-content: center;
+
+    padding: var(--space-16) var(--space-16);
   }
 </style>
