@@ -90,6 +90,7 @@ svg {
   --font-size-20: 1.25rem;
   --font-size-24: 1.5rem;
   --font-size-32: 2rem;
+  --font-size-48: 3rem;
 
   --font-weight-light: 300;
   --font-weight-regular: 400;
@@ -138,6 +139,7 @@ svg {
   --font-size-2xlg: var(--font-size-24);
 
   --font-size-ui-lg: var(--font-size-32);
+  --font-size-ui-xlg: var(--font-size-48);
 
   /* app colors */
 
@@ -232,6 +234,12 @@ h3 {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
 
+}
+
+.ui-xlarge {
+  line-height: 1.2;
+  font-size: var(--font-size-ui-xlg);
+  font-weight: var(--font-weight-bold);
 }
 
 .ui-large {

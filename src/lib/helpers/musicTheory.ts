@@ -21,7 +21,7 @@ export function getChordsByNoteNames(notes: string[]) {
   if (chordTokens) {
     const chordObjs = chordTokens.map(e => Chord.get(e));
     return chordObjs.map(e => {
-      const symbolWithoutTonic = e.symbol.slice(e.symbol.indexOf(e.tonic ?? "") + 1);
+      const symbolWithoutTonic = e.symbol.replace(e.tonic ?? "", "");
       return {
         tonic: e.tonic,
         symbol: symbolWithoutTonic,

@@ -50,14 +50,22 @@ export const toolsData: DataEntry[] = [
   {
     name: "Metronome",
     description: "Easy to use and customize metronome with many options, including polyrhythms!",
-    href: "/tools",
-    urlName: "NONE",
+    href: "/tools/metronome",
+    urlName: "metronome",
     color: "purple",
     icon: CircleOfFifths
   },
   {
     name: "Circle of Fifths",
     description: "Interactive simple circle of fifths for use in reference.",
+    href: "/tools",
+    urlName: "NONE",
+    color: "violet",
+    icon: CircleOfFifths
+  },
+  {
+    name: "Polyrhythm Creator",
+    description: "Tool to create and study simple polyrhythms.",
     href: "/tools",
     urlName: "NONE",
     color: "violet",

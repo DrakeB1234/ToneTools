@@ -30,6 +30,8 @@
 
 <style>
   select {
+    width: 100%;
+
     padding: var(--space-8);
 
     font-size: var(--font-size-base);
