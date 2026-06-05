@@ -22,6 +22,7 @@
             description={item.description}
             color={item.color}
             icon={item.icon}
+            href={item.href}
           />
         {/each}
       </div>

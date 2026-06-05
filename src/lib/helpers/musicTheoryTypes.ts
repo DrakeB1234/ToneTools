@@ -39,3 +39,8 @@ export type SimpleChordEntry = {
   name: string;
   symbol: string;
 }
+
+export type IntervalEntry = {
+  name: string;
+  interval: string;
+}

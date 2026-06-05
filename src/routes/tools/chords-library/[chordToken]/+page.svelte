@@ -11,6 +11,7 @@
   import { onDestroy, onMount } from "svelte";
   import type { PageProps } from "./$types";
   import PianoSnapshot from "$lib/components/Piano/PianoSnapshot.svelte";
+  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
 
   // Page Specific Types
 
@@ -137,20 +138,23 @@
       <hr class="divider" />
 
       <h3>Inversions</h3>
-      <div class="inner-card-base inversions-container">
+      <div class="inversions-container">
         {#each chordInversions as inversion, index (index)}
-          <button
-            class="btn inversion-button"
-            class:active={uiState.currentInversionSelected === index}
+          <InteractiveElement
+            variant="outline"
+            activeStyle="active-style-2"
+            active={uiState.currentInversionSelected === index}
             onclick={() => handleInversionPressed(index)}
           >
-            <p>{inversion.name}</p>
-            <div class="inversion-button-notes">
-              {#each inversion.notes as note}
-                <p class="muted">{note.simplifiedFullName}&nbsp;</p>
-              {/each}
+            <div class="inversion-button-container">
+              <p>{inversion.name}</p>
+              <div class="inversion-button-notes">
+                {#each inversion.notes as note}
+                  <p class="muted">{note.simplifiedFullName}&nbsp;</p>
+                {/each}
+              </div>
             </div>
-          </button>
+          </InteractiveElement>
         {/each}
       </div>
     </section>
@@ -197,35 +201,21 @@
   .inversions-container {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-8);
 
     padding: 0;
     margin-top: var(--space-16);
   }
 
-  .inversion-button {
+  .inversion-button-container {
     display: flex;
     flex-direction: column;
     align-items: start;
 
     padding: var(--space-12);
-
-    background-color: transparent;
-  }
-
-  .inversion-button.active {
-    background-color: var(--color-bg-brand);
-
-    * {
-      color: var(--color-text-inverse);
-    }
   }
 
   .inversion-button-notes {
     display: flex;
-  }
-
-  .inversion-button:not(.active):hover {
-    background-color: var(--color-surface-hover);
   }
 </style>

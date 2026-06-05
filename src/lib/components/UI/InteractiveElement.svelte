@@ -1,32 +1,28 @@
 <script lang="ts">
-  // Can create buttons that are either <a> or <button> elements depending on whether on element prop value
-
   import type { Snippet } from "svelte";
 
   interface Props {
     element?: "a" | "button";
-    color?: "brand" | "surface" | "app";
+    color?: "brand" | "surface" | "surface-dark" | "app";
     variant?: "raised" | "outline" | "text";
-    size?: "small" | "medium" | "large" | "icon";
+    activeStyle?: "active-style-1" | "active-style-2";
     active?: boolean;
-    class?: string;
     [key: string]: any;
     children?: Snippet;
   }
 
   let {
-    element = "button",
-    color = "brand",
+    element = "a",
+    color = "surface",
     variant = "raised",
-    size = "medium",
-    class: className = "",
+    activeStyle = "active-style-1",
     active = false,
     children,
     ...rest
   }: Props = $props();
 
   let classes = $derived(
-    ["btn", size, variant, color, className].filter(Boolean).join(" "),
+    ["btn", variant, color, activeStyle].filter(Boolean).join(" "),
   );
 </script>
 
@@ -37,21 +33,12 @@
 <style>
   /* base btn class hoisted to global css file */
 
-  a.btn:focus {
-    outline: 2px solid var(--palette-brand-400);
+  .btn {
+    padding: 0;
   }
 
-  .btn.small {
-    padding: var(--space-4);
-  }
-  .btn.medium {
-    padding: var(--space-4) var(--space-8);
-  }
-  .btn.large {
-    padding: var(--space-8) var(--space-12);
-  }
-  .btn.icon {
-    padding: var(--space-4);
+  a.btn:focus {
+    outline: 2px solid var(--palette-brand-400);
   }
 
   .btn.brand {
@@ -60,6 +47,10 @@
   }
   .btn.surface {
     background-color: var(--color-bg-surface);
+    border-color: var(--color-border);
+  }
+  .btn.surface-dark {
+    background-color: var(--color-bg-surface-dark);
     border-color: var(--color-border);
   }
   .btn.app {
@@ -73,17 +64,27 @@
   .btn.surface:hover {
     background-color: var(--color-surface-hover);
   }
+  .btn.surface-dark:hover {
+    background-color: var(--color-surface-dark-hover);
+  }
   .btn.app:hover {
     background-color: var(--color-app-hover);
   }
 
   .btn.active {
     background-color: var(--color-bg-brand);
-    border-color: transparent;
     color: var(--color-text-inverse);
   }
   .btn.active:hover {
     background-color: var(--color-bg-brand);
+  }
+  .active.active-style-2 {
+    background-color: var(--color-bg-brand-light);
+    border: 1px solid var(--color-border-brand);
+    color: var(--color-text);
+  }
+  .active.active-style-2:hover {
+    background-color: var(--color-brand-light-hover);
   }
 
   .btn.raised {

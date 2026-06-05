@@ -7,6 +7,7 @@
     generateKeys,
     viewBoxHeight,
   } from "../../helpers/pianoHelpers";
+  import "./piano.css";
 
   let {
     activeNotes = [],
@@ -70,7 +71,7 @@
           {@const isActive = activeMidis.has(key.midi)}
           <g class="key-group">
             <rect
-              class="key white"
+              class="key white interactive"
               class:active={isActive}
               x={key.x}
               y="0"
@@ -94,10 +95,10 @@
           {@const isActive = activeMidis.has(key.midi)}
           <g class="key-group">
             <rect
-              class="key black"
+              class="key black interactive"
               class:active={isActive}
               x={key.x}
-              y="0"
+              y="-2"
               width={keysConfig.black.width}
               height={keysConfig.black.height}
               rx={keysConfig.black.radius}
@@ -130,7 +131,7 @@
 
     overflow-x: auto;
 
-    border: 1px solid var(--color-border, #ccc);
+    border: 1px solid rgb(219, 220, 226);
     border-bottom: none;
     border-radius: var(--radius-8) var(--radius-8) 0 0;
   }
@@ -144,62 +145,12 @@
     width: 100%;
     height: 2em;
     position: relative;
-    background-color: var(--color-bg-app-sunken);
+    background-color: rgb(219, 220, 226);
   }
 
   .dummy-ruler-line {
     width: 100%;
     height: 50%;
-    border-bottom: 1px dashed var(--color-border-dark);
-  }
-
-  .piano-svg {
-    height: 11em;
-    max-width: unset;
-
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .key.white {
-    fill: var(--color-bg-surface);
-    stroke: var(--color-border);
-  }
-  .key.white:hover:not(.active) {
-    fill: var(--color-surface-hover);
-  }
-
-  .key.black {
-    fill: var(--palette-black);
-  }
-  .key.black:hover:not(.active) {
-    fill: var(--palette-grey-700);
-  }
-
-  .note-text {
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-base);
-    pointer-events: none;
-    text-anchor: middle;
-  }
-
-  .note-text.white {
-    fill: var(--color-text);
-  }
-
-  .note-text.black {
-    fill: var(--color-text-inverse);
-  }
-
-  /* TEMP WORKAROUND translateX to see active border over the inactive keys */
-  .key.active {
-    fill: var(--color-bg-brand);
-    stroke: var(--color-border-brand);
-
-    transform: translatex(-1px);
-  }
-
-  .key.active ~ text {
-    fill: var(--color-text-inverse, #ffffff);
+    border-bottom: 1px dashed rgb(154, 157, 170);
   }
 </style>

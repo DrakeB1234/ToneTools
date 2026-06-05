@@ -10,7 +10,7 @@
 	<title>Music App</title>
 </svelte:head>
 
-<div class="page">
+<div class="app">
 	<Sidebar />
 	<div class="content-container">
 		{@render children()}
@@ -18,7 +18,7 @@
 </div>
 
 <style>
-	.page {
+	.app {
 		display: flex;
 		min-height: 100dvh;
 	}
@@ -29,7 +29,7 @@
 	}
 
 	@media (max-width: 768px) {
-		.page {
+		.app {
 			flex-direction: column;
 		}
 	}

@@ -7,6 +7,7 @@
     generateKeys,
     viewBoxHeight,
   } from "../../helpers/pianoHelpers";
+  import "./piano.css";
 
   let {
     activeNotes = [],
@@ -98,49 +99,3 @@
     {/each}
   </g>
 </svg>
-
-<style>
-  .piano-svg {
-    max-width: unset;
-    min-height: 6em;
-    max-height: 11em;
-
-    overflow: visible;
-  }
-
-  .key.white {
-    fill: var(--color-bg-surface, #ffffff);
-    stroke: var(--color-border, #ccc);
-  }
-
-  .key.black {
-    fill: var(--palette-black, #111111);
-  }
-
-  .note-text {
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-base);
-    pointer-events: none;
-    text-anchor: middle;
-  }
-
-  .note-text.white {
-    fill: var(--color-text);
-  }
-
-  .note-text.black {
-    fill: var(--color-text-inverse, #ffffff);
-  }
-
-  /* TEMP WORKAROUND translateX to see active border over the inactive keys */
-  .key.active {
-    fill: var(--color-bg-brand);
-    stroke: var(--color-border-brand);
-
-    transform: translatex(-1px);
-  }
-
-  .key.active ~ text {
-    fill: var(--color-text-inverse, #ffffff);
-  }
-</style>

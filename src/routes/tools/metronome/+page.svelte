@@ -234,7 +234,7 @@
     width: 100%;
     max-width: 200px;
     height: 4px;
-    background: var(--color-bg-app-sunken);
+    background-color: var(--color-bg-surface-dark);
     border-radius: var(--radius-full);
     outline: none;
   }
@@ -269,7 +269,7 @@
     margin-top: var(--space-24);
     margin-bottom: var(--space-24);
 
-    background-color: var(--color-bg-app);
+    background-color: var(--color-bg-surface-dark);
     border-radius: var(--radius-8);
   }
 
@@ -279,12 +279,14 @@
     place-items: center;
 
     height: 100%;
+    padding: 0;
+    border: none;
 
     background-color: transparent;
     color: var(--color-text, #111111);
   }
   .tap-button:hover {
-    background-color: var(--color-app-hover);
+    background-color: var(--color-surface-dark-hover);
   }
 
   .play-button-wrapper {
@@ -300,7 +302,7 @@
 
     border-radius: var(--radius-full);
     color: var(--color-text-inverse);
-    background-color: var(--color-primary, #3b82f6);
+    background-color: var(--color-bg-brand);
   }
   .play-button:hover {
     background-color: var(--color-brand-hover);

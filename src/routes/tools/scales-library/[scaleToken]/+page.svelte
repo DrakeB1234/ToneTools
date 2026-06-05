@@ -7,6 +7,7 @@
   import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
   import type { PageProps } from "./$types";
   import PianoSnapshot from "$lib/components/Piano/PianoSnapshot.svelte";
+  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
 
   // Constants
 
@@ -160,25 +161,27 @@
 
       <div class="inner-card-base chords-container">
         {#each data.triads as triadObj, index (triadObj.name)}
-          <button
-            class="btn chord-button"
+          <InteractiveElement
+            variant="text"
             onclick={() => handlePlayChord(index)}
           >
-            <div class="pill" data-quality={triadObj.quality}>
-              <h3>{data.numerals[index]}</h3>
+            <div class="chord-button">
+              <div class="pill" data-quality={triadObj.quality}>
+                <h3>{data.numerals[index]}</h3>
+              </div>
+              <div class="text-container">
+                <h3>{triadObj.name}</h3>
+                <p class="caption muted">
+                  {#each triadObj.notes as note, i (note)}
+                    {note.letter + note.accidental}
+                    {#if i < triadObj.notes.length - 1}
+                      {" - "}
+                    {/if}
+                  {/each}
+                </p>
+              </div>
             </div>
-            <div class="text-container">
-              <h3>{triadObj.name}</h3>
-              <p class="caption muted">
-                {#each triadObj.notes as note, i (note)}
-                  {note.letter + note.accidental}
-                  {#if i < triadObj.notes.length - 1}
-                    {" - "}
-                  {/if}
-                {/each}
-              </p>
-            </div>
-          </button>
+          </InteractiveElement>
         {/each}
       </div>
     </section>
@@ -241,9 +244,11 @@
 
   .chords-container {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-8);
     padding: 0;
     margin-top: var(--space-16);
+
+    background-color: transparent;
   }
 
   .chord-button {

@@ -1,10 +1,26 @@
-import type { SimpleChordEntry } from "./musicTheoryTypes";
+import type { IntervalEntry, SimpleChordEntry } from "./musicTheoryTypes";
 
 export const regexChordSymbolToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)?)-?(?<symbol>.*)$/;
 export const regexScaleToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)?)-?(?<scale>.*)$/;
 
 export const naturalNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
 export const chordCategories = ["Common", "Major", "Minor"];
+
+export const intervalObjs: IntervalEntry[] = [
+  { name: "Perfect Unison", interval: "P1" },
+  { name: "Minor Second", interval: "m2" },
+  { name: "Major Second", interval: "M2" },
+  { name: "Minor Third", interval: "m3" },
+  { name: "Major Third", interval: "M3" },
+  { name: "Perfect Fourth", interval: "P4" },
+  { name: "Tritone", interval: "A4" },
+  { name: "Perfect Fifth", interval: "P5" },
+  { name: "Minor Sixth", interval: "m6" },
+  { name: "Major Sixth", interval: "M6" },
+  { name: "Minor Seventh", interval: "m7" },
+  { name: "Major Seventh", interval: "M7" },
+  { name: "Perfect Octave", interval: "P8" },
+]
 
 export const chordCategoryEntries: Record<string, SimpleChordEntry[]> = {
   "Common": [

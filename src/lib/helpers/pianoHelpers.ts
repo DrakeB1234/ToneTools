@@ -10,7 +10,7 @@ type KeyObj = {
 
 export const keysConfig = {
   white: { width: 42, height: 180, radius: 0 },
-  black: { width: 26, height: 106, radius: 4 },
+  black: { width: 26, height: 108, radius: 4 },
 };
 
 export const blackKeysSet = new Set([1, 3, 6, 8, 10]);

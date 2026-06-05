@@ -12,8 +12,8 @@
 
   <Button
     element="a"
-    color="surface"
-    variant="raised"
+    color="brand"
+    variant="outline"
     size="large"
     href="/exercises"
   >

@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import { findChord } from '$lib/helpers/musicTheory';
 import type { PageLoad } from './$types';
 import { regexChordSymbolToken } from '$lib/helpers/musicTheoryConstants';
+import { decodeUrlAccidentals } from '$lib/helpers/helpers';
 
 export const load: PageLoad = ({ params }) => {
   const rawUrlParam = params.chordToken;
@@ -15,11 +16,11 @@ export const load: PageLoad = ({ params }) => {
 
   const { note, accidental, symbol } = match.groups;
 
-  let fixedNote = note;
-  if (accidental === "sharp") fixedNote += "#";
-  else if (accidental === "flat") fixedNote += "b";
+  let fixedNote = decodeUrlAccidentals(note + accidental);
+  let fixedSymbol = decodeUrlAccidentals(symbol);
 
-  const chordObj = findChord(fixedNote, symbol);
+  const chordObj = findChord(fixedNote, fixedSymbol);
+
 
   if (!chordObj) {
     const message = encodeURIComponent("Invalid chord format provided.");

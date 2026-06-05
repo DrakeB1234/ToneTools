@@ -1,5 +1,5 @@
-import { Chord, ChordType, Midi, Mode, Note, Scale } from "tonal";
-import { chordCategoryEntries, modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
+import { Chord, ChordType, Interval, Midi, Mode, Note, Scale } from "tonal";
+import { chordCategoryEntries, intervalObjs, modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
 import { ChordInversionNames, type GeneralChord, type GeneralChordInversion, type GeneralNote, type SimpleChordEntry } from "./musicTheoryTypes";
 
 function convertChordQualityIntoName(quality: string): string {
@@ -13,6 +13,26 @@ function convertChordQualityIntoName(quality: string): string {
     default:
       return "maj"
   };
+}
+
+export function getIntervalName(interval: string): string {
+  const intervalObj = intervalObjs.find(e => e.interval === interval);
+
+  return intervalObj?.name ?? "";
+}
+
+export function incrementNoteNameByInterval(note: string, interval: string) {
+  const newNote = Note.transpose(note, interval);
+
+  return newNote;
+}
+
+export function decrementNoteNameByInterval(note: string, interval: string) {
+  // Convert app interval string (m2) to tonals (2m) for proper parsing
+  const normalizedInterval = Interval.get(interval).name;
+  const newNote = Note.transpose(note, `-${normalizedInterval}`);
+
+  return newNote;
 }
 
 export function getChordsByNoteNames(notes: string[]) {

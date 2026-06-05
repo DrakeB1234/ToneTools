@@ -11,7 +11,23 @@ interface DataEntry {
   icon: Component
 };
 
+export interface IntervalsExerciseEntry {
+  title: string;
+  description: string;
+  href: string,
+  color: "purple" | "violet" | "blue" | "green";
+  icon: any;
+}
+
 export const exercisesData: DataEntry[] = [
+  {
+    name: "Intervals Ear Training",
+    description: "Improve your ear training with either custom or guided interval training exercises!",
+    href: "/exercises/interval-ear-training",
+    urlName: "interval-ear-training",
+    color: "violet",
+    icon: CircleOfFifths
+  },
   {
     name: "Note Identification",
     description: "Master reading notes on treble, bass, and alto clefs.",
@@ -19,14 +35,6 @@ export const exercisesData: DataEntry[] = [
     urlName: "NONE",
     color: "purple",
     icon: NoteGlasses
-  },
-  {
-    name: "Interval Training",
-    description: "Learn to recognize the distance between notes by ear and sight.",
-    href: "/exercises",
-    urlName: "NONE",
-    color: "violet",
-    icon: CircleOfFifths
   },
   {
     name: "Key Identification",
