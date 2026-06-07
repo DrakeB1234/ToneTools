@@ -1,6 +1,6 @@
 import type { IntervalEntry, SimpleChordEntry } from "./musicTheoryTypes";
 
-export const regexChordSymbolToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)?)-?(?<symbol>.*)$/;
+export const regexChordSymbolToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)?)-?(?<symbol>.*?)(?:-?bass(?<bassNote>.*))?$/;
 export const regexScaleToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)?)-?(?<scale>.*)$/;
 
 export const naturalNoteNames = ["C", "D", "E", "F", "G", "A", "B"];

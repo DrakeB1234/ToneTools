@@ -5,7 +5,7 @@
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { exercisesData, toolsData } from "$lib/data/appData";
 
-  const lastUsedItems = [exercisesData[0], exercisesData[1], toolsData[0]];
+  const lastUsedItems = [exercisesData[0], toolsData[0], toolsData[1]];
 </script>
 
 <Wrapper>

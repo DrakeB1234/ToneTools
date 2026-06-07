@@ -1,5 +1,4 @@
 <script lang="ts">
-  import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
   import ConfirmationCard from "$lib/components/Popups/ConfirmationCard.svelte";
   import Popup from "$lib/components/Popups/Popup.svelte";
   import Button from "$lib/components/UI/Button.svelte";
@@ -9,6 +8,7 @@
   import type { IntervalEarConfig } from "./intervalEarTrainingHelpers";
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
+  import Icon from "$lib/components/Icons/Icon.svelte";
 
   type Props = {
     config: IntervalEarConfig;
@@ -67,17 +67,17 @@
   <div class="score-container">
     <div class="score-item red">
       <p class="text-caption">Wrong</p>
-      <p class="text-large">{exerciseController.wrongAnswers}</p>
+      <p class="text-heading-2">{exerciseController.wrongAnswers}</p>
     </div>
     <div class="score-item">
       <p class="text-caption">Question</p>
-      <p class="text-large">
+      <p class="text-heading-2">
         {exerciseController.questionNumber}/{config.questionsAmount}
       </p>
     </div>
     <div class="score-item green">
       <p class="text-caption">Correct</p>
-      <p class="text-large">{exerciseController.correctAnswers}</p>
+      <p class="text-heading-2">{exerciseController.correctAnswers}</p>
     </div>
   </div>
 
@@ -106,14 +106,14 @@
       class="btn refresh-button"
       onclick={exerciseController.handleReplayIntervalClick}
     >
-      <MaterialIcon name="volumeUp" />
+      <Icon icon="volumeUp" />
     </button>
     <button
       class="btn next-button"
       onclick={exerciseController.handleNextButtonClick}
       disabled={exerciseController.isNextQuestionDisabled}
     >
-      <MaterialIcon name="arrowRightAlt" />
+      <Icon icon="arrowRightAlt" />
     </button>
   </div>
 </main>

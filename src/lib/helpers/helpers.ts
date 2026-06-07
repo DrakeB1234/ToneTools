@@ -1,7 +1,31 @@
 const toolScalesLibraryBaseURL = "/tools/scales-library/";
 const toolChordLibraryBaseURL = "/tools/chords-library/";
 
-const encodeUrlAccidentals = (string: string) => {
+export const encodeUrlScale = (note: string, scale: string) => {
+  let urlPart = encodeUrlNote(note);
+  urlPart += "-";
+  urlPart += encodeUrlNote(scale);
+
+  return toolScalesLibraryBaseURL + urlPart;
+}
+
+export const encodeUrlChord = (note: string, symbol: string) => {
+  let urlPart = encodeUrlNote(note);
+
+  const parts = symbol.split("/");
+  const mainSymbol = parts[0];
+  const bassNote = parts[1];
+
+  urlPart += `-${encodeUrlNote(mainSymbol)}`;
+
+  if (bassNote) {
+    urlPart += `-bass${encodeUrlNote(bassNote)}`;
+  }
+
+  return toolChordLibraryBaseURL + urlPart;
+}
+
+const encodeUrlNote = (string: string) => {
   let newString = string;
   newString = newString.replaceAll("#", "sharp");
   newString = newString.replaceAll("b", "flat");
@@ -9,7 +33,9 @@ const encodeUrlAccidentals = (string: string) => {
   return newString;
 }
 
-export const decodeUrlAccidentals = (string: string) => {
+export const decodeUrlNote = (string: string) => {
+  if (!string) return "";
+
   let newString = string;
   newString = newString.replaceAll("sharp", "#");
   newString = newString.replaceAll("flat", "b");
@@ -17,18 +43,11 @@ export const decodeUrlAccidentals = (string: string) => {
   return newString;
 }
 
-export const encodeUrlScale = (note: string, scale: string) => {
-  return toolScalesLibraryBaseURL + encodeUrlNoteWithValue(note, scale);
-}
+export const decodeUrlChord = (string: string) => {
+  let newString = string;
+  newString = newString.replaceAll("sharp", "#");
+  newString = newString.replaceAll("flat", "b");
+  newString = newString.replaceAll("bass", "/");
 
-export const encodeUrlChord = (note: string, chord: string) => {
-  return toolChordLibraryBaseURL + encodeUrlNoteWithValue(note, chord);
-}
-
-const encodeUrlNoteWithValue = (note: string, value: string) => {
-  let urlPart = encodeUrlAccidentals(note);
-  urlPart += "-";
-  urlPart += encodeUrlAccidentals(value);
-
-  return urlPart;
+  return newString;
 }

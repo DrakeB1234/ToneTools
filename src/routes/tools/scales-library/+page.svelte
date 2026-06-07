@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
+  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import RootNoteInput from "$lib/components/RootNoteInput.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
@@ -12,7 +12,11 @@
 
 <Wrapper>
   <main>
-    <PageHeaderDetails subText="Tools" headerText="Scales Library" href="/" />
+    <PageHeaderContainer
+      subText="Tools"
+      headerText="Scales Library"
+      fallbackHref="/"
+    />
 
     <section class="card-base input-card">
       <RootNoteInput bind:value={inputNote} />
@@ -27,8 +31,8 @@
             href={encodeUrlScale(inputNote, scale)}
           >
             <div class="scales-item">
-              <h2 class="text-base">{inputNote}&nbsp;{scale}</h2>
-              <p class="caption muted">{scale}</p>
+              <h2 class="text-heading-3">{inputNote}&nbsp;{scale}</h2>
+              <p class="text-caption-muted">{scale}</p>
             </div>
           </Button>
         {/each}

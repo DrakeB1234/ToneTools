@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MaterialIcon from "../Icons/MaterialIcon.svelte";
+  import Icon from "../Icons/Icon.svelte";
   import Button from "../UI/Button.svelte";
 
   type Props = {
@@ -30,7 +30,7 @@
       size="icon"
       onclick={() => handleResponse(false)}
     >
-      <MaterialIcon name="close" />
+      <Icon icon="close" />
     </Button>
   </div>
 

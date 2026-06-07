@@ -1,5 +1,5 @@
 <script>
-  import MaterialIcon from "../Icons/MaterialIcon.svelte";
+  import Icon from "../Icons/Icon.svelte";
   import InteractiveElement from "../UI/InteractiveElement.svelte";
 
   let {
@@ -7,7 +7,7 @@
     description = "Description of the card.",
     href = "/",
     color = "",
-    icon: Icon,
+    icon,
   } = $props();
 </script>
 
@@ -17,15 +17,15 @@
       class="icon-container"
       style="background-color: var(--color-deco-{color}-base);"
     >
-      <Icon size={"var(--icon-size-med"} />
+      <Icon {icon} size={"var(--icon-size-med"} />
     </div>
     <div class="text-container">
       <h3>{title}</h3>
-      <p class="caption muted line-clamp-3">{description}</p>
+      <p class="text-caption-muted line-clamp-3">{description}</p>
     </div>
     <div class="link-action">
-      <p class="caption muted">Open</p>
-      <MaterialIcon name="arrowRightAlt" color="var(--color-text-muted)" />
+      <p class="text-caption-muted">Open</p>
+      <Icon icon="arrowRightAlt" color="var(--color-text-muted)" />
     </div>
   </div>
 </InteractiveElement>

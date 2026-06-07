@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
+  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { earTrainingGuideEntry } from "../intervalEarTrainingHelpers";
@@ -18,10 +18,10 @@
 
 <Wrapper>
   <main>
-    <PageHeaderDetails
+    <PageHeaderContainer
       subText="Guide"
       headerText="Intervals Ear Training"
-      href="/exercises/interval-ear-training"
+      fallbackHref="/exercises/interval-ear-training"
     />
 
     <section class="card-base ear-card">
@@ -40,7 +40,7 @@
                 <p>{i + 1}</p>
               </div>
               <div class="entry-content-container">
-                <h3 class="entry-title text-large">{entry.title}</h3>
+                <h3 class="entry-title text-heading-2">{entry.title}</h3>
                 <div class="entry-pills-container">
                   {#each entry.exerciseConfig.selectedIntervals as intervalObj}
                     <div class="entry-pill">{intervalObj.interval}</div>

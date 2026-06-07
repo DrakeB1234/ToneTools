@@ -1,7 +1,6 @@
 <script lang="ts">
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { getSimpleChordsByCategory } from "$lib/helpers/musicTheory";
-  import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
   import { chordCategories } from "$lib/helpers/musicTheoryConstants";
   import { onDestroy, onMount } from "svelte";
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
@@ -12,6 +11,7 @@
   import Button from "$lib/components/UI/Button.svelte";
   import RootNoteInput from "$lib/components/RootNoteInput.svelte";
   import { encodeUrlChord } from "$lib/helpers/helpers";
+  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
 
   // Page Specific Types
 
@@ -71,7 +71,11 @@
 
 <Wrapper>
   <main>
-    <PageHeaderDetails subText="Tools" headerText="Chord Library" href="/" />
+    <PageHeaderContainer
+      subText="Tools"
+      headerText="Chord Library"
+      fallbackHref="/"
+    />
 
     <section class="card-base input-card">
       <div class="input-group">
@@ -103,8 +107,8 @@
             href={encodeUrlChord(uiState.inputNote, chord.symbol)}
           >
             <div class="chord-category-item">
-              <h2 class="text-base">{uiState.inputNote + chord.symbol}</h2>
-              <p class="caption muted">{chord.name}</p>
+              <h2 class="text-heading-3">{uiState.inputNote + chord.symbol}</h2>
+              <p class="text-caption-muted">{chord.name}</p>
             </div>
           </Button>
         {/each}

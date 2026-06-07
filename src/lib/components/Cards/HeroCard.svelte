@@ -1,11 +1,11 @@
 <script>
+  import Icon from "../Icons/Icon.svelte";
   import Button from "../UI/Button.svelte";
-  import MaterialIcon from "../Icons/MaterialIcon.svelte";
 </script>
 
 <div class="card-base">
-  <h1 class="text-large">Music Training Exercises</h1>
-  <p class="caption">
+  <h1 class="text-heading-2">Music Training Exercises</h1>
+  <p class="text-caption text-max-width-med">
     There's a lot to master when it comes to music. Start working on some of the
     many areas of focus today!
   </p>
@@ -18,7 +18,7 @@
     href="/exercises"
   >
     View Exercises
-    <MaterialIcon name="arrowRightAlt" />
+    <Icon icon="arrowRightAlt" />
   </Button>
 </div>
 
@@ -40,11 +40,9 @@
     color: var(--color-text-primary);
   }
 
-  p.caption {
+  p.text-caption {
     color: var(--color-text-inverse-muted);
     margin-top: var(--space-12);
-    margin-bottom: var(--space-24);
-
-    max-width: var(--text-box-width-small);
+    margin-bottom: var(--space-16);
   }
 </style>

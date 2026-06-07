@@ -1,6 +1,6 @@
 <script lang="ts">
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
-  import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
+  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import PianoInteractive from "$lib/components/Piano/PianoInteractive.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
@@ -42,7 +42,11 @@
 
 <Wrapper>
   <main>
-    <PageHeaderDetails subText="Tools" headerText="Indentify Chord" href="/" />
+    <PageHeaderContainer
+      subText="Tools"
+      headerText="Indentify Chord"
+      fallbackHref="/"
+    />
 
     <section class="card-base input-card">
       <PianoInteractive
@@ -54,7 +58,7 @@
         onNoteClick={handlePianoNoteClick}
       />
 
-      <h2 class="text-regular header">Selected Notes:</h2>
+      <h2 class="text-body header">Selected Notes:</h2>
       <div class="notes-container">
         {#each selectedNotes as note}
           <p>{note}</p>
@@ -72,7 +76,7 @@
             color="surface"
             variant="outline"
             size="large"
-            href={chord.tonic && encodeUrlChord(chord.tonic, chord.symbol)}
+            href={encodeUrlChord(chord.tonic!, chord.symbol)}
           >
             <div class="chord-link">
               <p>{chord.tonic + chord.symbol}</p>

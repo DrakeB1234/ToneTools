@@ -2,7 +2,7 @@
   import { onNavigate } from "$app/navigation";
   import { page } from "$app/state";
   import { toolsData, exercisesData } from "$lib/data/appData";
-  import MaterialIcon from "./Icons/MaterialIcon.svelte";
+  import Icon from "./Icons/Icon.svelte";
   import Button from "./UI/Button.svelte";
 
   let isOpen = $state(false);
@@ -23,7 +23,7 @@
 <header class="mobile-navbar">
   <a href="/" class="logo-container">
     <img src="/images/logo.svg" alt="Music App Logo" width="32" height="32" />
-    <h1 class="text-large">Music App</h1>
+    <h1 class="text-heading-2">Music App</h1>
   </a>
   <Button
     color="surface"
@@ -32,7 +32,7 @@
     onclick={toggleSidebar}
     aria-label="Open menu"
   >
-    <MaterialIcon name="menu" />
+    <Icon icon="menu" />
   </Button>
 </header>
 
@@ -50,7 +50,7 @@
           width="32"
           height="32"
         />
-        <h1 class="text-large">Music App</h1>
+        <h1 class="text-heading-2">Music App</h1>
       </a>
     </div>
 
@@ -62,7 +62,7 @@
           width="32"
           height="32"
         />
-        <h1 class="text-large">Music App</h1>
+        <h1 class="text-heading-2">Music App</h1>
       </a>
       <Button
         color="surface"
@@ -71,7 +71,7 @@
         onclick={closeSidebar}
         aria-label="Close menu"
       >
-        <MaterialIcon name="close" />
+        <Icon icon="close" />
       </Button>
     </div>
 
@@ -81,7 +81,7 @@
         {#each exercisesData as data (data.name)}
           <li>
             <a
-              class="nav-link muted"
+              class="nav-link"
               class:active={page.url.pathname.includes(data.urlName)}
               href={data.href}
             >
@@ -96,7 +96,7 @@
         {#each toolsData as data (data.name)}
           <li>
             <a
-              class="nav-link muted"
+              class="nav-link"
               class:active={page.url.pathname.includes(data.urlName)}
               href={data.href}
             >
@@ -166,6 +166,7 @@
     padding: var(--space-12);
     border-radius: var(--radius-8);
 
+    color: var(--color-text-muted);
     transition: var(--transition-color);
   }
 

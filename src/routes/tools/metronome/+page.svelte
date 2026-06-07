@@ -1,7 +1,7 @@
 <script lang="ts">
   import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
-  import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
-  import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
+  import Icon from "$lib/components/Icons/Icon.svelte";
+  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import Label from "$lib/components/UI/Label.svelte";
   import Select from "$lib/components/UI/Select.svelte";
@@ -138,7 +138,11 @@
 
 <Wrapper>
   <main>
-    <PageHeaderDetails subText="Tools" headerText="Metronome" href="/" />
+    <PageHeaderContainer
+      subText="Tools"
+      headerText="Metronome"
+      fallbackHref="/"
+    />
 
     <section class="card-base">
       <div class="bpm-container">
@@ -151,8 +155,7 @@
           color="surface"
           variant="outline"
           size="icon"
-          onclick={() => handleBpmButtonPress(-1)}
-          ><MaterialIcon name="minus" /></Button
+          onclick={() => handleBpmButtonPress(-1)}><Icon icon="minus" /></Button
         >
         <input
           type="range"
@@ -166,8 +169,7 @@
           color="surface"
           variant="outline"
           size="icon"
-          onclick={() => handleBpmButtonPress(1)}
-          ><MaterialIcon name="plus" /></Button
+          onclick={() => handleBpmButtonPress(1)}><Icon icon="plus" /></Button
         >
       </div>
 
@@ -176,7 +178,7 @@
 
         <div class="play-button-wrapper">
           <button class="btn play-button" onclick={handlePlayPressed}>
-            <MaterialIcon name={metrnomeInterval ? "stop" : "playArrow"} />
+            <Icon icon={metrnomeInterval ? "stop" : "playArrow"} />
           </button>
         </div>
 

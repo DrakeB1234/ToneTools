@@ -85,8 +85,8 @@ export function getAllChordInversions(chordObj: GeneralChord) {
   return inversions;
 }
 
-export function findChord(note: string, _chordSymbol: string, startingOctave: number = 4) {
-  const chordObj = Chord.getChord(_chordSymbol, note);
+export function findChord(note: string, chordSymbol: string, bassNote?: string, startingOctave: number = 4) {
+  const chordObj = Chord.getChord(chordSymbol, note, bassNote);
   const chordNotes = Chord.notes(chordObj.symbol, note + startingOctave);
 
   const notes: GeneralNote[] = chordNotes.map(e => {
@@ -94,12 +94,12 @@ export function findChord(note: string, _chordSymbol: string, startingOctave: nu
   });
 
   // This gets the tonal.js preferred symbol, I prefer the M to be alias[3], so I force that here
-  let chordSymbol = chordObj.aliases[0];
-  if (chordSymbol.endsWith("M")) chordSymbol = chordObj.aliases[3];
+  let _chordSymbol = chordObj.aliases[0];
+  if (_chordSymbol.endsWith("M")) _chordSymbol = chordObj.aliases[3];
 
   return {
     name: chordObj.name,
-    symbol: chordSymbol,
+    symbol: _chordSymbol,
     tonic: note,
     simplifiedTonic: simplifyNoteAccidental(note),
     tonicOctave: startingOctave,

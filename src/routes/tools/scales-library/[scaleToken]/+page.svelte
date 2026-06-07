@@ -1,13 +1,13 @@
 <script lang="ts">
   import Button from "$lib/components/UI/Button.svelte";
-  import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { onDestroy, onMount } from "svelte";
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
-  import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
   import type { PageProps } from "./$types";
   import PianoSnapshot from "$lib/components/Piano/PianoSnapshot.svelte";
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
+  import Icon from "$lib/components/Icons/Icon.svelte";
+  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
 
   // Constants
 
@@ -80,15 +80,15 @@
 
 <Wrapper>
   <main>
-    <PageHeaderDetails
+    <PageHeaderContainer
       subText="Scale"
       headerText="Back"
-      href="/tools/scales-library"
+      fallbackHref="/tools/scales-library"
     />
 
     <section class="card-base scale-card">
       <div class="scale-notes-header space-below">
-        <h2 class="text-xlarge">
+        <h2 class="text-heading-1">
           {data.noteToken}&nbsp;{data.scaleToken}
         </h2>
         <Button
@@ -97,7 +97,7 @@
           variant="text"
           size="icon"
         >
-          <MaterialIcon name="playArrow" />
+          <Icon icon="playArrow" />
         </Button>
       </div>
       <div class="scale-notes-container">
@@ -126,7 +126,7 @@
       <hr class="divider" />
 
       <div class="inner-card-base">
-        <h3 class="text-regular space-below">Numerals</h3>
+        <h3 class="text-heading-3 space-below">Numerals</h3>
         <p>
           {#each data.numerals as note, i (note)}
             {note}
@@ -138,8 +138,8 @@
 
         <hr class="divider" />
 
-        <h3 class="text-regular space-below">
-          Formula <span class="caption">(relative to major)</span>
+        <h3 class="text-heading-3 space-below">
+          Formula <span class="text-caption">(relative to major)</span>
         </h3>
         <p>
           {#each data.formula as note (note)}
@@ -148,7 +148,7 @@
         </p>
 
         <hr class="divider" />
-        <h3 class="text-regular space-below">Relative Modes</h3>
+        <h3 class="text-heading-3 space-below">Relative Modes</h3>
         <p>
           {data.relativeModes?.majorMode}&nbsp;|&nbsp;{data.relativeModes
             ?.minorMode}
@@ -171,7 +171,7 @@
               </div>
               <div class="text-container">
                 <h3>{triadObj.name}</h3>
-                <p class="caption muted">
+                <p class="text-caption-muted">
                   {#each triadObj.notes as note, i (note)}
                     {note.letter + note.accidental}
                     {#if i < triadObj.notes.length - 1}

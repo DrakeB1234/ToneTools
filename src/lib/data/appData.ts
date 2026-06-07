@@ -1,6 +1,6 @@
 import CircleOfFifths from "$lib/components/Icons/CircleOfFifths.svelte";
+import type { IconType } from "$lib/components/Icons/Icon.svelte";
 import NoteGlasses from "$lib/components/Icons/NoteGlasses.svelte";
-import type { Component } from "svelte";
 
 interface DataEntry {
   name: string;
@@ -8,7 +8,7 @@ interface DataEntry {
   href: string;
   urlName: string;
   color: string;
-  icon: Component
+  icon: IconType
 };
 
 export interface IntervalsExerciseEntry {
@@ -16,7 +16,7 @@ export interface IntervalsExerciseEntry {
   description: string;
   href: string,
   color: "purple" | "violet" | "blue" | "green";
-  icon: any;
+  icon: IconType;
 }
 
 export const exercisesData: DataEntry[] = [
@@ -26,32 +26,8 @@ export const exercisesData: DataEntry[] = [
     href: "/exercises/interval-ear-training",
     urlName: "interval-ear-training",
     color: "violet",
-    icon: CircleOfFifths
-  },
-  {
-    name: "Note Identification",
-    description: "Master reading notes on treble, bass, and alto clefs.",
-    href: "/exercises",
-    urlName: "NONE",
-    color: "purple",
-    icon: NoteGlasses
-  },
-  {
-    name: "Key Identification",
-    description: "Learn to determine the key based off the key signature on a staff.",
-    href: "/exercises",
-    urlName: "NONE",
-    color: "blue",
-    icon: CircleOfFifths
-  },
-  {
-    name: "Chord Identification",
-    description: "Learn to read chords on the staff, by sound, and other options to master!",
-    href: "/exercises",
-    urlName: "NONE",
-    color: "green",
-    icon: CircleOfFifths
-  },
+    icon: "book"
+  }
 ];
 
 export const toolsData: DataEntry[] = [
@@ -61,23 +37,7 @@ export const toolsData: DataEntry[] = [
     href: "/tools/metronome",
     urlName: "metronome",
     color: "purple",
-    icon: CircleOfFifths
-  },
-  {
-    name: "Circle of Fifths",
-    description: "Interactive simple circle of fifths for use in reference.",
-    href: "/tools",
-    urlName: "NONE",
-    color: "violet",
-    icon: CircleOfFifths
-  },
-  {
-    name: "Polyrhythm Creator",
-    description: "Tool to create and study simple polyrhythms.",
-    href: "/tools",
-    urlName: "NONE",
-    color: "violet",
-    icon: CircleOfFifths
+    icon: "volumeUp"
   },
   {
     name: "Indentify Chord",
@@ -85,7 +45,7 @@ export const toolsData: DataEntry[] = [
     href: "/tools/indentify-chord",
     urlName: "indentify-chord",
     color: "violet",
-    icon: CircleOfFifths
+    icon: "search"
   },
   {
     name: "Chords Library",
@@ -93,7 +53,7 @@ export const toolsData: DataEntry[] = [
     href: "/tools/chords-library",
     urlName: "chords-library",
     color: "blue",
-    icon: CircleOfFifths
+    icon: "stacks"
   },
   {
     name: "Scales Library",
@@ -101,6 +61,6 @@ export const toolsData: DataEntry[] = [
     href: "/tools/scales-library",
     urlName: "scales-library",
     color: "green",
-    icon: CircleOfFifths
+    icon: "book"
   },
 ]

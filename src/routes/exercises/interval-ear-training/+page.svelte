@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
-  import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
+  import Icon from "$lib/components/Icons/Icon.svelte";
+  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import Popup from "$lib/components/Popups/Popup.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
@@ -52,10 +52,10 @@
 
 <Wrapper>
   <main>
-    <PageHeaderDetails
+    <PageHeaderContainer
       subText="Exercises"
       headerText="Intervals Ear Training"
-      href="/"
+      fallbackHref="/"
     />
 
     <section class="card-base links-card">
@@ -65,11 +65,11 @@
       >
         <div class="link-container">
           <div class="icon-container purple">
-            <MaterialIcon name="book" />
+            <Icon icon="book" />
           </div>
           <div class="text-container">
-            <h2 class="text-base">Guided</h2>
-            <p class="caption">
+            <h2 class="text-heading-3">Guided</h2>
+            <p class="text-caption-muted">
               Learn intervals through a guided set of exercises.
             </p>
           </div>
@@ -81,11 +81,11 @@
       >
         <div class="link-container">
           <div class="icon-container violet">
-            <MaterialIcon name="stacks" />
+            <Icon icon="stacks" />
           </div>
           <div class="text-container">
-            <h2 class="text-base">Presets</h2>
-            <p class="caption">
+            <h2 class="text-heading-3">Presets</h2>
+            <p class="text-caption-muted">
               Create or choose your own presets for exercises.
             </p>
           </div>
@@ -97,11 +97,11 @@
       >
         <div class="link-container">
           <div class="icon-container green">
-            <MaterialIcon name="leaderBoard" />
+            <Icon icon="leaderBoard" />
           </div>
           <div class="text-container">
-            <h2 class="text-base">Stats</h2>
-            <p class="caption">
+            <h2 class="text-heading-3">Stats</h2>
+            <p class="text-caption-muted">
               See how well you can identify each type of interval
             </p>
           </div>

@@ -1,17 +1,14 @@
 <script lang="ts">
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
-  import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
-  import PageHeaderDetails from "$lib/components/PageHeaderDetails.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
-  import {
-    convertNoteNameToMidi,
-    getAllChordInversions,
-  } from "$lib/helpers/musicTheory";
+  import { getAllChordInversions } from "$lib/helpers/musicTheory";
   import { onDestroy, onMount } from "svelte";
   import type { PageProps } from "./$types";
   import PianoSnapshot from "$lib/components/Piano/PianoSnapshot.svelte";
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
+  import Icon from "$lib/components/Icons/Icon.svelte";
+  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
 
   // Page Specific Types
 
@@ -88,16 +85,16 @@
 
 <Wrapper>
   <main>
-    <PageHeaderDetails
+    <PageHeaderContainer
       subText="Chord"
       headerText="Back"
-      href="/tools/chords-library"
+      fallbackHref="/tools/chords-library"
     />
 
     <section class="card-base chord-card">
       <div class="chord-header">
         <div>
-          <h2 class="text-xlarge">
+          <h2 class="text-heading-1">
             {chordObj.tonic + chordObj.symbol}
           </h2>
           <p class="muted">{chordObj.name}</p>
@@ -108,7 +105,7 @@
           variant="text"
           size="icon"
         >
-          <MaterialIcon name="playArrow" />
+          <Icon icon="playArrow" />
         </Button>
       </div>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MaterialIcon from "$lib/components/Icons/MaterialIcon.svelte";
+  import Icon from "$lib/components/Icons/Icon.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import Input from "$lib/components/UI/Input.svelte";
   import Label from "$lib/components/UI/Label.svelte";
@@ -55,7 +55,7 @@
       size="icon"
       onclick={handlePopupDone}
     >
-      <MaterialIcon name="close" />
+      <Icon icon="close" />
     </Button>
   </div>
 
@@ -148,16 +148,6 @@
 
     width: 100%;
     max-width: 500px;
-  }
-
-  .space-above {
-    margin-top: var(--space-16);
-  }
-  .space-above-sm {
-    margin-top: var(--space-4);
-  }
-  .space-above-lg {
-    margin-top: var(--space-24);
   }
 
   .top-container {
