@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LinkCard from "$lib/components/Cards/LinkCard.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import RootNoteInput from "$lib/components/RootNoteInput.svelte";
   import Button from "$lib/components/UI/Button.svelte";
@@ -23,18 +24,11 @@
 
       <div class="scales-container">
         {#each scales as scale (scale)}
-          <Button
-            element="a"
-            color="surface"
-            variant="outline"
-            size="large"
+          <LinkCard
+            header={`${inputNote} ${scale}`}
+            subTextItems={scale}
             href={encodeUrlScale(inputNote, scale)}
-          >
-            <div class="scales-item">
-              <h2 class="text-heading-3">{inputNote}&nbsp;{scale}</h2>
-              <p class="text-caption-muted">{scale}</p>
-            </div>
-          </Button>
+          />
         {/each}
       </div>
     </section>
@@ -60,10 +54,5 @@
     gap: var(--space-8);
 
     margin-top: var(--space-24);
-  }
-
-  .scales-item {
-    display: grid;
-    gap: var(--space-4);
   }
 </style>

@@ -166,11 +166,9 @@
             onclick={() => handlePlayChord(index)}
           >
             <div class="chord-button">
-              <div class="pill" data-quality={triadObj.quality}>
-                <h3>{data.numerals[index]}</h3>
-              </div>
+              <h3 class="pill">{data.numerals[index]}</h3>
               <div class="text-container">
-                <h3>{triadObj.name}</h3>
+                <h3>{triadObj.tonic + triadObj.symbol}</h3>
                 <p class="text-caption-muted">
                   {#each triadObj.notes as note, i (note)}
                     {note.letter + note.accidental}
@@ -265,34 +263,6 @@
   }
 
   .pill {
-    text-align: center;
-
-    width: 100%;
-    max-width: 3em;
-    padding: var(--space-4) var(--space-8);
-    height: fit-content;
-
-    background-color: var(--color-deco-blue-light);
-    border-radius: var(--radius-8);
-  }
-
-  .pill h3 {
-    color: var(--color-deco-blue-dark);
-  }
-
-  .pill[data-quality="Minor"] {
-    background-color: var(--color-deco-purple-light);
-
-    & h3 {
-      color: var(--color-deco-purple-dark);
-    }
-  }
-
-  .pill[data-quality="Diminished"] {
-    background-color: var(--color-deco-green-light);
-
-    & h3 {
-      color: var(--color-deco-green-dark);
-    }
+    min-width: 4ch;
   }
 </style>

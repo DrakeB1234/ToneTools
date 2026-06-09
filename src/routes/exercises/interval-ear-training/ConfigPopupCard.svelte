@@ -96,7 +96,7 @@
   </div>
 
   <p class="space-above">Octave Range</p>
-  <div class="input-row space-above-sm">
+  <div class="input-row space-above-xsmall">
     <div class="input-group">
       <Label labelFor="octave-low">Low</Label>
       <Select
@@ -125,7 +125,7 @@
     </div>
   </div>
 
-  <div class="input-group space-above-lg">
+  <div class="input-group space-above-large">
     <Label labelFor="questions">Questions</Label>
     <Input
       id="questions"
@@ -137,7 +137,7 @@
     />
   </div>
 
-  <div class="confirm-button-container space-above-lg">
+  <div class="confirm-button-container space-above-large">
     <Button size="large" onclick={handlePopupDone}>Confirm</Button>
   </div>
 </div>

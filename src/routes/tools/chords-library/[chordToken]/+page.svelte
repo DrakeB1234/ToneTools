@@ -2,39 +2,38 @@
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
-  import { getAllChordInversions } from "$lib/helpers/musicTheory";
   import { onDestroy, onMount } from "svelte";
   import type { PageProps } from "./$types";
   import PianoSnapshot from "$lib/components/Piano/PianoSnapshot.svelte";
-  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import Icon from "$lib/components/Icons/Icon.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
-
-  // Page Specific Types
-
-  interface uiState {
-    currentInversionSelected: number;
-  }
+  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
+  import {
+    getFullNoteNameFromObj,
+    simplifyNoteName,
+  } from "$lib/helpers/musicTheory";
+  import Toggle from "$lib/components/UI/Toggle.svelte";
+  import Label from "$lib/components/UI/Label.svelte";
+  import LinkCard from "$lib/components/Cards/LinkCard.svelte";
+  import { encodeUrlChord } from "$lib/helpers/helpers";
 
   // Constants
 
   const startingOctave = 4;
   let { data }: PageProps = $props();
 
-  // State
+  // Data
 
-  let uiState: uiState = $state({
-    currentInversionSelected: 0,
-  });
+  const chordObj = $derived(data.chordObj);
+  const chordInversions = $derived(data.chordInversions);
+  const chordIntervals = $derived(data.chordIntervals);
+  const chordAliases = $derived(data.chordAliases);
+  const similarChords = $derived(data.similarChords);
 
-  let chordObj = $derived(data.chordObj);
-  let chordInversions = $derived(getAllChordInversions(data.chordObj));
-  let pianoSnapshotNotes = $derived(getPianoSnapshotNotes());
-
-  $effect.pre(() => {
-    data.chordObj;
-    uiState.currentInversionSelected = 0;
-  });
+  let isChordInversions = $derived(data.chordInversions !== null);
+  let isSimplifyNotesSelected = $state(false);
+  let currentInversionSelected = $state(0);
+  let pianoSnapshotNotes = $derived(data.fullNoteNames);
 
   // Functions
 
@@ -47,27 +46,25 @@
 
   // Considers currently selected chord inversion, then plays those notes. Root inversion is set by default
   function handlePlayChord() {
-    const selectedInversion = chordInversions[uiState.currentInversionSelected];
-    selectedInversion.notes.forEach((e) => {
-      if (e.octave === null) return;
-      return e;
-    });
-
-    pianoAudioService.playChord(selectedInversion.notes);
-  }
-
-  function getPianoSnapshotNotes(): string[] {
-    const selectedInversion = chordInversions[uiState.currentInversionSelected];
-    return selectedInversion.notes.map((e) => e.tonalJsName);
+    if (!chordInversions) {
+      pianoAudioService.playChord(chordObj.notes);
+    } else {
+      pianoAudioService.playChord(
+        chordInversions[currentInversionSelected].chord.notes,
+      );
+    }
   }
 
   function handleInversionPressed(i: number) {
-    if (i >= chordInversions.length) {
-      uiState.currentInversionSelected = 0;
-      return;
-    }
+    if (!chordInversions) return;
 
-    uiState.currentInversionSelected = i;
+    currentInversionSelected = i;
+    const selectedInversionNotes = chordInversions[i].chord.notes;
+    const noteFullNames = selectedInversionNotes.map((e) =>
+      getFullNoteNameFromObj(e),
+    );
+
+    pianoSnapshotNotes = noteFullNames;
   }
 
   onMount(() => {
@@ -80,7 +77,7 @@
 </script>
 
 <svelte:head>
-  <title>{data.chordObj.tonic}{data.chordObj.symbol} | Music App</title>
+  <title>{data.chordObj.tonic}{data.chordObj.symbol} Chord | Music App</title>
 </svelte:head>
 
 <Wrapper>
@@ -94,10 +91,10 @@
     <section class="card-base chord-card">
       <div class="chord-header">
         <div>
-          <h2 class="text-heading-1">
+          <h1>
             {chordObj.tonic + chordObj.symbol}
-          </h2>
-          <p class="muted">{chordObj.name}</p>
+          </h1>
+          <p class="text-body-muted">{chordObj.name}</p>
         </div>
         <Button
           onclick={handlePlayChord}
@@ -109,16 +106,40 @@
         </Button>
       </div>
 
-      <hr class="divider" />
+      <div class="flex-container aliases-container">
+        {#each chordAliases as alias (alias)}
+          <p class="pill surface-dark text-heading-3">{alias}</p>
+        {/each}
+      </div>
+
+      <div class="toggle-button-container space-above">
+        <div class="input-label-container">
+          <Label labelFor="simplify-notes">Simplify Notes</Label>
+          <Toggle
+            bind:toggled={isSimplifyNotesSelected}
+            id="simplify-notes"
+            ariaLabel="Enable Simplified Notes"
+          />
+        </div>
+      </div>
+
+      <hr class="divider space-above" />
 
       <div class="note-buttons-container">
         {#each chordObj.notes as note, index (note)}
+          {@const rawNote = note.letter + note.accidental}
+          {@const displayNote = isSimplifyNotesSelected
+            ? simplifyNoteName(rawNote)
+            : rawNote}
+
           <Button
             onclick={() => handlePlayNote(index)}
             color="surface"
             variant="outline"
-            size="large">{note.simplifiedFullName}</Button
+            size="large"
           >
+            {displayNote}
+          </Button>
         {/each}
       </div>
 
@@ -132,26 +153,63 @@
         />
       </div>
 
+      <div class="inner-card-base">
+        <h3>Intervals</h3>
+        <div class="flex-container">
+          {#each chordIntervals as interval (interval)}
+            <p class="text-body-muted">{interval}</p>
+          {/each}
+        </div>
+      </div>
+
       <hr class="divider" />
 
-      <h3>Inversions</h3>
-      <div class="inversions-container">
-        {#each chordInversions as inversion, index (index)}
-          <InteractiveElement
-            variant="outline"
-            activeStyle="active-style-2"
-            active={uiState.currentInversionSelected === index}
-            onclick={() => handleInversionPressed(index)}
-          >
-            <div class="inversion-button-container">
-              <p>{inversion.name}</p>
-              <div class="inversion-button-notes">
-                {#each inversion.notes as note}
-                  <p class="muted">{note.simplifiedFullName}&nbsp;</p>
-                {/each}
+      {#if isChordInversions}
+        <h3 class="space-above">Inversions</h3>
+        <div class="inversions-container">
+          {#each chordInversions as inversion, index (index)}
+            <InteractiveElement
+              variant="outline"
+              activeStyle="active-style-2"
+              active={currentInversionSelected === index}
+              onclick={() => handleInversionPressed(index)}
+            >
+              <div class="inversion-button-container">
+                <div class="inversion-top-container">
+                  <p class="pill inversion-pill">{inversion.inversionName}</p>
+                </div>
+                <div class="inversion-bottom-container">
+                  <p>{inversion.chord.tonic + inversion.chord.symbol}</p>
+                  <div class="inversion-button-notes">
+                    {#each inversion.chord.notes as note}
+                      {@const rawNote = note.letter + note.accidental}
+                      {@const displayNote = isSimplifyNotesSelected
+                        ? simplifyNoteName(rawNote)
+                        : rawNote}
+
+                      <p class="text-body-muted">
+                        {displayNote}&nbsp;
+                      </p>
+                    {/each}
+                  </div>
+                </div>
               </div>
-            </div>
-          </InteractiveElement>
+            </InteractiveElement>
+          {/each}
+        </div>
+      {/if}
+    </section>
+
+    <section class="card-base">
+      <h3>Similar Chords</h3>
+
+      <div class="similar-chords-container">
+        {#each similarChords as chord}
+          <LinkCard
+            header={chord.tonic + chord.symbol}
+            subTextItems={chord.name}
+            href={encodeUrlChord(chord.tonic!, chord.symbol)}
+          />
         {/each}
       </div>
     </section>
@@ -180,6 +238,10 @@
     margin-bottom: var(--space-12);
   }
 
+  .aliases-container {
+    overflow-x: auto;
+  }
+
   .note-buttons-container {
     display: flex;
     gap: var(--space-4);
@@ -195,24 +257,62 @@
     margin-block: var(--space-16);
   }
 
-  .inversions-container {
+  .inner-card-base {
+    margin-bottom: var(--space-16);
+  }
+
+  .flex-container {
     display: flex;
-    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .toggle-button-container {
+    width: fit-content;
+    margin-left: auto;
+  }
+
+  .input-label-container {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .inversions-container {
+    display: grid;
     gap: var(--space-8);
 
     padding: 0;
-    margin-top: var(--space-16);
+    margin-top: var(--space-8);
   }
 
   .inversion-button-container {
     display: flex;
-    flex-direction: column;
-    align-items: start;
+    gap: var(--space-12);
 
     padding: var(--space-12);
   }
 
+  .inversion-top-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .inversion-bottom-container {
+    display: grid;
+  }
+
   .inversion-button-notes {
     display: flex;
+  }
+
+  .inversion-pill {
+    width: 5ch;
+  }
+
+  .similar-chords-container {
+    display: grid;
+    gap: var(--space-8);
+
+    margin-top: var(--space-16);
   }
 </style>

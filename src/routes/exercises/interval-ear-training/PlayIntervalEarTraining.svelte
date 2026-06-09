@@ -84,6 +84,7 @@
   <div class="input-wrapper">
     {#each exerciseController.selectedIntervals as intervalObj (intervalObj.interval)}
       <InteractiveElement
+        element="button"
         variant="outline"
         onclick={() =>
           exerciseController.handleIntervalButtonClick(intervalObj.interval)}

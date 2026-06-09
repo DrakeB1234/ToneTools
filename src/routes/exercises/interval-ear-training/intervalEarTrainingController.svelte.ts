@@ -1,6 +1,6 @@
 import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
 import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
-import { convertNoteNameToObj, decrementNoteNameByInterval, incrementNoteNameByInterval } from "$lib/helpers/musicTheory";
+import { convertNoteNameToObj, decrementNoteNameByInterval, getFullNoteNameFromObj, incrementNoteNameByInterval } from "$lib/helpers/musicTheory";
 import { naturalNoteNames } from "$lib/helpers/musicTheoryConstants";
 import type { GeneralNote, IntervalEntry } from "$lib/helpers/musicTheoryTypes";
 import type { IntervalEarConfig } from "./intervalEarTrainingHelpers";
@@ -144,8 +144,11 @@ export class IntervalEarTrainingController {
 
   private getIntervalNoteByDirection(rootNote: GeneralNote, interval: string, direction: string): GeneralNote {
     let intervalNoteName = "";
-    if (direction === "descending") intervalNoteName = decrementNoteNameByInterval(rootNote.tonalJsName, interval);
-    else intervalNoteName = incrementNoteNameByInterval(rootNote.tonalJsName, interval);
+
+    const fullRootNoteName = getFullNoteNameFromObj(rootNote);
+
+    if (direction === "descending") intervalNoteName = decrementNoteNameByInterval(fullRootNoteName, interval);
+    else intervalNoteName = incrementNoteNameByInterval(fullRootNoteName, interval);
     return convertNoteNameToObj(intervalNoteName);
   }
 

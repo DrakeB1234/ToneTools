@@ -1,4 +1,4 @@
-import { convertNoteNameToMidi } from '$lib/helpers/musicTheory';
+import { convertNoteNameToMidi, convertNoteNameToObj, getFullNoteNameFromObj } from '$lib/helpers/musicTheory';
 import type { GeneralNote } from '$lib/helpers/musicTheoryTypes';
 import { Howl, Howler } from 'howler';
 
@@ -98,14 +98,16 @@ class PianoAudioService {
       return;
     }
 
+    const fullNoteName = getFullNoteNameFromObj(note);
+
     if (note.octave === null || note.octave < MIN_OCTAVE || note.octave > MAX_OCTAVE) {
-      console.warn(`Invalid octave for note: '${note.tonalJsName}'`);
+      console.warn(`Invalid octave for note: '${fullNoteName}'`);
       return;
     }
 
-    let noteMidi = convertNoteNameToMidi(note.tonalJsName);
+    let noteMidi = convertNoteNameToMidi(fullNoteName);
     if (noteMidi === null || noteMidi < MIN_PLAYABLE_MIDI || noteMidi > MAX_PLAYABLE_MIDI) {
-      console.warn(`Invalid MIDI value for note: '${note.tonalJsName}'`);
+      console.warn(`Invalid MIDI value for note: '${fullNoteName}'`);
       return;
     }
 

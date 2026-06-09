@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { findChord } from '$lib/helpers/musicTheory';
+import { findChord, getChordAliases, getChordIntervalFormula, getChordInversions, getFullNoteNameFromObj, getScalesFromChord, getSimilarChords } from '$lib/helpers/musicTheory';
 import type { PageLoad } from './$types';
 import { regexChordSymbolToken } from '$lib/helpers/musicTheoryConstants';
 import { decodeUrlNote, decodeUrlChord } from '$lib/helpers/helpers';
@@ -23,14 +23,22 @@ export const load: PageLoad = ({ params }) => {
   const chordObj = findChord(fixedNote, fixedSymbol, fixedBassNote);
 
   if (!chordObj) {
-    const message = encodeURIComponent("Invalid chord format provided.");
+    const message = encodeURIComponent("Unable to find chord");
     redirect(303, `/tools/chord-library`);
   };
 
-  const tonalNotes = chordObj.notes.map(n => n.tonalJsName);
+  const fullNoteNames = chordObj.notes.map(e => getFullNoteNameFromObj(e));
+  const chordInversions = !fixedBassNote ? getChordInversions(fixedNote, fixedSymbol) : null;
+  const chordIntervals = getChordIntervalFormula(fixedNote, fixedSymbol);
+  const chordAliases = getChordAliases(fixedNote, fixedSymbol);
+  const similarChords = getSimilarChords(fixedNote, fixedSymbol);
 
   return {
     chordObj: chordObj,
-    tonalNotes: tonalNotes,
+    fullNoteNames: fullNoteNames,
+    chordInversions: chordInversions,
+    chordIntervals: chordIntervals,
+    chordAliases: chordAliases,
+    similarChords: similarChords,
   };
-};
+}; 

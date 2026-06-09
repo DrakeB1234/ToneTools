@@ -1,4 +1,4 @@
-import type { IntervalEntry, SimpleChordEntry } from "./musicTheoryTypes";
+import type { GeneralChord, IntervalEntry } from "./musicTheoryTypes";
 
 export const regexChordSymbolToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)?)-?(?<symbol>.*?)(?:-?bass(?<bassNote>.*))?$/;
 export const regexScaleToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)?)-?(?<scale>.*)$/;
@@ -22,7 +22,7 @@ export const intervalObjs: IntervalEntry[] = [
   { name: "Perfect Octave", interval: "P8" },
 ]
 
-export const chordCategoryEntries: Record<string, SimpleChordEntry[]> = {
+export const chordCategoryEntries: Record<string, Pick<GeneralChord, "name" | "symbol">[]> = {
   "Common": [
     { name: "major", symbol: "maj" },
     { name: "minor", symbol: "min" },
@@ -59,9 +59,6 @@ export const chordCategoryEntries: Record<string, SimpleChordEntry[]> = {
     { name: "minor thirteenth", symbol: "min13" },
   ]
 }
-
-// COMMENTED OUT FOR NOW, UNTIL NEEDED TO HELP MEM
-// export const allChords = getAllChords();
 
 export const modeNumeralMap: Record<string, string[]> = {
   "major": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],
@@ -120,3 +117,12 @@ export const simpleChordSymbols = [
   "add9",
   "6/9",
 ];
+
+export enum chordInversionNames {
+  "root",
+  "1st",
+  "2nd",
+  "3rd",
+  "4th",
+  "5th",
+}

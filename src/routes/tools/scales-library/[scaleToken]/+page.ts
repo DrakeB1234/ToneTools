@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { regexScaleToken } from '$lib/helpers/musicTheoryConstants';
-import { getFormulaFromMode, getModeDiatonicTriads, getNumeralsFromMode, getRelativeMajorMinorScales, getScaleNotes } from '$lib/helpers/musicTheory';
+import { getFormulaFromMode, getFullNoteNameFromObj, getModeDiatonicTriads, getNumeralsFromMode, getRelativeMajorMinorScales, getScaleNotes } from '$lib/helpers/musicTheory';
 
 export const load: PageLoad = ({ params }) => {
   const rawUrlParam = params.scaleToken;
@@ -42,7 +42,7 @@ export const load: PageLoad = ({ params }) => {
     throw error(404, "Scale not found in library");
   };
 
-  const pianoRollNotes = notes.map(e => e.tonalJsName);
+  const pianoRollNotes = notes.map(e => getFullNoteNameFromObj(e));
 
   return {
     noteToken: fixedNote,

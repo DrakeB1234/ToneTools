@@ -1,5 +1,6 @@
 <script lang="ts">
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
+  import LinkCard from "$lib/components/Cards/LinkCard.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import PianoInteractive from "$lib/components/Piano/PianoInteractive.svelte";
   import Button from "$lib/components/UI/Button.svelte";
@@ -8,12 +9,12 @@
   import {
     convertMidiToNoteName,
     convertNoteNameToObj,
-    getChordsByNoteNames,
+    detectChordsByNoteNames,
   } from "$lib/helpers/musicTheory";
   import { onDestroy, onMount } from "svelte";
 
   let selectedNotes: string[] = $state([]);
-  let identifiedChords = $derived(getChordsByNoteNames(selectedNotes));
+  let identifiedChords = $derived(detectChordsByNoteNames(selectedNotes));
 
   function handlePianoNoteClick(midi: number) {
     const noteName = convertMidiToNoteName(midi);
@@ -71,25 +72,14 @@
       <hr />
       <div class="chords-container">
         {#each identifiedChords as chord}
-          <Button
-            element="a"
-            color="surface"
-            variant="outline"
-            size="large"
+          <LinkCard
+            header={chord.tonic + chord.symbol}
+            subTextItems={selectedNotes}
             href={encodeUrlChord(chord.tonic!, chord.symbol)}
-          >
-            <div class="chord-link">
-              <p>{chord.tonic + chord.symbol}</p>
-              <div class="notes-container">
-                {#each selectedNotes as note}
-                  <p class="muted">{note}</p>
-                {/each}
-              </div>
-            </div>
-          </Button>
+          />
         {:else}
           <div class="empty-container">
-            <p class="muted">No chords found</p>
+            <p class="text-body-muted">No chords found</p>
           </div>
         {/each}
       </div>
@@ -136,10 +126,6 @@
     gap: var(--space-8);
 
     margin-top: var(--space-8);
-  }
-
-  .chord-link {
-    display: grid;
   }
 
   .empty-container {

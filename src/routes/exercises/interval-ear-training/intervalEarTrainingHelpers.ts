@@ -149,4 +149,34 @@ export const earTrainingGuideEntry: EarTrainingGuideEntry[] = [
       questionsAmount: 25
     }
   },
+  {
+    title: "Sixth Intervals",
+    description: "Learn about simple perfect intervals and compare the two apart when played!",
+    exerciseConfig: {
+      selectedIntervals: [
+        { interval: "m6", name: "Minor Sixth" },
+        { interval: "M6", name: "Major Sixth" },
+      ],
+      selectedTypes: ["melodic"],
+      selectedDirections: ["ascending"],
+      octaveRangeHigh: 5,
+      octaveRangeLow: 4,
+      questionsAmount: 10
+    }
+  },
+  {
+    title: "Seventh Intervals",
+    description: "Learn about simple perfect intervals and compare the two apart when played!",
+    exerciseConfig: {
+      selectedIntervals: [
+        { interval: "m7", name: "Minor Seventh" },
+        { interval: "M7", name: "Major Seventh" },
+      ],
+      selectedTypes: ["melodic"],
+      selectedDirections: ["ascending"],
+      octaveRangeHigh: 5,
+      octaveRangeLow: 4,
+      questionsAmount: 10
+    }
+  }
 ]

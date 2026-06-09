@@ -1,17 +1,15 @@
 <script lang="ts">
   import Wrapper from "$lib/components/Wrapper.svelte";
-  import { getSimpleChordsByCategory } from "$lib/helpers/musicTheory";
+  import { getAllCategoryChords } from "$lib/helpers/musicTheory";
   import { chordCategories } from "$lib/helpers/musicTheoryConstants";
   import { onDestroy, onMount } from "svelte";
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
-  import type {
-    GeneralChord,
-    SimpleChordEntry,
-  } from "$lib/helpers/musicTheoryTypes";
+  import type { GeneralChord } from "$lib/helpers/musicTheoryTypes";
   import Button from "$lib/components/UI/Button.svelte";
   import RootNoteInput from "$lib/components/RootNoteInput.svelte";
   import { encodeUrlChord } from "$lib/helpers/helpers";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
+  import LinkCard from "$lib/components/Cards/LinkCard.svelte";
 
   // Page Specific Types
 
@@ -19,7 +17,7 @@
     inputNote: string;
     inputChordCategory: string;
 
-    categoryChords: SimpleChordEntry[];
+    categoryChords: ReturnType<typeof getAllCategoryChords>;
   }
 
   // State
@@ -32,7 +30,6 @@
 
     chordObj: {} as GeneralChord,
     pianoRollNotes: [],
-    chordInversions: [],
 
     currentInversionSelected: 0,
   });
@@ -42,9 +39,7 @@
   function setData() {
     if (!uiState.inputNote || !uiState.inputChordCategory) return;
 
-    const categoryChords = getSimpleChordsByCategory(
-      uiState.inputChordCategory,
-    );
+    const categoryChords = getAllCategoryChords(uiState.inputChordCategory);
 
     uiState.categoryChords = categoryChords;
   }
@@ -99,18 +94,11 @@
 
       <div class="chord-categories-container">
         {#each uiState.categoryChords as chord (chord.symbol)}
-          <Button
-            element="a"
-            color="surface"
-            variant="outline"
-            size="large"
+          <LinkCard
+            header={uiState.inputNote + chord.symbol}
+            subTextItems={chord.name}
             href={encodeUrlChord(uiState.inputNote, chord.symbol)}
-          >
-            <div class="chord-category-item">
-              <h2 class="text-heading-3">{uiState.inputNote + chord.symbol}</h2>
-              <p class="text-caption-muted">{chord.name}</p>
-            </div>
-          </Button>
+          />
         {/each}
       </div>
     </section>
@@ -149,11 +137,6 @@
     gap: var(--space-8);
 
     margin-top: var(--space-16);
-  }
-
-  .chord-category-item {
-    display: grid;
-    gap: var(--space-4);
   }
 
   @media (max-width: 768px) {

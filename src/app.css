@@ -406,16 +406,36 @@ span,
   max-width: var(--text-box-width-large);
 }
 
+.pill {
+  text-align: center;
+
+  padding: var(--space-4) var(--space-8);
+  height: fit-content;
+
+  background-color: var(--color-bg-brand);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-8);
+}
+
+.pill.surface-dark {
+  background-color: var(--color-bg-surface-dark);
+  color: var(--color-text);
+}
+
 /* Space Above Classes */
+.space-above-xsmall {
+  margin-top: var(--space-4);
+}
+
+.space-above-small {
+  margin-top: var(--space-8);
+}
+
 .space-above {
   margin-top: var(--space-16);
 }
 
-.space-above-sm {
-  margin-top: var(--space-4);
-}
-
-.space-above-lg {
+.space-above-large {
   margin-top: var(--space-24);
 }
 
