@@ -14,7 +14,7 @@
     element="a"
     color="brand"
     variant="outline"
-    size="large"
+    shape="large"
     href="/exercises"
   >
     View Exercises

@@ -27,7 +27,7 @@
     <Button
       color="surface"
       variant="text"
-      size="icon"
+      shape="small"
       onclick={() => handleResponse(false)}
     >
       <Icon icon="close" />
@@ -40,10 +40,10 @@
     <Button
       color="surface"
       variant="outline"
-      size="large"
+      shape="large"
       onclick={() => handleResponse(false)}>Cancel</Button
     >
-    <Button size="large" onclick={() => handleResponse(true)}
+    <Button shape="large" onclick={() => handleResponse(true)}
       >{confirmationText}</Button
     >
   </div>

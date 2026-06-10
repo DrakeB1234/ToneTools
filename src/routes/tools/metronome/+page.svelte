@@ -154,7 +154,7 @@
         <Button
           color="surface"
           variant="outline"
-          size="icon"
+          shape="small"
           onclick={() => handleBpmButtonPress(-1)}><Icon icon="minus" /></Button
         >
         <input
@@ -168,7 +168,7 @@
         <Button
           color="surface"
           variant="outline"
-          size="icon"
+          shape="small"
           onclick={() => handleBpmButtonPress(1)}><Icon icon="plus" /></Button
         >
       </div>

@@ -99,6 +99,8 @@ export function findChord(note: string, chordSymbol: string, bassNote?: string, 
   const fixedChordSymbol = chordSymbol + (bassNote && `/${bassNote}`);
   const chordObj = Chord.get(note + fixedChordSymbol);
 
+  if (chordObj.empty) return null;
+
   const chordNotes = Chord.notes(chordObj.symbol, note + startingOctave);
   const notes: GeneralNote[] = chordNotes.map(e => {
     return convertNoteNameToObj(e);
@@ -116,6 +118,7 @@ export function findChord(note: string, chordSymbol: string, bassNote?: string, 
   } as GeneralChord;
 }
 
+// findChord function may return null, if there is any null chord, return null to caller
 export function getChordInversions(note: string, chordSymbol: string, startingOctave: number = 4) {
   const chordObj = Chord.get(note + chordSymbol);
 
@@ -123,12 +126,15 @@ export function getChordInversions(note: string, chordSymbol: string, startingOc
     return findChord(note, chordSymbol, e, startingOctave);
   });
 
+  if (chordInversions.includes(null)) return null;
+
   return chordInversions.map((e, idx) => {
     return {
-      chord: e,
+      chord: e!,
       inversionName: chordInversionNames[idx]
     }
   })
+
 }
 
 export function getChordIntervalFormula(note: string, chordSymbol: string) {

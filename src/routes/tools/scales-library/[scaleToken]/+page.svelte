@@ -8,12 +8,17 @@
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import Icon from "$lib/components/Icons/Icon.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
+  import Label from "$lib/components/UI/Label.svelte";
+  import Toggle from "$lib/components/UI/Toggle.svelte";
+  import { simplifyNoteName } from "$lib/helpers/musicTheory";
 
-  // Constants
+  // Values
 
   const playScaleDelayMs: number = 500;
-  let playScaleInterval: ReturnType<typeof setInterval> | null = null;
+  let playScaleInterval: ReturnType<typeof setInterval> | null = $state(null);
   let currentPlayedScaleIdx: number | null = $state(null);
+
+  let isSimplifyNotesSelected = $state(false);
 
   let { data }: PageProps = $props();
 
@@ -46,17 +51,19 @@
   function handlePlayScale() {
     resetPlayScaleInterval();
 
+    // Start playing first note at call
+    pianoAudioService.playNote(data.scaleNotes[0], "low");
+    currentPlayedScaleIdx = 1;
+
     playScaleInterval = setInterval(() => {
-      if (currentPlayedScaleIdx === null) currentPlayedScaleIdx = 0;
+      if (currentPlayedScaleIdx === null) currentPlayedScaleIdx = 1;
       if (currentPlayedScaleIdx >= data.scaleNotes.length) {
         resetPlayScaleInterval();
         return;
       }
 
       const currentNote = data.scaleNotes[currentPlayedScaleIdx];
-      if (currentNote.octave) {
-        pianoAudioService.playNote(currentNote, "low");
-      }
+      pianoAudioService.playNote(currentNote, "low");
 
       currentPlayedScaleIdx++;
     }, playScaleDelayMs);
@@ -88,27 +95,43 @@
 
     <section class="card-base scale-card">
       <div class="scale-notes-header space-below">
-        <h2 class="text-heading-1">
-          {data.noteToken}&nbsp;{data.scaleToken}
-        </h2>
+        <div>
+          <h1>{data.noteToken}&nbsp;{data.scaleToken}&nbsp;Scale</h1>
+        </div>
         <Button
           onclick={handlePlayScale}
           color="brand"
-          variant="text"
-          size="icon"
+          variant="outline"
+          shape="small"
+          disabled={playScaleInterval}
         >
-          <Icon icon="playArrow" />
+          <Icon icon="volumeUp" />
         </Button>
       </div>
+      <div class="toggle-button-container space-above-large">
+        <Label labelFor="simplify-notes">Simplify Notes</Label>
+        <Toggle
+          bind:toggled={isSimplifyNotesSelected}
+          id="simplify-notes"
+          ariaLabel="Enable Simplified Notes"
+        />
+      </div>
+
+      <hr class="space-above" />
+
       <div class="scale-notes-container">
         {#each data.scaleNotes as note, index (note)}
+          {@const rawNote = note.letter + note.accidental}
+          {@const displayNote = isSimplifyNotesSelected
+            ? simplifyNoteName(rawNote)
+            : rawNote}
+
           <Button
             onclick={() => handlePlayNote(index)}
             color="surface"
             variant="outline"
-            size="large"
-            active={currentPlayedScaleIdx === index + 1}
-            >{note.letter + note.accidental}</Button
+            shape="large"
+            active={currentPlayedScaleIdx === index + 1}>{displayNote}</Button
           >
         {/each}
       </div>
@@ -171,7 +194,12 @@
                 <h3>{triadObj.tonic + triadObj.symbol}</h3>
                 <p class="text-caption-muted">
                   {#each triadObj.notes as note, i (note)}
-                    {note.letter + note.accidental}
+                    {@const rawNote = note.letter + note.accidental}
+                    {@const displayNote = isSimplifyNotesSelected
+                      ? simplifyNoteName(rawNote)
+                      : rawNote}
+
+                    {displayNote}
                     {#if i < triadObj.notes.length - 1}
                       {" - "}
                     {/if}
@@ -210,6 +238,11 @@
     padding-block: var(--space-16);
   }
 
+  .toggle-button-container {
+    width: fit-content;
+    margin-left: auto;
+  }
+
   .scale-notes-header {
     display: flex;
     gap: var(--space-16);
@@ -222,7 +255,7 @@
     flex-wrap: wrap;
     gap: var(--space-4);
 
-    margin-bottom: var(--space-16);
+    margin-block: var(--space-16);
   }
 
   .piano-roll-container {

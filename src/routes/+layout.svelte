@@ -1,6 +1,8 @@
 <script lang="ts">
 	import "../app.css";
 	import Sidebar from "$lib/components/Sidebar.svelte";
+	import { dev } from "$app/environment";
+	import { RenderScan } from "svelte-render-scan";
 
 	let { children } = $props();
 </script>
@@ -9,6 +11,10 @@
 	<link rel="icon" href="/images/logo.svg" />
 	<title>Music App</title>
 </svelte:head>
+
+{#if dev}
+	<RenderScan />
+{/if}
 
 <div class="app">
 	<Sidebar />
@@ -20,7 +26,6 @@
 <style>
 	.app {
 		display: flex;
-		min-height: 100dvh;
 	}
 
 	.content-container {

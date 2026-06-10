@@ -111,13 +111,13 @@
 
     <section class="card-base intervals-card">
       <div class="start-container">
-        <Button color="brand" size="large" onclick={onStartClick}
+        <Button color="brand" shape="large" onclick={onStartClick}
           >Start Exercise</Button
         >
         <Button
           color="surface"
           variant="outline"
-          size="large"
+          shape="large"
           onclick={() => (isConfigOpen = true)}
         >
           Configure

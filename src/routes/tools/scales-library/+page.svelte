@@ -2,7 +2,6 @@
   import LinkCard from "$lib/components/Cards/LinkCard.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import RootNoteInput from "$lib/components/RootNoteInput.svelte";
-  import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { encodeUrlScale } from "$lib/helpers/helpers";
   import { getAllModes } from "$lib/helpers/musicTheory";

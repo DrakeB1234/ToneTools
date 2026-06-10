@@ -30,7 +30,7 @@
     element="button"
     color="app"
     variant="text"
-    size="icon"
+    shape="small"
     onclick={handleBack}
     aria-label="Go back"
   >

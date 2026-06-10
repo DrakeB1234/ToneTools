@@ -29,7 +29,7 @@
     viewBox="0 -960 960 960"
     fill={color}
   >
-    {@html materialIconPaths[icon]}
+    <path d={materialIconPaths[icon]} />
   </svg>
 {:else}
   {@const CustomIcon = icon}

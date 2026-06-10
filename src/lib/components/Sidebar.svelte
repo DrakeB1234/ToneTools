@@ -28,7 +28,7 @@
   <Button
     color="surface"
     variant="text"
-    size="icon"
+    shape="small"
     onclick={toggleSidebar}
     aria-label="Open menu"
   >
@@ -67,7 +67,7 @@
       <Button
         color="surface"
         variant="text"
-        size="icon"
+        shape="small"
         onclick={closeSidebar}
         aria-label="Close menu"
       >
@@ -85,6 +85,7 @@
               class:active={page.url.pathname.includes(data.urlName)}
               href={data.href}
             >
+              <Icon icon={data.icon} />
               {data.name}
             </a>
           </li>
@@ -100,6 +101,7 @@
               class:active={page.url.pathname.includes(data.urlName)}
               href={data.href}
             >
+              <Icon icon={data.icon} />
               {data.name}
             </a>
           </li>
@@ -136,7 +138,6 @@
     height: 100dvh;
     width: 25dvw;
     max-width: 300px;
-    padding: var(--space-12);
     overflow-y: auto;
 
     border-right: 1px solid var(--color-border);
@@ -147,24 +148,26 @@
     display: flex;
     align-items: center;
     gap: var(--space-12);
+    padding: var(--space-12);
   }
 
   nav > h3 {
     margin-top: var(--space-24);
     margin-bottom: var(--space-8);
+    margin-left: var(--space-12);
   }
 
   ul {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
   }
 
   a.nav-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
 
-    padding: var(--space-12);
-    border-radius: var(--radius-8);
+    padding: var(--space-16) var(--space-12);
 
     color: var(--color-text-muted);
     transition: var(--transition-color);
@@ -184,7 +187,7 @@
       justify-content: space-between;
       align-items: center;
 
-      padding: var(--space-12) var(--space-16);
+      padding-inline: var(--space-8);
       width: 100%;
 
       background-color: var(--color-bg-surface);
@@ -197,7 +200,9 @@
 
     .mobile-header {
       display: flex;
+      align-items: center;
       justify-content: space-between;
+      padding-right: var(--space-8);
     }
 
     aside {

@@ -52,7 +52,7 @@
     <Button
       color="surface"
       variant="text"
-      size="icon"
+      shape="small"
       onclick={handlePopupDone}
     >
       <Icon icon="close" />
@@ -138,7 +138,7 @@
   </div>
 
   <div class="confirm-button-container space-above-large">
-    <Button size="large" onclick={handlePopupDone}>Confirm</Button>
+    <Button shape="large" onclick={handlePopupDone}>Confirm</Button>
   </div>
 </div>
 

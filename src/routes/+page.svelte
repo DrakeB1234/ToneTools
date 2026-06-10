@@ -12,7 +12,7 @@
   <main>
     <HeroCard />
 
-    <div class="section">
+    <section>
       <h3>Last Used</h3>
 
       <div class="cards-container">
@@ -26,9 +26,9 @@
           />
         {/each}
       </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section>
       <h3>Tools</h3>
 
       <div class="cards-grid">
@@ -42,7 +42,7 @@
           />
         {/each}
       </div>
-    </div>
+    </section>
   </main>
 </Wrapper>
 
@@ -52,7 +52,7 @@
     padding: var(--app-padding);
   }
 
-  .section {
+  section {
     margin-top: var(--space-36);
   }
 

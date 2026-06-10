@@ -100,27 +100,25 @@
           onclick={handlePlayChord}
           color="brand"
           variant="text"
-          size="icon"
+          shape="small"
         >
-          <Icon icon="playArrow" />
+          <Icon icon="volumeUp" />
         </Button>
       </div>
 
       <div class="flex-container aliases-container">
         {#each chordAliases as alias (alias)}
-          <p class="pill surface-dark text-heading-3">{alias}</p>
+          <p class="pill surface-dark">{alias}</p>
         {/each}
       </div>
 
       <div class="toggle-button-container space-above">
-        <div class="input-label-container">
-          <Label labelFor="simplify-notes">Simplify Notes</Label>
-          <Toggle
-            bind:toggled={isSimplifyNotesSelected}
-            id="simplify-notes"
-            ariaLabel="Enable Simplified Notes"
-          />
-        </div>
+        <Label labelFor="simplify-notes">Simplify Notes</Label>
+        <Toggle
+          bind:toggled={isSimplifyNotesSelected}
+          id="simplify-notes"
+          ariaLabel="Enable Simplified Notes"
+        />
       </div>
 
       <hr class="divider space-above" />
@@ -136,7 +134,7 @@
             onclick={() => handlePlayNote(index)}
             color="surface"
             variant="outline"
-            size="large"
+            shape="large"
           >
             {displayNote}
           </Button>
@@ -269,12 +267,6 @@
   .toggle-button-container {
     width: fit-content;
     margin-left: auto;
-  }
-
-  .input-label-container {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
   }
 
   .inversions-container {

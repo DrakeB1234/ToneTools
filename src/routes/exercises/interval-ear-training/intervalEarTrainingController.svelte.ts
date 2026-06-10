@@ -3,6 +3,7 @@ import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
 import { convertNoteNameToObj, decrementNoteNameByInterval, getFullNoteNameFromObj, incrementNoteNameByInterval } from "$lib/helpers/musicTheory";
 import { naturalNoteNames } from "$lib/helpers/musicTheoryConstants";
 import type { GeneralNote, IntervalEntry } from "$lib/helpers/musicTheoryTypes";
+import { MusicStaff } from "vector-score";
 import type { IntervalEarConfig } from "./intervalEarTrainingHelpers";
 
 type ExerciseState = "idle" | "playing" | "answered" | "finished";
@@ -19,6 +20,7 @@ type CurrentQuestion = {
 export class IntervalEarTrainingController {
   private config: IntervalEarConfig;
   private intervalAudioTimer: ReturnType<typeof setTimeout> | null = null;
+  private staffInstance: MusicStaff | null = null;
 
   selectedIntervals: IntervalEntry[] = $state([]);
 
@@ -72,6 +74,9 @@ export class IntervalEarTrainingController {
     };
 
     this.playInterval();
+
+    // Reset notes that are drawn on staff
+    this.clearVectorScoreNotes();
   }
 
   private handleInput(guessedInterval: string) {
@@ -94,6 +99,19 @@ export class IntervalEarTrainingController {
     } else {
       this.status = "answered";
     }
+
+    // After input, draw the correct interval to the staff
+    const rootNote = getFullNoteNameFromObj(this.currentQuestion.rootNote);
+
+    const correctNotesToDraw = [rootNote, getFullNoteNameFromObj(this.currentQuestion.intervalNote)];
+    this.drawVectorScoreNotes(correctNotesToDraw);
+    this.applyClassesVectorScoreNotes(0, "correct-note");
+
+    const gussedIntervaledNote = this.getIntervalNoteByDirection(this.currentQuestion.rootNote, guessedInterval, this.currentQuestion.direction);
+    const gussedNotesToDraw = [rootNote, getFullNoteNameFromObj(gussedIntervaledNote)];
+    this.drawVectorScoreNotes(gussedNotesToDraw);
+    if (this.wrongGuessInterval === "") this.applyClassesVectorScoreNotes(2, "correct-note");
+    else this.applyClassesVectorScoreNotes(2, "wrong-note");
   }
 
   private playInterval() {
@@ -163,6 +181,22 @@ export class IntervalEarTrainingController {
     }
   }
 
+  private drawVectorScoreNotes(notes: string[]) {
+    if (!this.staffInstance) return;
+    this.staffInstance.drawNote(notes);
+  }
+
+  private applyClassesVectorScoreNotes(groupIndexStart: number, className: string) {
+    if (!this.staffInstance) return;
+    this.staffInstance.addClassToNoteByIndex(className, groupIndexStart);
+    this.staffInstance.addClassToNoteByIndex(className, groupIndexStart + 1);
+  }
+
+  private clearVectorScoreNotes() {
+    if (!this.staffInstance) return;
+    this.staffInstance.clearAllNotes();
+  }
+
   // If class state is already answered, then whatever interval pressed by user is played.
   handleIntervalButtonClick = (interval: string) => {
     if (this.status === "playing") this.handleInput(interval);
@@ -179,7 +213,24 @@ export class IntervalEarTrainingController {
     if (this.status !== "idle") this.playInterval();
   }
 
+  setupVectorScoreStaff = (staffContainerElement: HTMLDivElement) => {
+    this.staffInstance = new MusicStaff(staffContainerElement, {
+      staffType: 'grand',
+      staffColor: 'var(--color-text)',
+      staffBackgroundColor: 'var(--color-bg-surface)',
+      width: 200,
+      noteStartX: 20,
+      scale: 1.2,
+      spaceAbove: 2,
+      spaceBelow: 2
+    });
+  }
+
   destroy() {
     if (this.intervalAudioTimer) clearTimeout(this.intervalAudioTimer);
+    if (this.staffInstance) {
+      this.staffInstance.clearAllNotes();
+      this.staffInstance = null;
+    }
   }
 }

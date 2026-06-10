@@ -36,6 +36,7 @@
       <Button
         color="surface"
         variant="outline"
+        shape="large"
         active={activeNote === note}
         onclick={() => handleNoteNamePressed(note)}
       >
@@ -49,6 +50,7 @@
     <Button
       color="surface"
       variant="outline"
+      shape="large"
       active={activeAccidental === "n"}
       onclick={() => handleAccidentalPressed("n")}
     >
@@ -57,6 +59,7 @@
     <Button
       color="surface"
       variant="outline"
+      shape="large"
       active={activeAccidental === "#"}
       onclick={() => handleAccidentalPressed("#")}
     >
@@ -65,6 +68,7 @@
     <Button
       color="surface"
       variant="outline"
+      shape="large"
       active={activeAccidental === "b"}
       onclick={() => handleAccidentalPressed("b")}
     >
@@ -83,7 +87,7 @@
   .note-buttons,
   .accidental-buttons {
     display: flex;
-    gap: var(--space-8);
+    gap: var(--space-4);
     flex-wrap: wrap;
   }
 </style>

@@ -5,9 +5,9 @@
 
   interface Props {
     element?: "a" | "button";
-    color?: "brand" | "surface" | "app";
+    color?: "brand" | "app" | "surface" | "surface-dark";
     variant?: "raised" | "outline" | "text";
-    size?: "small" | "medium" | "large" | "icon";
+    shape?: "small" | "medium" | "large" | "circle";
     active?: boolean;
     class?: string;
     [key: string]: any;
@@ -18,7 +18,7 @@
     element = "button",
     color = "brand",
     variant = "raised",
-    size = "medium",
+    shape = "medium",
     class: className = "",
     active = false,
     children,
@@ -26,7 +26,9 @@
   }: Props = $props();
 
   let classes = $derived(
-    ["btn", size, variant, color, className].filter(Boolean).join(" "),
+    ["btn", `color-${color}`, `variant-${variant}`, `shape-${shape}`, className]
+      .filter(Boolean)
+      .join(" "),
   );
 </script>
 
@@ -37,45 +39,74 @@
 <style>
   /* base btn class hoisted to global css file */
 
+  .shape-small {
+    padding: var(--space-4);
+  }
+  .shape-medium {
+    padding: var(--space-4) var(--space-8);
+  }
+  .shape-large {
+    padding: var(--space-8) var(--space-12);
+  }
+  .shape-icon {
+    padding: var(--space-4);
+  }
+  .shape-circle {
+    display: grid;
+    place-items: center;
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: var(--radius-full);
+  }
+
+  .variant-raised {
+    border-color: transparent !important;
+    box-shadow: var(--shadow-elevation-1);
+  }
+
+  .variant-text {
+    border-color: transparent !important;
+  }
+
+  .color-brand {
+    background-color: var(--color-bg-brand);
+    color: var(--color-text-inverse);
+  }
+  .color-app {
+    background-color: var(--color-bg-app);
+    border-color: var(--color-border);
+  }
+  .color-surface {
+    background-color: var(--color-bg-surface);
+    border-color: var(--color-border);
+  }
+  .color-surface-dark {
+    background-color: var(--color-bg-surface-dark);
+    border-color: var(--color-border);
+  }
+
   a.btn:focus {
     outline: 2px solid var(--palette-brand-400);
   }
 
-  .btn.small {
-    padding: var(--space-4);
-  }
-  .btn.medium {
-    padding: var(--space-4) var(--space-8);
-  }
-  .btn.large {
-    padding: var(--space-8) var(--space-12);
-  }
-  .btn.icon {
-    padding: var(--space-4);
-  }
+  /* hover state */
 
-  .btn.brand {
-    background-color: var(--color-bg-brand);
-    color: var(--color-text-inverse);
-  }
-  .btn.surface {
-    background-color: var(--color-bg-surface);
-    border-color: var(--color-border);
-  }
-  .btn.app {
-    background-color: var(--color-bg-app);
-    border-color: var(--color-border);
-  }
-
-  .btn.brand:hover {
+  .color-brand:hover:not(:disabled) {
     background-color: var(--color-brand-hover);
   }
-  .btn.surface:hover {
-    background-color: var(--color-surface-hover);
-  }
-  .btn.app:hover {
+  .color-app:hover {
     background-color: var(--color-app-hover);
   }
+  .color-surface:hover {
+    background-color: var(--color-surface-hover);
+  }
+  .color-surface-dark:hover {
+    background-color: var(--color-surface-dark-hover);
+  }
+
+  /* active state */
 
   .btn.active {
     background-color: var(--color-bg-brand);
@@ -86,12 +117,11 @@
     background-color: var(--color-bg-brand);
   }
 
-  .btn.raised {
-    border: 1px solid transparent;
-    box-shadow: var(--shadow-elevation-1);
+  /* disabled state */
+  .btn:disabled {
+    cursor: default;
   }
-
-  .btn.text {
-    border: 1px solid transparent;
+  .color-brand:disabled {
+    background-color: var(--color-brand-disabled);
   }
 </style>

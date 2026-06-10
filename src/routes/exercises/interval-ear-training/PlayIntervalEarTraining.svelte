@@ -21,6 +21,7 @@
   const exerciseController = new IntervalEarTrainingController(config);
 
   let isExitPopupOpen = $state(false);
+  let staffElement: HTMLDivElement | null = $state(null);
 
   function handleExitPressed() {
     if (exerciseController.isExerciseOver) {
@@ -40,11 +41,14 @@
   onMount(() => {
     pianoAudioService.init();
     sfxAudioService.init();
+
+    if (staffElement) exerciseController.setupVectorScoreStaff(staffElement);
   });
 
   onDestroy(() => {
     pianoAudioService.stopAll();
     sfxAudioService.stopAll();
+    exerciseController.destroy();
   });
 </script>
 
@@ -53,15 +57,16 @@
     <Button
       color="surface"
       variant="outline"
-      size="large"
+      shape="large"
       onclick={handleExitPressed}>Exit</Button
     >
   </div>
 
-  <div class="staff-container">
+  <div class="game-container">
     <div class="message-container">
       <p>{exerciseController.currentMessage}</p>
     </div>
+    <div class="staff-container" bind:this={staffElement}></div>
   </div>
 
   <div class="score-container">
@@ -103,19 +108,20 @@
   </div>
 
   <div class="bottom-container">
-    <button
-      class="btn refresh-button"
+    <Button
+      color="surface"
+      shape="circle"
       onclick={exerciseController.handleReplayIntervalClick}
     >
       <Icon icon="volumeUp" />
-    </button>
-    <button
-      class="btn next-button"
+    </Button>
+    <Button
+      shape="circle"
       onclick={exerciseController.handleNextButtonClick}
       disabled={exerciseController.isNextQuestionDisabled}
     >
       <Icon icon="arrowRightAlt" />
-    </button>
+    </Button>
   </div>
 </main>
 
@@ -137,12 +143,17 @@
     min-height: 700px;
   }
 
-  .staff-container {
-    min-height: 10em;
+  .game-container {
     margin-top: var(--space-8);
 
     border: 1px solid var(--color-border);
     background-color: var(--color-bg-surface);
+  }
+
+  .staff-container {
+    display: flex;
+    justify-content: center;
+    padding-block: var(--space-12);
   }
 
   .message-container {
@@ -208,29 +219,5 @@
 
     padding-block: var(--space-12);
     margin-top: auto;
-  }
-  .refresh-button,
-  .next-button {
-    background-color: var(--color-bg-surface);
-    color: var(--color-text);
-
-    border-radius: var(--radius-full);
-    padding: var(--space-12);
-
-    box-shadow: var(--shadow-elevation-1);
-  }
-  .refresh-button:hover {
-    background-color: var(--color-surface-hover);
-  }
-  .next-button {
-    background-color: var(--color-bg-brand);
-    color: var(--color-text-inverse);
-  }
-  .next-button:hover:not(:disabled) {
-    background-color: var(--color-brand-hover);
-  }
-
-  .next-button:disabled {
-    background-color: var(--color-surface-disabled);
   }
 </style>

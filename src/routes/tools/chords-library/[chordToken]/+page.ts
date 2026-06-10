@@ -11,7 +11,7 @@ export const load: PageLoad = ({ params }) => {
 
   if (!match || !match.groups) {
     const message = encodeURIComponent("Invalid chord format provided.");
-    redirect(303, `/tools/chord-library`);
+    redirect(303, `/tools/chords-library`);
   }
 
   const { note, accidental, symbol, bassNote } = match.groups;
@@ -24,7 +24,7 @@ export const load: PageLoad = ({ params }) => {
 
   if (!chordObj) {
     const message = encodeURIComponent("Unable to find chord");
-    redirect(303, `/tools/chord-library`);
+    redirect(303, `/tools/chords-library`);
   };
 
   const fullNoteNames = chordObj.notes.map(e => getFullNoteNameFromObj(e));
