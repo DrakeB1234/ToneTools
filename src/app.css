@@ -125,7 +125,7 @@ svg {
   --inter: 'Inter Variable', 'Inter', sans-serif;
 
   --app-max-width: 800px;
-  --app-padding: var(--space-24) var(--space-36);
+  --app-padding: var(--space-16) var(--space-36);
 
   --icon-size-sm: 20px;
   --icon-size-base: 24px;
@@ -157,6 +157,8 @@ svg {
   --color-bg-surface: var(--palette-white);
   --color-bg-surface-sunken: var(--palette-grey-100);
   --color-bg-surface-dark: var(--palette-grey-200);
+
+  --color-bg-dark: var(--palette-grey-800);
 
   --color-brand-hover: var(--palette-brand-600);
   --color-brand-light-hover: var(--palette-brand-200);
@@ -263,8 +265,9 @@ h3 {
   color: var(--color-text);
 }
 
-:is(input, select, button, textarea):focus {
+:is(input, select, button, textarea, a):focus-visible {
   outline: 2px solid var(--palette-brand-400);
+  outline-offset: 2px;
 }
 
 /* headers */
@@ -456,10 +459,6 @@ span,
 
   border-radius: var(--radius-8);
   background-color: var(--color-bg-surface-sunken);
-}
-
-a.card-base:hover {
-  background-color: var(--color-surface-hover);
 }
 
 /* Vector Score Classes */

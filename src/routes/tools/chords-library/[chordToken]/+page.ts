@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { findChord, getChordAliases, getChordIntervalFormula, getChordInversions, getFullNoteNameFromObj, getScalesFromChord, getSimilarChords } from '$lib/helpers/musicTheory';
+import { findChord, getChordAliases, getChordIntervalFormula, getChordInversions, getChordSecondaryDominant, getFullNoteNameFromObj, getSimilarChords } from '$lib/helpers/musicTheory';
 import type { PageLoad } from './$types';
 import { regexChordSymbolToken } from '$lib/helpers/musicTheoryConstants';
 import { decodeUrlNote, decodeUrlChord } from '$lib/helpers/helpers';
@@ -32,6 +32,7 @@ export const load: PageLoad = ({ params }) => {
   const chordIntervals = getChordIntervalFormula(fixedNote, fixedSymbol);
   const chordAliases = getChordAliases(fixedNote, fixedSymbol);
   const similarChords = getSimilarChords(fixedNote, fixedSymbol);
+  const secondaryDominantChord = getChordSecondaryDominant(fixedNote);
 
   return {
     chordObj: chordObj,
@@ -40,5 +41,6 @@ export const load: PageLoad = ({ params }) => {
     chordIntervals: chordIntervals,
     chordAliases: chordAliases,
     similarChords: similarChords,
+    secondaryDominantChord: secondaryDominantChord,
   };
 }; 

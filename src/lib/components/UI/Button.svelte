@@ -5,7 +5,7 @@
 
   interface Props {
     element?: "a" | "button";
-    color?: "brand" | "app" | "surface" | "surface-dark";
+    color?: "brand" | "app" | "surface" | "surface-dark" | "destructive";
     variant?: "raised" | "outline" | "text";
     shape?: "small" | "medium" | "large" | "circle";
     active?: boolean;
@@ -55,8 +55,8 @@
     display: grid;
     place-items: center;
 
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
 
     border-radius: var(--radius-full);
   }
@@ -86,24 +86,10 @@
     background-color: var(--color-bg-surface-dark);
     border-color: var(--color-border);
   }
-
-  a.btn:focus {
-    outline: 2px solid var(--palette-brand-400);
-  }
-
-  /* hover state */
-
-  .color-brand:hover:not(:disabled) {
-    background-color: var(--color-brand-hover);
-  }
-  .color-app:hover {
-    background-color: var(--color-app-hover);
-  }
-  .color-surface:hover {
-    background-color: var(--color-surface-hover);
-  }
-  .color-surface-dark:hover {
-    background-color: var(--color-surface-dark-hover);
+  .color-destructive {
+    background-color: var(--color-deco-red-base);
+    border-color: var(--color-deco-red-base);
+    color: var(--color-text-inverse);
   }
 
   /* active state */
@@ -113,9 +99,6 @@
     border-color: transparent;
     color: var(--color-text-inverse);
   }
-  .btn.active:hover {
-    background-color: var(--color-bg-brand);
-  }
 
   /* disabled state */
   .btn:disabled {
@@ -123,5 +106,48 @@
   }
   .color-brand:disabled {
     background-color: var(--color-brand-disabled);
+  }
+
+  @media (hover: hover) {
+    /* hover state */
+    .color-brand:hover:not(:disabled) {
+      background-color: var(--color-brand-hover);
+    }
+    .color-app:hover {
+      background-color: var(--color-app-hover);
+    }
+    .color-surface:hover {
+      background-color: var(--color-surface-hover);
+    }
+    .color-surface-dark:hover {
+      background-color: var(--color-surface-dark-hover);
+    }
+    .btn.active:hover {
+      background-color: var(--color-bg-brand);
+    }
+    .btn.color-destructive:hover {
+      background-color: var(--color-deco-red-dark);
+    }
+  }
+
+  @media (hover: none) {
+    .color-brand:active:not(:disabled) {
+      background-color: var(--color-brand-hover);
+    }
+    .color-app:active {
+      background-color: var(--color-app-hover);
+    }
+    .color-surface:active {
+      background-color: var(--color-surface-hover);
+    }
+    .color-surface-dark:active {
+      background-color: var(--color-surface-dark-hover);
+    }
+    .btn.active:active {
+      background-color: var(--color-bg-brand);
+    }
+    .btn.color-destructive:active {
+      background-color: var(--color-deco-red-dark);
+    }
   }
 </style>

@@ -29,6 +29,7 @@
   const chordIntervals = $derived(data.chordIntervals);
   const chordAliases = $derived(data.chordAliases);
   const similarChords = $derived(data.similarChords);
+  const secondaryDominantChord = $derived(data.secondaryDominantChord);
 
   let isChordInversions = $derived(data.chordInversions !== null);
   let isSimplifyNotesSelected = $state(false);
@@ -158,6 +159,14 @@
             <p class="text-body-muted">{interval}</p>
           {/each}
         </div>
+        <h3 class="space-above">
+          Secondary Dominant <span class="text-body-muted"
+            >(perfect 5th above root)</span
+          >
+        </h3>
+        <p class="text-body-muted">
+          {secondaryDominantChord?.tonic}{secondaryDominantChord?.symbol}
+        </p>
       </div>
 
       <hr class="divider" />

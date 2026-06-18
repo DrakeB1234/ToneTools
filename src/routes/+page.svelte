@@ -66,7 +66,7 @@
 
   .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(11em, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
     align-items: stretch;
     grid-auto-rows: 1fr;
     gap: var(--space-12);

@@ -4,7 +4,10 @@ export const regexChordSymbolToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp
 export const regexScaleToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)?)-?(?<scale>.*)$/;
 
 export const naturalNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
+export const accidentalNames = ["n", "#", "b"];
 export const chordCategories = ["Common", "Major", "Minor"];
+
+export const keyNamesFlatted = ["C", "G", "D", "A", "E", "B", "F", "Bb", "Eb", "Ab", "Db", "Gb"];
 
 export const intervalObjs: IntervalEntry[] = [
   { name: "Perfect Unison", interval: "P1" },
@@ -91,8 +94,8 @@ export const modeFormulaMap: Record<string, string[]> = {
 };
 
 export const simpleChordSymbols = [
-  "major",
-  "minor",
+  "maj",
+  "m",
   "diminished",
   "augmented",
   "sus2",
@@ -110,7 +113,6 @@ export const simpleChordSymbols = [
   "maj9",
   "11",
   "m11",
-  "maj11",
   "13",
   "m13",
   "maj13",

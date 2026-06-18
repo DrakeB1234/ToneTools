@@ -26,7 +26,7 @@
 
     <section class="card-base ear-card">
       <div class="title-container">
-        <h2 class="text-lg">Melodic Path</h2>
+        <h2>Melodic Path</h2>
       </div>
       <div class="content-container">
         {#each earTrainingGuideEntry as entry, i}

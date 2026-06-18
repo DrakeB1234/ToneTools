@@ -44,27 +44,24 @@
 <style>
   .popup-backdrop {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-
+    inset: 0;
     z-index: 9999;
-
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.6);
   }
 
   .popup-animation-wrapper {
     position: fixed;
     inset: 0;
 
-    display: grid;
-    place-items: start center;
+    display: flex;
+    flex-direction: column;
 
-    padding: var(--space-16);
+    padding: var(--space-8);
+  }
 
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+  @media (min-width: 600px) {
+    .popup-animation-wrapper {
+      padding: var(--space-16);
+    }
   }
 </style>

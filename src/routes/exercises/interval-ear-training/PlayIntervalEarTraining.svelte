@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ConfirmationCard from "$lib/components/Popups/ConfirmationCard.svelte";
+  import ConfirmationCard from "$lib/components/Popups/ConfirmationPopupCard.svelte";
   import Popup from "$lib/components/Popups/Popup.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";

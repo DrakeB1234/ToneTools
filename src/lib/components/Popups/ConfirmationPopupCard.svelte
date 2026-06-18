@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "$lib/components/Popups/popup.css";
   import Icon from "../Icons/Icon.svelte";
   import Button from "../UI/Button.svelte";
 
@@ -21,9 +22,9 @@
   }
 </script>
 
-<div class="card-base exit-popup-card">
-  <div class="top-container">
-    <h2 class="text-l">{title}</h2>
+<div class="popup-card">
+  <div class="popup-header">
+    <h2 class="text-heading-3">{title}</h2>
     <Button
       color="surface"
       variant="text"
@@ -34,9 +35,11 @@
     </Button>
   </div>
 
-  <p class="muted">{message}</p>
+  <div class="popup-body">
+    <p class="muted">{message}</p>
+  </div>
 
-  <div class="button-container">
+  <div class="popup-footer">
     <Button
       color="surface"
       variant="outline"
@@ -48,28 +51,3 @@
     >
   </div>
 </div>
-
-<style>
-  .exit-popup-card {
-    background-color: var(--color-bg-surface);
-
-    width: 100%;
-    max-width: 400px;
-  }
-
-  .top-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    margin-bottom: var(--space-12);
-  }
-
-  .button-container {
-    display: flex;
-    justify-content: end;
-    gap: var(--space-8);
-
-    margin-top: var(--space-16);
-  }
-</style>

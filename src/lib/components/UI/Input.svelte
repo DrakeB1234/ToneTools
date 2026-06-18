@@ -27,11 +27,12 @@
 
 <style>
   input {
+    width: 100%;
     padding: var(--space-8);
 
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     color: var(--color-text);
-    background-color: transparent;
+    background-color: var(--color-bg-surface);
     border-radius: var(--radius-8);
     border: 1px solid var(--color-border);
   }

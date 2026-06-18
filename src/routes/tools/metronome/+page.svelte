@@ -153,7 +153,7 @@
       <div class="input-container">
         <Button
           color="surface"
-          variant="outline"
+          variant="text"
           shape="small"
           onclick={() => handleBpmButtonPress(-1)}><Icon icon="minus" /></Button
         >
@@ -167,7 +167,7 @@
         />
         <Button
           color="surface"
-          variant="outline"
+          variant="text"
           shape="small"
           onclick={() => handleBpmButtonPress(1)}><Icon icon="plus" /></Button
         >
@@ -177,9 +177,9 @@
         <button class="btn tap-button" onclick={handleTap}>TAP</button>
 
         <div class="play-button-wrapper">
-          <button class="btn play-button" onclick={handlePlayPressed}>
+          <Button shape="circle" onclick={handlePlayPressed}>
             <Icon icon={metrnomeInterval ? "stop" : "playArrow"} />
-          </button>
+          </Button>
         </div>
 
         <p class="beat-counter">{currentBeatCount || "-"}</p>
@@ -297,17 +297,6 @@
     place-items: center;
 
     height: 100%;
-  }
-
-  .play-button {
-    padding: var(--space-8);
-
-    border-radius: var(--radius-full);
-    color: var(--color-text-inverse);
-    background-color: var(--color-bg-brand);
-  }
-  .play-button:hover {
-    background-color: var(--color-brand-hover);
   }
 
   .beat-counter {

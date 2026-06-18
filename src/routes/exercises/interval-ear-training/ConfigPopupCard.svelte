@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "$lib/components/Popups/popup.css";
   import Icon from "$lib/components/Icons/Icon.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import Input from "$lib/components/UI/Input.svelte";
@@ -46,9 +47,9 @@
   }
 </script>
 
-<div class="card-base config-popup-card">
-  <div class="top-container">
-    <h2 class="text-l">Configure</h2>
+<div class="popup-card">
+  <div class="popup-header">
+    <h2 class="text-heading-3">Configure</h2>
     <Button
       color="surface"
       variant="text"
@@ -59,103 +60,89 @@
     </Button>
   </div>
 
-  <div class="input-group space-above">
-    <p class="muted">Type</p>
-    <div class="toggle-buttons">
-      <Button
-        color="surface"
-        variant="outline"
-        active={configData.selectedTypes.includes("melodic")}
-        onclick={() => handleTypeClick("melodic")}>Melodic</Button
-      >
-      <Button
-        color="surface"
-        variant="outline"
-        active={configData.selectedTypes.includes("harmonic")}
-        onclick={() => handleTypeClick("harmonic")}>Harmonic</Button
-      >
-    </div>
-  </div>
-
-  <div class="input-group space-above">
-    <p class="muted">Direction</p>
-    <div class="toggle-buttons">
-      <Button
-        color="surface"
-        variant="outline"
-        active={configData.selectedDirections.includes("ascending")}
-        onclick={() => handleDirectionClick("ascending")}>Ascending</Button
-      >
-      <Button
-        color="surface"
-        variant="outline"
-        active={configData.selectedDirections.includes("descending")}
-        onclick={() => handleDirectionClick("descending")}>Descending</Button
-      >
-    </div>
-  </div>
-
-  <p class="space-above">Octave Range</p>
-  <div class="input-row space-above-xsmall">
+  <div class="popup-body">
     <div class="input-group">
-      <Label labelFor="octave-low">Low</Label>
-      <Select
-        id="octave-low"
-        bind:value={configData.octaveRangeLow}
-        options={[
-          { label: "2", value: 2 },
-          { label: "3", value: 3 },
-          { label: "4", value: 4 },
-          { label: "5", value: 5 },
-        ]}
+      <p class="text-caption-muted">Type</p>
+      <div class="toggle-buttons">
+        <Button
+          color="surface"
+          variant="outline"
+          active={configData.selectedTypes.includes("melodic")}
+          onclick={() => handleTypeClick("melodic")}>Melodic</Button
+        >
+        <Button
+          color="surface"
+          variant="outline"
+          active={configData.selectedTypes.includes("harmonic")}
+          onclick={() => handleTypeClick("harmonic")}>Harmonic</Button
+        >
+      </div>
+    </div>
+    <div class="input-group space-above">
+      <p class="text-caption-muted">Direction</p>
+      <div class="toggle-buttons">
+        <Button
+          color="surface"
+          variant="outline"
+          active={configData.selectedDirections.includes("ascending")}
+          onclick={() => handleDirectionClick("ascending")}>Ascending</Button
+        >
+        <Button
+          color="surface"
+          variant="outline"
+          active={configData.selectedDirections.includes("descending")}
+          onclick={() => handleDirectionClick("descending")}>Descending</Button
+        >
+      </div>
+    </div>
+    <p class="space-above">Octave Range</p>
+    <div class="octave-range-input space-above-xsmall">
+      <div class="input-group">
+        <Label labelFor="octave-low">Low</Label>
+        <Select
+          id="octave-low"
+          bind:value={configData.octaveRangeLow}
+          options={[
+            { label: "2", value: 2 },
+            { label: "3", value: 3 },
+            { label: "4", value: 4 },
+            { label: "5", value: 5 },
+          ]}
+        />
+      </div>
+      <div class="input-group">
+        <Label labelFor="octave-high">High</Label>
+        <Select
+          id="octave-high"
+          bind:value={configData.octaveRangeHigh}
+          options={[
+            { label: "3", value: 3 },
+            { label: "4", value: 4 },
+            { label: "5", value: 5 },
+            { label: "6", value: 6 },
+          ]}
+        />
+      </div>
+    </div>
+    <div class="input-group space-above-large">
+      <Label labelFor="questions">Questions</Label>
+      <Input
+        id="questions"
+        type="number"
+        min="0"
+        max="99"
+        placeholder="10"
+        bind:value={configData.questionsAmount}
       />
     </div>
-    <div class="input-group">
-      <Label labelFor="octave-high">High</Label>
-      <Select
-        id="octave-high"
-        bind:value={configData.octaveRangeHigh}
-        options={[
-          { label: "3", value: 3 },
-          { label: "4", value: 4 },
-          { label: "5", value: 5 },
-          { label: "6", value: 6 },
-        ]}
-      />
-    </div>
   </div>
 
-  <div class="input-group space-above-large">
-    <Label labelFor="questions">Questions</Label>
-    <Input
-      id="questions"
-      type="number"
-      min="0"
-      max="99"
-      placeholder="10"
-      bind:value={configData.questionsAmount}
-    />
-  </div>
-
-  <div class="confirm-button-container space-above-large">
+  <div class="popup-footer">
     <Button shape="large" onclick={handlePopupDone}>Confirm</Button>
   </div>
 </div>
 
 <style>
-  .config-popup-card {
-    background-color: var(--color-bg-surface);
-
-    width: 100%;
-    max-width: 500px;
-  }
-
-  .top-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .input-group {
     display: grid;
     gap: var(--space-4);
@@ -165,17 +152,17 @@
     gap: var(--space-8);
   }
 
-  .input-row {
+  .octave-range-input {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-16);
-  }
-  .input-row > div {
-    flex: 1;
-  }
 
-  .confirm-button-container {
-    display: flex;
-    justify-content: end;
+    padding: var(--space-8);
+
+    border-radius: var(--radius-8);
+    background-color: var(--color-bg-surface-sunken);
+  }
+  .octave-range-input > div {
+    flex: 1;
   }
 </style>

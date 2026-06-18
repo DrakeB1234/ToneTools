@@ -37,10 +37,6 @@
     padding: 0;
   }
 
-  a.btn:focus {
-    outline: 2px solid var(--palette-brand-400);
-  }
-
   .btn.brand {
     background-color: var(--color-bg-brand);
     color: var(--color-text-inverse);

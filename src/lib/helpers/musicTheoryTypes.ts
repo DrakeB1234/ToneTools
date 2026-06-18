@@ -16,3 +16,8 @@ export type IntervalEntry = {
   name: string;
   interval: string;
 }
+
+export interface DiatonicChordSet {
+  degree: string;
+  chords: Pick<GeneralChord, "tonic" | "symbol">[];
+}

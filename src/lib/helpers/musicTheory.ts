@@ -1,6 +1,6 @@
 import { Chord, Interval, Midi, Mode, Note, Scale } from "tonal";
 import { chordCategoryEntries, chordInversionNames, intervalObjs, modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
-import { type GeneralChord, type GeneralNote } from "./musicTheoryTypes";
+import { type DiatonicChordSet, type GeneralChord, type GeneralNote } from "./musicTheoryTypes";
 
 // Intervals
 
@@ -22,6 +22,10 @@ export function decrementNoteNameByInterval(note: string, interval: string) {
   const newNote = Note.transpose(note, `-${normalizedInterval}`);
 
   return newNote;
+}
+
+export function getIntervalDistanceFromNoteNames(noteNameA: string, noteNameB: string) {
+  return Interval.distance(noteNameA, noteNameB);
 }
 
 // Notes
@@ -64,6 +68,19 @@ export function simplifyNoteNames(noteNames: string[]) {
 
 export function simplifyNoteName(noteName: string) { return Note.simplify(noteName) };
 
+export function getPitchClassFromNoteName(noteName: string) {
+  return Note.pitchClass(noteName);
+}
+
+export function getLetterFromNoteName(noteName: string) {
+  return noteName.at(0);
+}
+
+export function getAccidentalFromNoteName(noteName: string) {
+  const accidental = Note.get(noteName).acc;
+  return accidental !== "" ? accidental : "n";
+}
+
 // Chords
 
 export function getPreferredChordSymbol(chordSymbol: string) {
@@ -96,7 +113,7 @@ export function getAllCategoryChords(category: string) {
 }
 
 export function findChord(note: string, chordSymbol: string, bassNote?: string, startingOctave: number = 4) {
-  const fixedChordSymbol = chordSymbol + (bassNote && `/${bassNote}`);
+  const fixedChordSymbol = chordSymbol + (bassNote ? `/${bassNote}` : "");
   const chordObj = Chord.get(note + fixedChordSymbol);
 
   if (chordObj.empty) return null;
@@ -135,6 +152,12 @@ export function getChordInversions(note: string, chordSymbol: string, startingOc
     }
   })
 
+}
+
+export function getChordSecondaryDominant(note: string) {
+  const secondaryDominantRoot = incrementNoteNameByInterval(note, "5P");
+
+  return findChord(secondaryDominantRoot, "7");
 }
 
 export function getChordIntervalFormula(note: string, chordSymbol: string) {
@@ -197,6 +220,77 @@ export function getModeDiatonicTriads(note: string, scaleType: string, startingO
   });
 
   return result;
+}
+
+export function getDiatonicChordsFromScale(tonic: string, scaleType: string): DiatonicChordSet[] | null {
+  const scaleName = `${tonic} ${scaleType}`;
+  const scaleObj = Scale.get(scaleName);
+
+  if (scaleObj.empty) return null;
+
+  // Fetches precise notes by their 1-based scale degree and auto-handles octave wraps
+  const getNoteByDegree = Scale.degrees(scaleName);
+
+  const result = scaleObj.notes.map((_, idx) => {
+    const rootDegree = idx + 1;
+    const rootNote = getNoteByDegree(rootDegree);
+    const rootNoteWithoutOctave = rootNote.replace(/\d/g, '');
+
+    const triadNotes = [
+      rootNote,
+      getNoteByDegree(rootDegree + 2),
+      getNoteByDegree(rootDegree + 4)
+    ];
+
+    const seventhNotes = [
+      ...triadNotes,
+      getNoteByDegree(rootDegree + 6)
+    ];
+
+    const ninthNotes = [
+      ...seventhNotes,
+      getNoteByDegree(rootDegree + 8)
+    ];
+
+    const chords: Pick<GeneralChord, "tonic" | "symbol">[] = [];
+    const cleanedTriadChord = formatDiatonicChord(triadNotes, rootNoteWithoutOctave);
+    const cleanedSeventhChord = formatDiatonicChord(seventhNotes, rootNoteWithoutOctave);
+    const cleanedNinthChord = formatDiatonicChord(ninthNotes, rootNoteWithoutOctave);
+    if (cleanedTriadChord) chords.push(cleanedTriadChord);
+    if (cleanedSeventhChord) chords.push(cleanedSeventhChord);
+    if (cleanedNinthChord) chords.push(cleanedNinthChord);
+
+    const degree = modeNumeralMap[scaleType][idx];
+
+    return {
+      degree: degree,
+      chords: chords
+    };
+  });
+
+  return result;
+}
+
+function formatDiatonicChord(notes: string[], rootNote: string): Pick<GeneralChord, "tonic" | "symbol"> | null {
+  const detected = Chord.detect(notes);
+
+  if (!detected.length) {
+    return { tonic: rootNote, symbol: "" };
+  }
+
+  const bestMatch = detected.find(c => c.startsWith(rootNote));
+  if (!bestMatch) return null;
+
+  const chordObj = Chord.get(bestMatch);
+
+  const chordTonic = chordObj.tonic ?? rootNote;
+  let cleanSymbol = getChordSymbolWithoutTonic(chordObj.symbol, chordTonic);
+  cleanSymbol = getPreferredChordSymbol(cleanSymbol);
+
+  return {
+    tonic: chordObj.tonic ?? rootNote,
+    symbol: cleanSymbol
+  };
 }
 
 function getChordSymbolWithoutTonic(chordSymbol: string, tonic: string) { return chordSymbol.replace(tonic, ""); }

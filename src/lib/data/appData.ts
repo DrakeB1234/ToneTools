@@ -1,6 +1,6 @@
-import CircleOfFifths from "$lib/components/Icons/CircleOfFifths.svelte";
 import type { IconType } from "$lib/components/Icons/Icon.svelte";
-import NoteGlasses from "$lib/components/Icons/NoteGlasses.svelte";
+import DAW from "$lib/components/Icons/DAW.svelte";
+import Metronome from "$lib/components/Icons/Metronome.svelte";
 
 interface DataEntry {
   name: string;
@@ -37,7 +37,7 @@ export const toolsData: DataEntry[] = [
     href: "/tools/metronome",
     urlName: "metronome",
     color: "purple",
-    icon: "volumeUp"
+    icon: Metronome
   },
   {
     name: "Indentify Chord",
@@ -53,7 +53,7 @@ export const toolsData: DataEntry[] = [
     href: "/tools/chords-library",
     urlName: "chords-library",
     color: "blue",
-    icon: "stacks"
+    icon: "dictionary"
   },
   {
     name: "Scales Library",
@@ -61,6 +61,14 @@ export const toolsData: DataEntry[] = [
     href: "/tools/scales-library",
     urlName: "scales-library",
     color: "green",
-    icon: "book"
+    icon: "stacks"
+  },
+  {
+    name: "Chord Progression",
+    description: "Create and save chord progressions for practicing or writing music.",
+    href: "/tools/chord-progression",
+    urlName: "chord-progression",
+    color: "purple",
+    icon: DAW,
   },
 ]

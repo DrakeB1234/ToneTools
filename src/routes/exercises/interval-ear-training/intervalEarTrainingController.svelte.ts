@@ -18,10 +18,6 @@ type CurrentQuestion = {
 } | null;
 
 export class IntervalEarTrainingController {
-  private config: IntervalEarConfig;
-  private intervalAudioTimer: ReturnType<typeof setTimeout> | null = null;
-  private staffInstance: MusicStaff | null = null;
-
   selectedIntervals: IntervalEntry[] = $state([]);
 
   // State
@@ -39,6 +35,10 @@ export class IntervalEarTrainingController {
   isExerciseOver = $derived(this.status === "finished");
 
   currentMessage = $derived(this.getCurrentUIMessage(this.status));
+
+  private config: IntervalEarConfig;
+  private intervalAudioTimer: ReturnType<typeof setTimeout> | null = null;
+  private staffInstance: MusicStaff | null = null;
 
   constructor(config: IntervalEarConfig) {
     this.config = config;

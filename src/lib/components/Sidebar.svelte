@@ -137,7 +137,8 @@
 
     height: 100dvh;
     width: 25dvw;
-    max-width: 300px;
+    min-width: 210px;
+    max-width: 260px;
     overflow-y: auto;
 
     border-right: 1px solid var(--color-border);
@@ -158,8 +159,8 @@
   }
 
   ul {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    gap: var(--space-8);
   }
 
   a.nav-link {
@@ -167,7 +168,7 @@
     align-items: center;
     gap: var(--space-8);
 
-    padding: var(--space-16) var(--space-12);
+    padding: var(--space-12);
 
     color: var(--color-text-muted);
     transition: var(--transition-color);

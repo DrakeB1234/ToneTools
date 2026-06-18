@@ -36,9 +36,10 @@
 
     font-size: var(--font-size-base);
     color: var(--color-text);
-    background-color: transparent;
+    background-color: var(--color-bg-surface);
     border-radius: var(--radius-8);
     border: 1px solid var(--color-border);
+    cursor: pointer;
 
     transition: var(--transition-color);
   }
