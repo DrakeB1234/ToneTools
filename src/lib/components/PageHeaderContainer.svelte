@@ -5,7 +5,7 @@
   import Icon from "./Icons/Icon.svelte";
   import Button from "./UI/Button.svelte";
 
-  let { subText, headerText, fallbackHref = "/" } = $props();
+  let { subText, headerText, useHistory = true, fallbackHref = "/" } = $props();
 
   let hasPreviousPage = $state(false);
 
@@ -17,7 +17,7 @@
   });
 
   function handleBack() {
-    if (hasPreviousPage) {
+    if (hasPreviousPage && useHistory) {
       history.back();
     } else {
       goto(fallbackHref);
@@ -25,28 +25,24 @@
   }
 </script>
 
-<div class="header-container">
+<div class="header-container lay-row">
   <Button
-    element="button"
-    color="app"
     variant="text"
-    shape="small"
+    size="icon-small"
     onclick={handleBack}
     aria-label="Go back"
   >
     <Icon icon="arrowLeftAlt" />
   </Button>
 
-  <div class="text-container">
+  <div>
     <p class="text-caption-muted">{subText}</p>
-    <h2>{headerText}</h2>
+    <h3>{headerText}</h3>
   </div>
 </div>
 
 <style>
   .header-container {
-    display: flex;
     gap: var(--space-16);
-    align-items: center;
   }
 </style>

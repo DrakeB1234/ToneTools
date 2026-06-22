@@ -11,47 +11,34 @@
   } = $props();
 </script>
 
-<InteractiveElement {href}>
-  <div class="container">
+<InteractiveElement variant="card" {href}>
+  <div class="lay-col">
     <div
       class="icon-container"
-      style="background-color: var(--color-deco-{color}-base);"
+      style="background-color: var(--color-bg-addon-{color});"
     >
-      <Icon {icon} size={"var(--icon-size-med"} />
+      <Icon {icon} />
     </div>
-    <div class="text-container">
+    <div class="space-above-small">
       <h3>{title}</h3>
-      <p class="text-caption-muted line-clamp-3">{description}</p>
+      <p class="text-caption-muted text-line-clamp-3 space-above-xsmall">
+        {description}
+      </p>
     </div>
-    <div class="link-action">
+    <div class="lay-row link-action space-above-base">
       <p class="text-caption-muted">Open</p>
-      <Icon icon="arrowRightAlt" color="var(--color-text-muted)" />
+      <Icon icon="arrowRightAlt" color="var(--color-on-bg-surface-subtle)" />
     </div>
   </div>
 </InteractiveElement>
 
 <style>
-  .container {
-    display: flex;
-    flex-direction: column;
+  .lay-col {
     height: 100%;
-    padding: var(--space-12);
   }
-
-  h3 {
-    margin-top: var(--space-12);
-    margin-bottom: var(--space-4);
-  }
-
-  .text-container {
-    margin-bottom: var(--space-16);
-  }
-
   .link-action {
-    display: flex;
-    align-items: center;
     gap: var(--space-4);
-
     margin-top: auto;
+    padding-top: var(--space-4);
   }
 </style>

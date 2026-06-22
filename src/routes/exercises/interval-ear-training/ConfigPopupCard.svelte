@@ -1,11 +1,11 @@
 <script lang="ts">
   import "$lib/components/Popups/popup.css";
   import Icon from "$lib/components/Icons/Icon.svelte";
-  import Button from "$lib/components/UI/Button.svelte";
-  import Input from "$lib/components/UI/Input.svelte";
   import Label from "$lib/components/UI/Label.svelte";
   import Select from "$lib/components/UI/Select.svelte";
   import type { IntervalEarConfig } from "./intervalEarTrainingHelpers";
+  import Button from "$lib/components/UI/Button.svelte";
+  import Input from "$lib/components/UI/Input.svelte";
 
   type ConfigProps = {
     configData: IntervalEarConfig;
@@ -13,6 +13,8 @@
   };
 
   let { configData = $bindable(), onComplete }: ConfigProps = $props();
+
+  let currentQuestionsInputValue = $derived(configData.questionsAmount);
 
   function handleTypeClick(type: "melodic" | "harmonic") {
     if (configData.selectedTypes.includes(type)) {
@@ -40,8 +42,18 @@
   function handlePopupDone() {
     if (configData.selectedTypes.length < 1)
       configData.selectedTypes.push("melodic");
+
     if (configData.selectedDirections.length < 1)
       configData.selectedDirections.push("ascending");
+
+    if (
+      !currentQuestionsInputValue ||
+      currentQuestionsInputValue < 0 ||
+      currentQuestionsInputValue > 99
+    ) {
+      currentQuestionsInputValue = 10;
+    }
+    configData.questionsAmount = currentQuestionsInputValue;
 
     onComplete();
   }
@@ -50,54 +62,50 @@
 <div class="popup-card">
   <div class="popup-header">
     <h2 class="text-heading-3">Configure</h2>
-    <Button
-      color="surface"
-      variant="text"
-      shape="small"
-      onclick={handlePopupDone}
-    >
+    <Button variant="text" size="icon-small" onclick={handlePopupDone}>
       <Icon icon="close" />
     </Button>
   </div>
 
   <div class="popup-body">
-    <div class="input-group">
-      <p class="text-caption-muted">Type</p>
-      <div class="toggle-buttons">
+    <div class="lay-input-label-col">
+      <p class="text-caption">Type</p>
+      <div class="lay-row">
         <Button
-          color="surface"
-          variant="outline"
-          active={configData.selectedTypes.includes("melodic")}
+          variant="outlined"
+          state={configData.selectedTypes.includes("melodic") ? "on" : "off"}
           onclick={() => handleTypeClick("melodic")}>Melodic</Button
         >
         <Button
-          color="surface"
-          variant="outline"
-          active={configData.selectedTypes.includes("harmonic")}
+          variant="outlined"
+          state={configData.selectedTypes.includes("harmonic") ? "on" : "off"}
           onclick={() => handleTypeClick("harmonic")}>Harmonic</Button
         >
       </div>
     </div>
-    <div class="input-group space-above">
-      <p class="text-caption-muted">Direction</p>
-      <div class="toggle-buttons">
+    <div class="lay-input-label-col space-above-base">
+      <p class="text-caption">Direction</p>
+      <div class="lay-row">
         <Button
-          color="surface"
-          variant="outline"
-          active={configData.selectedDirections.includes("ascending")}
+          variant="outlined"
+          state={configData.selectedDirections.includes("ascending")
+            ? "on"
+            : "off"}
           onclick={() => handleDirectionClick("ascending")}>Ascending</Button
         >
         <Button
-          color="surface"
-          variant="outline"
-          active={configData.selectedDirections.includes("descending")}
+          variant="outlined"
+          state={configData.selectedDirections.includes("descending")
+            ? "on"
+            : "off"}
           onclick={() => handleDirectionClick("descending")}>Descending</Button
         >
       </div>
     </div>
-    <p class="space-above">Octave Range</p>
-    <div class="octave-range-input space-above-xsmall">
-      <div class="input-group">
+    <p class="space-above-base">Octave Range</p>
+
+    <div class="select-inputs lay-row space-above-small">
+      <div class="lay-input-label-col">
         <Label labelFor="octave-low">Low</Label>
         <Select
           id="octave-low"
@@ -110,7 +118,7 @@
           ]}
         />
       </div>
-      <div class="input-group">
+      <div class="lay-input-label-col">
         <Label labelFor="octave-high">High</Label>
         <Select
           id="octave-high"
@@ -124,7 +132,7 @@
         />
       </div>
     </div>
-    <div class="input-group space-above-large">
+    <div class="lay-input-label-col space-above-large">
       <Label labelFor="questions">Questions</Label>
       <Input
         id="questions"
@@ -132,37 +140,18 @@
         min="0"
         max="99"
         placeholder="10"
-        bind:value={configData.questionsAmount}
+        bind:value={currentQuestionsInputValue}
       />
     </div>
   </div>
 
   <div class="popup-footer">
-    <Button shape="large" onclick={handlePopupDone}>Confirm</Button>
+    <Button onclick={handlePopupDone}>Confirm</Button>
   </div>
 </div>
 
 <style>
-  .input-group {
-    display: grid;
-    gap: var(--space-4);
-  }
-  .toggle-buttons {
-    display: flex;
-    gap: var(--space-8);
-  }
-
-  .octave-range-input {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-16);
-
-    padding: var(--space-8);
-
-    border-radius: var(--radius-8);
-    background-color: var(--color-bg-surface-sunken);
-  }
-  .octave-range-input > div {
+  .select-inputs > div {
     flex: 1;
   }
 </style>

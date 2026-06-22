@@ -6,6 +6,7 @@
   import Button from "./UI/Button.svelte";
 
   let isOpen = $state(false);
+  let isDarkMode = $state(false);
 
   function toggleSidebar() {
     isOpen = !isOpen;
@@ -15,20 +16,27 @@
     isOpen = false;
   }
 
+  function handleToggleLightMode() {
+    isDarkMode = !isDarkMode;
+  }
+
+  $effect(() => {
+    document.body.classList.toggle("dark", isDarkMode);
+  });
+
   onNavigate(() => {
     closeSidebar();
   });
 </script>
 
-<header class="mobile-navbar">
-  <a href="/" class="logo-container">
+<header class="lay-row mobile-navbar">
+  <a href="/" class="lay-row mobile-logo-container">
     <img src="/images/logo.svg" alt="Music App Logo" width="32" height="32" />
     <h1 class="text-heading-2">Music App</h1>
   </a>
   <Button
-    color="surface"
     variant="text"
-    shape="small"
+    size="icon-base"
     onclick={toggleSidebar}
     aria-label="Open menu"
   >
@@ -41,8 +49,8 @@
 {/if}
 
 <aside class:open={isOpen}>
-  <div class="wrapper">
-    <div class="desktop-header">
+  <div>
+    <div class="lay-row desktop-header">
       <a href="/" class="logo-container">
         <img
           src="/images/logo.svg"
@@ -54,7 +62,7 @@
       </a>
     </div>
 
-    <div class="mobile-header">
+    <div class="lay-row mobile-header">
       <a href="/" class="logo-container">
         <img
           src="/images/logo.svg"
@@ -65,9 +73,8 @@
         <h1 class="text-heading-2">Music App</h1>
       </a>
       <Button
-        color="surface"
         variant="text"
-        shape="small"
+        size="icon-base"
         onclick={closeSidebar}
         aria-label="Close menu"
       >
@@ -77,7 +84,7 @@
 
     <nav aria-label="Main Navigation">
       <h3>Exercises</h3>
-      <ul role="list">
+      <ul class="lay-col space-above-base" role="list">
         {#each exercisesData as data (data.name)}
           <li>
             <a
@@ -93,7 +100,7 @@
       </ul>
 
       <h3>Tools</h3>
-      <ul role="list">
+      <ul class="lay-col space-above-base" role="list">
         {#each toolsData as data (data.name)}
           <li>
             <a
@@ -108,6 +115,20 @@
         {/each}
       </ul>
     </nav>
+
+    <div class="light-mode-button-container space-above-large">
+      <Button
+        variant="text"
+        onclick={handleToggleLightMode}
+        aria-label="Switch Light/Dark Mode"
+        fullWidth
+      >
+        <div class="lay-row">
+          <Icon icon={isDarkMode ? "lightMode" : "darkMode"} />
+          Switch to {isDarkMode ? "light mode" : "dark mode"}
+        </div>
+      </Button>
+    </div>
   </div>
 </aside>
 
@@ -119,11 +140,7 @@
   }
 
   .desktop-header {
-    display: flex;
-    align-items: center;
     gap: var(--space-12);
-
-    margin-bottom: var(--space-24);
   }
 
   aside {
@@ -141,8 +158,8 @@
     max-width: 260px;
     overflow-y: auto;
 
-    border-right: 1px solid var(--color-border);
-    background-color: var(--color-bg-surface);
+    border-right: 1px solid var(--color-border-subtle);
+    background-color: var(--color-bg-surface-1);
   }
 
   .logo-container {
@@ -159,8 +176,7 @@
   }
 
   ul {
-    display: grid;
-    gap: var(--space-8);
+    padding-inline: var(--space-8);
   }
 
   a.nav-link {
@@ -170,29 +186,44 @@
 
     padding: var(--space-12);
 
-    color: var(--color-text-muted);
+    border-radius: var(--radius-base);
+    color: var(--color-on-bg-surface-subtle);
     transition: var(--transition-color);
   }
 
   a.nav-link:hover:not(.active) {
-    background-color: var(--color-surface-hover);
+    background-color: var(--color-bg-surface-1-active);
   }
   a.nav-link.active {
-    color: var(--color-text-inverse);
-    background-color: var(--color-bg-brand);
+    color: var(--color-on-bg-primary-subtle);
+    background-color: var(--color-bg-primary-subtle);
+  }
+
+  .mobile-logo-container {
+    gap: var(--space-16);
+  }
+
+  .mobile-navbar {
+    justify-content: space-between;
+    padding: var(--space-12);
+    width: 100%;
+
+    background-color: var(--color-bg-surface-1);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .mobile-header {
+    justify-content: space-between;
+    padding-right: var(--space-8);
+  }
+
+  .light-mode-button-container {
+    padding: var(--space-8);
   }
 
   @media (max-width: 768px) {
     .mobile-navbar {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      padding-inline: var(--space-8);
-      width: 100%;
-
-      background-color: var(--color-bg-surface);
-      border-bottom: 1px solid var(--color-border);
     }
 
     .desktop-header {
@@ -201,9 +232,6 @@
 
     .mobile-header {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-right: var(--space-8);
     }
 
     aside {
@@ -214,8 +242,6 @@
 
       width: 80dvw;
       max-width: 320px;
-
-      border-right: 1px solid var(--color-border);
 
       transform: translateX(-100%);
       transition: transform 0.3s ease;

@@ -14,7 +14,6 @@
   } from "$lib/helpers/musicTheory";
   import Toggle from "$lib/components/UI/Toggle.svelte";
   import Label from "$lib/components/UI/Label.svelte";
-  import LinkCard from "$lib/components/Cards/LinkCard.svelte";
   import { encodeUrlChord } from "$lib/helpers/helpers";
 
   // Constants
@@ -89,7 +88,7 @@
       fallbackHref="/tools/chords-library"
     />
 
-    <section class="card-base chord-card">
+    <section class="card">
       <div class="chord-header">
         <div>
           <h1>
@@ -97,23 +96,18 @@
           </h1>
           <p class="text-body-muted">{chordObj.name}</p>
         </div>
-        <Button
-          onclick={handlePlayChord}
-          color="brand"
-          variant="text"
-          shape="small"
-        >
+        <Button onclick={handlePlayChord} size="icon-small">
           <Icon icon="volumeUp" />
         </Button>
       </div>
 
-      <div class="flex-container aliases-container">
+      <div class="aliases-container lay-row">
         {#each chordAliases as alias (alias)}
-          <p class="pill surface-dark">{alias}</p>
+          <p class="pill">{alias}</p>
         {/each}
       </div>
 
-      <div class="toggle-button-container space-above">
+      <div class="simple-toggle-container lay-row space-above-base">
         <Label labelFor="simplify-notes">Simplify Notes</Label>
         <Toggle
           bind:toggled={isSimplifyNotesSelected}
@@ -122,21 +116,16 @@
         />
       </div>
 
-      <hr class="divider space-above" />
+      <hr class="divider space-above-base" />
 
-      <div class="note-buttons-container">
+      <div class="note-buttons-container space-above-base">
         {#each chordObj.notes as note, index (note)}
           {@const rawNote = note.letter + note.accidental}
           {@const displayNote = isSimplifyNotesSelected
             ? simplifyNoteName(rawNote)
             : rawNote}
 
-          <Button
-            onclick={() => handlePlayNote(index)}
-            color="surface"
-            variant="outline"
-            shape="large"
-          >
+          <Button variant="secondary" onclick={() => handlePlayNote(index)}>
             {displayNote}
           </Button>
         {/each}
@@ -147,19 +136,19 @@
           activeNotes={pianoSnapshotNotes}
           range={{
             startNote: "C4",
-            endNote: "E6",
+            endNote: "C7",
           }}
         />
       </div>
 
-      <div class="inner-card-base">
+      <div class="card-high">
         <h3>Intervals</h3>
-        <div class="flex-container">
+        <div class="lay-row">
           {#each chordIntervals as interval (interval)}
             <p class="text-body-muted">{interval}</p>
           {/each}
         </div>
-        <h3 class="space-above">
+        <h3 class="space-above-base">
           Secondary Dominant <span class="text-body-muted"
             >(perfect 5th above root)</span
           >
@@ -169,25 +158,24 @@
         </p>
       </div>
 
-      <hr class="divider" />
+      <hr class="space-above-large" />
 
       {#if isChordInversions}
-        <h3 class="space-above">Inversions</h3>
-        <div class="inversions-container">
+        <h3 class="space-above-base">Inversions</h3>
+        <div class="lay-col space-above-xsmall">
           {#each chordInversions as inversion, index (index)}
             <InteractiveElement
-              variant="outline"
-              activeStyle="active-style-2"
-              active={currentInversionSelected === index}
+              variant="outlined"
+              state={currentInversionSelected === index ? "on" : "off"}
               onclick={() => handleInversionPressed(index)}
             >
-              <div class="inversion-button-container">
-                <div class="inversion-top-container">
+              <div class="lay-row">
+                <div>
                   <p class="pill inversion-pill">{inversion.inversionName}</p>
                 </div>
-                <div class="inversion-bottom-container">
+                <div>
                   <p>{inversion.chord.tonic + inversion.chord.symbol}</p>
-                  <div class="inversion-button-notes">
+                  <div class="inversion-button-notes lay-row">
                     {#each inversion.chord.notes as note}
                       {@const rawNote = note.letter + note.accidental}
                       {@const displayNote = isSimplifyNotesSelected
@@ -207,16 +195,20 @@
       {/if}
     </section>
 
-    <section class="card-base">
+    <section>
       <h3>Similar Chords</h3>
+
+      <hr class="space-above-small" />
 
       <div class="similar-chords-container">
         {#each similarChords as chord}
-          <LinkCard
-            header={chord.tonic + chord.symbol}
-            subTextItems={chord.name}
+          <InteractiveElement
+            variant="card"
             href={encodeUrlChord(chord.tonic!, chord.symbol)}
-          />
+          >
+            <p>{chord.tonic + chord.symbol}</p>
+            <p class="text-body-muted">{chord.name}</p>
+          </InteractiveElement>
         {/each}
       </div>
     </section>
@@ -233,10 +225,6 @@
     padding: var(--app-padding);
   }
 
-  .chord-card {
-    padding-block: var(--space-16);
-  }
-
   .chord-header {
     display: flex;
     justify-content: space-between;
@@ -246,6 +234,7 @@
   }
 
   .aliases-container {
+    gap: var(--space-4);
     overflow-x: auto;
   }
 
@@ -253,60 +242,30 @@
     display: flex;
     gap: var(--space-4);
     flex-wrap: wrap;
-
-    margin-block: var(--space-12);
   }
 
   .piano-roll-container {
-    width: 100%;
     overflow-x: auto;
 
-    margin-block: var(--space-16);
+    /* Full Bleed, Negative margin */
+    margin-left: calc(-1 * var(--space-16));
+    margin-right: calc(-1 * var(--space-16));
+
+    margin-block: var(--space-24);
+    scrollbar-color: var(--color-border) var(--color-bg-secondary);
   }
 
-  .inner-card-base {
-    margin-bottom: var(--space-16);
-  }
-
-  .flex-container {
-    display: flex;
-    gap: var(--space-8);
-  }
-
-  .toggle-button-container {
+  .simple-toggle-container {
     width: fit-content;
     margin-left: auto;
   }
 
-  .inversions-container {
-    display: grid;
-    gap: var(--space-8);
-
-    padding: 0;
-    margin-top: var(--space-8);
-  }
-
-  .inversion-button-container {
-    display: flex;
-    gap: var(--space-12);
-
-    padding: var(--space-12);
-  }
-
-  .inversion-top-container {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .inversion-bottom-container {
-    display: grid;
-  }
-
   .inversion-button-notes {
-    display: flex;
+    gap: var(--space-4);
   }
 
   .inversion-pill {
+    color: var(--color-on-bg-secondary);
     width: 5ch;
   }
 

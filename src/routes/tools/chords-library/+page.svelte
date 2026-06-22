@@ -9,7 +9,7 @@
   import RootNoteInput from "$lib/components/RootNoteInput.svelte";
   import { encodeUrlChord } from "$lib/helpers/helpers";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
-  import LinkCard from "$lib/components/Cards/LinkCard.svelte";
+  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
 
   // Page Specific Types
 
@@ -72,7 +72,7 @@
       fallbackHref="/"
     />
 
-    <section class="card-base input-card">
+    <section class="card">
       <div class="input-group">
         <RootNoteInput
           bind:value={uiState.inputNote}
@@ -83,9 +83,8 @@
       <div class="toggle-buttons-container">
         {#each chordCategories as category (category)}
           <Button
-            color="surface"
-            variant="outline"
-            active={uiState.inputChordCategory === category}
+            variant="outlined"
+            state={uiState.inputChordCategory === category ? "on" : "off"}
             onclick={() => handleChordCategoryButtonPressed(category)}
             >{category}</Button
           >
@@ -94,11 +93,14 @@
 
       <div class="chord-categories-container">
         {#each uiState.categoryChords as chord (chord.symbol)}
-          <LinkCard
-            header={uiState.inputNote + chord.symbol}
-            subTextItems={chord.name}
+          <InteractiveElement
+            variant="outlined"
+            style="padding: var(--space-12)"
             href={encodeUrlChord(uiState.inputNote, chord.symbol)}
-          />
+          >
+            <p>{uiState.inputNote + chord.symbol}</p>
+            <p class="text-body-muted">{chord.name}</p>
+          </InteractiveElement>
         {/each}
       </div>
     </section>

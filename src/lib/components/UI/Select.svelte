@@ -35,15 +35,12 @@
     padding: var(--space-8);
 
     font-size: var(--font-size-base);
-    color: var(--color-text);
-    background-color: var(--color-bg-surface);
-    border-radius: var(--radius-8);
+    background-color: var(--color-bg-surface-1);
+    color: var(--color-on-bg-surface);
+    border-radius: var(--radius-base);
     border: 1px solid var(--color-border);
     cursor: pointer;
 
     transition: var(--transition-color);
-  }
-  select:hover {
-    background-color: var(--color-hover-surface);
   }
 </style>

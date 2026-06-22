@@ -126,9 +126,8 @@
   <div class="popup-header">
     <h2 class="text-heading-3">Edit Chord {progressionIdx + 1}</h2>
     <InteractiveElement
-      color="surface"
       variant="text"
-      shape="small"
+      size="icon-small"
       onclick={cancelChanges}
     >
       <Icon icon="close" />
@@ -138,7 +137,7 @@
   <div class="popup-body">
     <h1>{chordName}</h1>
 
-    <div class="input-label space-above-large">
+    <div class="lay-input-label-col space-above-large">
       <Label labelFor="duration">Duration</Label>
       <StepperInput
         id="duration"
@@ -147,16 +146,19 @@
       />
     </div>
 
-    <div class="remove-button-container">
-      <Button color="destructive" variant="outline" onclick={removeChord}>
-        <Icon icon="delete" />
-        Remove
-      </Button>
-    </div>
+    <Button
+      variant="destructive-outlined"
+      size="small"
+      class="space-above-xlarge"
+      onclick={removeChord}
+    >
+      <Icon icon="delete" />
+      Remove
+    </Button>
 
     <h2 class="text-heading-3 space-above-large">Build Chord</h2>
-    <div class="note-input-container space-above-small">
-      <div class="input-label note-input">
+    <div class="lay-row space-above-small">
+      <div class="note-input lay-input-label-col">
         <Label labelFor="letter">Letter</Label>
         <Select
           id="letter"
@@ -165,7 +167,7 @@
           onchange={onChordLetterChange}
         />
       </div>
-      <div class="input-label note-input">
+      <div class="note-input lay-input-label-col">
         <Label labelFor="accidental">Acc</Label>
         <Select
           id="accidental"
@@ -174,7 +176,7 @@
           onchange={onChordAccidentalChange}
         />
       </div>
-      <div class="input-label">
+      <div class="chord-input lay-input-label-col">
         <Label labelFor="chord">Chord</Label>
         <Select
           id="chord"
@@ -186,14 +188,14 @@
     </div>
 
     <h2 class="text-heading-3 space-above-large">Diatonic Chords</h2>
-    <div class="diatonic-chords space-above-small">
+    <div class="lay-col space-above-small">
       {#each diatonicChords as chordSet, i}
         <div class="chord-button-group">
           {#each chordSet.chords as chord, j}
             {@const chordName = chord.tonic + chord.symbol}
             <InteractiveElement
-              color="surface"
-              variant="outline"
+              variant="outlined"
+              fullWidth
               onclick={() => onDiatonicChordSelect(i, j)}
             >
               <div class="chord-button-container">
@@ -208,57 +210,20 @@
   </div>
 
   <div class="popup-footer">
-    <InteractiveElement
-      color="surface"
-      variant="outline"
-      shape="large"
-      onclick={cancelChanges}>Cancel</InteractiveElement
+    <InteractiveElement variant="secondary" onclick={cancelChanges}
+      >Cancel</InteractiveElement
     >
-    <InteractiveElement shape="large" onclick={applyChanges}
-      >Apply</InteractiveElement
-    >
+    <InteractiveElement onclick={applyChanges}>Apply</InteractiveElement>
   </div>
 </div>
 
 <style>
-  .remove-button-container {
-    display: flex;
-    justify-content: end;
-
-    margin-top: var(--space-16);
+  .note-input {
+    min-width: 4.5ch;
   }
 
-  .input-label {
-    display: grid;
-    gap: var(--space-4);
-  }
-
-  .note-input-container {
-    display: flex;
-    gap: var(--space-8);
-
-    padding: var(--space-8);
-
-    border-radius: var(--space-8);
-    background-color: var(--color-bg-surface-sunken);
-  }
-  .note-input-container > .input-label {
-    flex: 1;
-    max-width: 50px;
-  }
-  .note-input-container > .input-label:last-of-type {
-    flex: 1;
-    max-width: unset;
-  }
-
-  .diatonic-chords {
-    display: grid;
-    gap: var(--space-4);
-
-    padding: var(--space-8);
-
-    border-radius: var(--space-8);
-    background-color: var(--color-bg-surface-sunken);
+  .chord-input {
+    width: 100%;
   }
 
   .chord-button-group {

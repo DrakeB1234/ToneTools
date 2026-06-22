@@ -12,12 +12,11 @@
   let { id, value, onStepperClick }: Props = $props();
 </script>
 
-<div class="stepper-input">
+<div class="lay-row">
   <div class="decrement-button-wrapper">
     <Button
-      color="surface"
-      variant="outline"
-      shape="small"
+      variant="outlined"
+      size="icon-small"
       onclick={() => onStepperClick(-1)}
       aria-label="Decrease {id}"
     >
@@ -38,9 +37,8 @@
 
   <div class="increment-button-wrapper">
     <Button
-      color="surface"
-      variant="outline"
-      shape="small"
+      variant="outlined"
+      size="icon-small"
       onclick={() => onStepperClick(1)}
       aria-label="Decrease {id}"
     >
@@ -50,11 +48,6 @@
 </div>
 
 <style>
-  .stepper-input {
-    display: flex;
-    align-items: end;
-    gap: var(--space-8);
-  }
   .input-wrapper {
     pointer-events: none;
     max-width: 5ch;

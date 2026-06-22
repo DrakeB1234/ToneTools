@@ -2,13 +2,12 @@
   let { labelFor = "", children } = $props();
 </script>
 
-<label class="input-label" for={labelFor}>
+<label class="text-caption" for={labelFor}>
   {@render children?.()}
 </label>
 
 <style>
   label {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
+    color: var(--color-on-bg-surface);
   }
 </style>

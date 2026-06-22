@@ -223,40 +223,9 @@ export const styleBasic2: RhythmStyle = {
   }
 };
 
-export const styleBossaNova1: RhythmStyle = {
-  id: "bossa-nova-1",
-  name: "Bossa Nova 1",
-  patternLength: 16,
-
-  relativeNoteRanges: {
-    melody: { anchorOctave: 4, spanSemitones: 11 },
-    bass: { anchorOctave: 2, spanSemitones: 11 }
-  },
-
-  melodyTrack: {
-    stepCount: 16,
-    events: [
-      { step: 0, noteLength: "staccato", voices: [0, 1, 2, 3, 4] },
-      { step: 4, noteLength: "legato", voices: [0, 1, 2, 3, 4] },
-      { step: 10, noteLength: "legato", voices: [0, 1, 2, 3, 4] },
-      { step: 14, noteLength: "staccato", voices: [0, 1, 2, 3, 4] },
-    ]
-  },
-
-  bassTrack: {
-    stepCount: 16,
-    events: [
-      { step: 0, noteLength: "legato", degree: "root" },
-      { step: 6, noteLength: "legato", degree: "root" },
-      { step: 8, noteLength: "legato", degree: "fifth" },
-      { step: 14, noteLength: "legato", degree: "root" },
-    ]
-  }
-};
-
-export const styleBossaNova2: RhythmStyle = {
-  id: "bossa-nova-2",
-  name: "Bossa Nova 2",
+export const styleBossaNova: RhythmStyle = {
+  id: "bossa-nova",
+  name: "Bossa Nova",
   patternLength: 64,
 
   relativeNoteRanges: {
@@ -343,6 +312,5 @@ export const styleLibrary: Record<string, RhythmStyle> = {
   "basic-1": styleBasic1,
   "basic-2": styleBasic2,
   "pop-1": stylePop1,
-  "bossa-nova-1": styleBossaNova1,
-  "bossa-nova-2": styleBossaNova2,
+  "bossa-nova": styleBossaNova,
 };

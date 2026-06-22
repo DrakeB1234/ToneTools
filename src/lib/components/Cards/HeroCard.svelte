@@ -3,46 +3,30 @@
   import Button from "../UI/Button.svelte";
 </script>
 
-<div class="card-base">
+<div class="card">
   <h1 class="text-heading-2">Music Training Exercises</h1>
-  <p class="text-caption text-max-width-med">
+  <p class="text-caption text-max-width-med space-above-small">
     There's a lot to master when it comes to music. Start working on some of the
     many areas of focus today!
   </p>
 
-  <Button
-    element="a"
-    color="brand"
-    variant="outline"
-    shape="large"
-    href="/exercises"
-  >
-    View Exercises
-    <Icon icon="arrowRightAlt" />
-  </Button>
+  <div class="space-above-base">
+    <Button element="a" href="/exercises">
+      View Exercises
+      <Icon icon="arrowRightAlt" />
+    </Button>
+  </div>
 </div>
 
 <style>
-  .card-base {
+  .card {
     padding: var(--space-24) var(--space-24);
     padding-bottom: var(--space-16);
 
     box-shadow: var(--shadow-elevation-2);
-    background-color: var(--color-bg-brand);
-    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
   }
-
-  h1 {
-    color: var(--color-text-inverse);
-  }
-
-  p:nth-child(2n) {
-    color: var(--color-text-primary);
-  }
-
-  p.text-caption {
-    color: var(--color-text-inverse-muted);
-    margin-top: var(--space-12);
-    margin-bottom: var(--space-16);
+  .card * {
+    color: var(--color-on-bg-primary);
   }
 </style>

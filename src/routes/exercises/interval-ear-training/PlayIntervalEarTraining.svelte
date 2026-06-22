@@ -53,14 +53,7 @@
 </script>
 
 <main>
-  <div class="exit-container">
-    <Button
-      color="surface"
-      variant="outline"
-      shape="large"
-      onclick={handleExitPressed}>Exit</Button
-    >
-  </div>
+  <Button variant="outlined" onclick={handleExitPressed}>Exit</Button>
 
   <div class="game-container">
     <div class="message-container">
@@ -89,8 +82,9 @@
   <div class="input-wrapper">
     {#each exerciseController.selectedIntervals as intervalObj (intervalObj.interval)}
       <InteractiveElement
-        element="button"
-        variant="outline"
+        variant="text"
+        style="padding: 0;"
+        fullWidth
         onclick={() =>
           exerciseController.handleIntervalButtonClick(intervalObj.interval)}
       >
@@ -101,22 +95,24 @@
           class:wrong={exerciseController.wrongGuessInterval ===
             intervalObj.interval}
         >
-          {intervalObj.name}
+          <p>{intervalObj.name}</p>
         </div>
       </InteractiveElement>
     {/each}
   </div>
 
-  <div class="bottom-container">
+  <div class="bottom-container lay-row">
     <Button
-      color="surface"
-      shape="circle"
+      variant="secondary"
+      size="icon-large"
+      circle
       onclick={exerciseController.handleReplayIntervalClick}
     >
       <Icon icon="volumeUp" />
     </Button>
     <Button
-      shape="circle"
+      size="icon-large"
+      circle
       onclick={exerciseController.handleNextButtonClick}
       disabled={exerciseController.isNextQuestionDisabled}
     >
@@ -140,14 +136,13 @@
     flex-direction: column;
 
     padding: var(--space-8) var(--space-12);
-    min-height: 700px;
   }
 
   .game-container {
     margin-top: var(--space-8);
 
-    border: 1px solid var(--color-border);
-    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border-subtle);
+    background-color: var(--color-bg-surface-1);
   }
 
   .staff-container {
@@ -182,10 +177,10 @@
   }
 
   .green p {
-    color: var(--color-deco-green-base);
+    color: var(--color-bg-addon-green);
   }
   .red p {
-    color: var(--color-deco-red-base);
+    color: var(--color-bg-danger);
   }
 
   .input-wrapper {
@@ -193,31 +188,30 @@
     grid-template-columns: repeat(auto-fill, minmax(11em, 1fr));
     align-items: stretch;
     gap: var(--space-8);
+    padding-bottom: var(--space-16);
   }
   .input-container {
     width: 100%;
     text-align: center;
 
     padding: var(--space-12);
-    border: 1px solid transparent;
-    border-radius: var(--radius-8);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
   }
   .input-container.correct {
-    border-color: var(--color-deco-green-base);
+    border-color: var(--color-bg-addon-green-contrast);
   }
   .input-container.wrong {
-    border-color: var(--color-deco-red-base);
+    border-color: var(--color-bg-addon-red-contrast);
   }
 
   .bottom-container {
     position: sticky;
     bottom: 0;
 
-    display: flex;
     justify-content: end;
-    gap: var(--space-16);
+    gap: var(--space-12);
 
-    padding-block: var(--space-12);
-    margin-top: auto;
+    padding-block: var(--space-16);
   }
 </style>

@@ -15,7 +15,7 @@
     <section>
       <h3>Last Used</h3>
 
-      <div class="cards-container">
+      <div class="lay-col space-above-small">
         {#each lastUsedItems as item}
           <LastUsedCard
             title={item.name}
@@ -31,7 +31,7 @@
     <section>
       <h3>Tools</h3>
 
-      <div class="cards-grid">
+      <div class="lay-grid-cards space-above-small">
         {#each toolsData as item}
           <ToolCard
             title={item.name}
@@ -54,23 +54,5 @@
 
   section {
     margin-top: var(--space-36);
-  }
-
-  .cards-container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-12);
-
-    margin-top: var(--space-16);
-  }
-
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
-    align-items: stretch;
-    grid-auto-rows: 1fr;
-    gap: var(--space-12);
-
-    margin-top: var(--space-16);
   }
 </style>

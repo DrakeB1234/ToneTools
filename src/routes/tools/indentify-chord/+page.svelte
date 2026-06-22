@@ -1,9 +1,8 @@
 <script lang="ts">
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
-  import LinkCard from "$lib/components/Cards/LinkCard.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import PianoInteractive from "$lib/components/Piano/PianoInteractive.svelte";
-  import Button from "$lib/components/UI/Button.svelte";
+  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { encodeUrlChord } from "$lib/helpers/helpers";
   import {
@@ -49,7 +48,7 @@
       fallbackHref="/"
     />
 
-    <section class="card-base input-card">
+    <section class="card">
       <PianoInteractive
         activeNotes={selectedNotes}
         range={{
@@ -59,24 +58,33 @@
         onNoteClick={handlePianoNoteClick}
       />
 
-      <h2 class="text-body header">Selected Notes:</h2>
-      <div class="notes-container">
-        {#each selectedNotes as note}
-          <p>{note}</p>
-        {/each}
+      <div class="card-content space-above-base">
+        <p>Selected Notes:</p>
+        <div class="notes-container lay-row">
+          {#each selectedNotes as note}
+            <p>{note}</p>
+          {/each}
+        </div>
       </div>
     </section>
 
-    <section class="card-base chords-card">
-      <h2>Results</h2>
+    <section class="lay-col space-above-base">
+      <h3>Results</h3>
       <hr />
       <div class="chords-container">
         {#each identifiedChords as chord}
-          <LinkCard
-            header={chord.tonic + chord.symbol}
-            subTextItems={selectedNotes}
+          <InteractiveElement
+            variant="card"
+            style="border-radius: var(--radius-base);"
             href={encodeUrlChord(chord.tonic!, chord.symbol)}
-          />
+          >
+            <p>{chord.tonic + chord.symbol}</p>
+            <div class="notes-container lay-row">
+              {#each chord.notes as note (note)}
+                <p class="text-body-muted">{note}</p>
+              {/each}
+            </div>
+          </InteractiveElement>
         {:else}
           <div class="empty-container">
             <p class="text-body-muted">No chords found</p>
@@ -97,28 +105,22 @@
     padding: var(--app-padding);
   }
 
-  .input-card {
-    display: grid;
-
-    width: 100%;
+  .card {
+    padding: 0;
+    padding-bottom: var(--space-8);
   }
 
-  .header {
-    margin-top: var(--space-24);
+  .card-content {
+    padding: var(--space-12);
   }
 
   .notes-container {
-    display: flex;
-    gap: var(--space-8);
     flex-wrap: wrap;
+    gap: var(--space-4);
 
     width: 100%;
     min-height: 21px;
     margin-top: var(--space-8);
-  }
-
-  .chords-card h2 {
-    margin-bottom: var(--space-8);
   }
 
   .chords-container {
@@ -132,6 +134,6 @@
     display: flex;
     justify-content: center;
 
-    padding: var(--space-16) var(--space-16);
+    padding: var(--space-12) var(--space-16);
   }
 </style>

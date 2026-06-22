@@ -24,29 +24,29 @@
       fallbackHref="/exercises/interval-ear-training"
     />
 
-    <section class="card-base ear-card">
+    <section class="card ear-card">
       <div class="title-container">
         <h2>Melodic Path</h2>
       </div>
-      <div class="content-container">
+      <div class="content-container lay-col space-above-small">
         {#each earTrainingGuideEntry as entry, i}
           <InteractiveElement
             element="button"
             variant="text"
             onclick={() => handleEarEntryClick(i)}
           >
-            <div class="entry-container">
+            <div class="lay-row entry-container">
               <div class="entry-number-badge">
                 <p>{i + 1}</p>
               </div>
               <div class="entry-content-container">
-                <h3 class="entry-title text-heading-2">{entry.title}</h3>
-                <div class="entry-pills-container">
+                <h3 class="text-heading-2">{entry.title}</h3>
+                <div class="entry-pills-container lay-row space-above-xsmall">
                   {#each entry.exerciseConfig.selectedIntervals as intervalObj}
-                    <div class="entry-pill">{intervalObj.interval}</div>
+                    <div class="pill">{intervalObj.interval}</div>
                   {/each}
                 </div>
-                <p class="entry-description">{entry.description}</p>
+                <p class="space-above-xsmall">{entry.description}</p>
               </div>
             </div>
           </InteractiveElement>
@@ -66,6 +66,10 @@
     padding: var(--app-padding);
   }
 
+  .content-container {
+    padding: var(--space-8);
+  }
+
   .ear-card {
     display: grid;
     gap: var(--space-4);
@@ -81,68 +85,35 @@
     padding: 0 var(--space-16);
   }
 
-  .content-container {
-    display: grid;
-    gap: var(--space-4);
-
-    padding-top: var(--space-8);
-  }
-
   .entry-container {
-    display: flex;
+    align-items: start;
     gap: var(--space-12);
-
-    padding: var(--space-16);
   }
 
   .entry-number-badge {
-    flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    width: 32px;
-    height: 32px;
-
+    width: 30px;
+    height: 30px;
     padding: var(--space-8);
 
-    background-color: var(--color-bg-brand);
+    background-color: var(--color-bg-primary);
     border-radius: var(--radius-full);
 
     & p {
-      color: var(--color-text-inverse);
+      color: var(--color-on-bg-primary);
     }
   }
 
-  .entry-title {
+  .entry-content-container {
+    flex: 1;
     text-align: start;
   }
 
   .entry-pills-container {
-    display: flex;
     flex-wrap: wrap;
     gap: var(--space-4);
-
-    margin-top: var(--space-4);
-  }
-
-  .entry-pill {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 20px;
-    height: 20px;
-    padding: var(--space-4);
-
-    border-radius: var(--radius-4);
-    font-size: var(--font-size-12);
-    background-color: var(--color-bg-surface-dark);
-    color: var(--color-text-muted);
-  }
-
-  .entry-description {
-    margin-top: var(--space-4);
-    text-align: start;
   }
 </style>

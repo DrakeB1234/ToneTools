@@ -56,14 +56,16 @@
       subText="Exercises"
       headerText="Intervals Ear Training"
       fallbackHref="/"
+      useHistory={false}
     />
 
-    <section class="card-base links-card">
+    <section class="card links-card">
       <InteractiveElement
         variant="text"
         href="/exercises/interval-ear-training/guided"
+        style="padding: var(--space-12); padding-bottom: var(--space-16);"
       >
-        <div class="link-container">
+        <div class="lay-grid-center link-container">
           <div class="icon-container purple">
             <Icon icon="book" />
           </div>
@@ -78,24 +80,9 @@
       <InteractiveElement
         variant="text"
         href="/exercises/interval-ear-training/guided"
+        style="padding: var(--space-12); padding-bottom: var(--space-16);"
       >
-        <div class="link-container">
-          <div class="icon-container violet">
-            <Icon icon="stacks" />
-          </div>
-          <div class="text-container">
-            <h2 class="text-heading-3">Presets</h2>
-            <p class="text-caption-muted">
-              Create or choose your own presets for exercises.
-            </p>
-          </div>
-        </div>
-      </InteractiveElement>
-      <InteractiveElement
-        variant="text"
-        href="/exercises/interval-ear-training/guided"
-      >
-        <div class="link-container">
+        <div class="lay-grid-center link-container">
           <div class="icon-container green">
             <Icon icon="leaderBoard" />
           </div>
@@ -109,17 +96,10 @@
       </InteractiveElement>
     </section>
 
-    <section class="card-base intervals-card">
+    <section class="card">
       <div class="start-container">
-        <Button color="brand" shape="large" onclick={onStartClick}
-          >Start Exercise</Button
-        >
-        <Button
-          color="surface"
-          variant="outline"
-          shape="large"
-          onclick={() => (isConfigOpen = true)}
-        >
+        <Button onclick={onStartClick}>Start Exercise</Button>
+        <Button variant="secondary" onclick={() => (isConfigOpen = true)}>
           Configure
         </Button>
       </div>
@@ -128,13 +108,13 @@
       <div class="interval-buttons-container">
         {#each intervalObjs as interval (interval.interval)}
           <InteractiveElement
-            element="button"
-            variant="outline"
-            activeStyle="active-style-2"
-            active={activeIntervalStrings.includes(interval.interval)}
+            variant="outlined"
+            state={activeIntervalStrings.includes(interval.interval)
+              ? "on"
+              : "off"}
             onclick={() => handleIntervalButtonClick(interval)}
           >
-            <div class="interval-button-content">
+            <div class="lay-row">
               <p class="interval-text">{interval.interval}</p>
               <p>{interval.name}</p>
             </div>
@@ -164,7 +144,7 @@
 
   .links-card {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     align-items: stretch;
     grid-auto-rows: 1fr;
     gap: var(--space-16) var(--space-4);
@@ -173,19 +153,10 @@
   }
   .link-container {
     flex: 1;
-    display: grid;
-    place-items: center;
-
-    padding: var(--space-16);
   }
   .text-container {
     margin-top: var(--space-8);
     text-align: center;
-  }
-
-  .intervals-card {
-    display: grid;
-    gap: var(--space-4);
   }
 
   .start-container {
@@ -199,12 +170,6 @@
   .interval-buttons-container {
     display: grid;
     gap: var(--space-4);
-  }
-  .interval-button-content {
-    display: flex;
-    gap: var(--space-12);
-
-    padding: var(--space-12) var(--space-8);
   }
   .interval-text {
     text-align: right;

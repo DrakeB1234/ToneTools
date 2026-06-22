@@ -26,9 +26,8 @@
   <div class="popup-header">
     <h2 class="text-heading-3">{title}</h2>
     <Button
-      color="surface"
       variant="text"
-      shape="small"
+      size="icon-small"
       onclick={() => handleResponse(false)}
     >
       <Icon icon="close" />
@@ -40,14 +39,15 @@
   </div>
 
   <div class="popup-footer">
-    <Button
-      color="surface"
-      variant="outline"
-      shape="large"
-      onclick={() => handleResponse(false)}>Cancel</Button
+    <Button variant="outlined" onclick={() => handleResponse(false)}
+      >Cancel</Button
     >
-    <Button shape="large" onclick={() => handleResponse(true)}
-      >{confirmationText}</Button
-    >
+    <Button onclick={() => handleResponse(true)}>{confirmationText}</Button>
   </div>
 </div>
+
+<style>
+  .popup-footer {
+    border: none;
+  }
+</style>

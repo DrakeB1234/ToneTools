@@ -11,13 +11,13 @@
   } = $props();
 </script>
 
-<InteractiveElement {href}>
-  <div class="container">
+<InteractiveElement variant="card" {href}>
+  <div class="lay-row">
     <div
       class="icon-container"
-      style="background-color: var(--color-deco-{color}-base);"
+      style="background-color: var(--color-bg-addon-{color});"
     >
-      <Icon {icon} size={"var(--icon-size-med"} />
+      <Icon {icon} />
     </div>
     <div class="text-container">
       <h3>{title}</h3>
@@ -25,28 +25,22 @@
     </div>
 
     <div class="arrow-container">
-      <Icon icon="arrowRightAlt" color="var(--color-text-muted)" />
+      <Icon icon="arrowRightAlt" color="var(--color-on-bg-surface-subtle)" />
     </div>
   </div>
 </InteractiveElement>
 
 <style>
-  .container {
-    display: flex;
-    gap: var(--space-12);
-    width: 100%;
-    padding: var(--space-12);
+  .lay-row {
+    gap: var(--space-16);
   }
-
-  .icon-container {
-    margin-bottom: auto;
-  }
-
   .text-container {
     flex: 1;
   }
-
+  .icon-container {
+    margin-bottom: auto;
+  }
   .arrow-container {
-    margin-block: auto;
+    margin-left: auto;
   }
 </style>

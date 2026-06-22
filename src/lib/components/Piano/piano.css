@@ -35,13 +35,13 @@
   }
 
   .note-text.black {
-    fill: var(--color-text-inverse);
+    fill: white;
   }
 
   /* TEMP WORKAROUND translateX to see active border over the inactive keys */
   .key.active {
-    fill: var(--color-bg-brand);
-    stroke: var(--color-border-brand-dark);
+    fill: var(--color-bg-primary);
+    stroke: var(--color-bg-primary-dark);
 
     transform: translatex(-1px);
   }

@@ -51,7 +51,7 @@
   }
 </script>
 
-<div class="scroll-wrapper hide-scrollbar">
+<div class="scroll-wrapper">
   <div class="piano-content-wrapper">
     <div class="control-track">
       <div class="dummy-ruler-line"></div>
@@ -131,9 +131,10 @@
 
     overflow-x: auto;
 
-    border: 1px solid rgb(219, 220, 226);
     border-bottom: none;
-    border-radius: var(--radius-8) var(--radius-8) 0 0;
+    border-radius: var(--radius-base) var(--radius-base) 0 0;
+
+    scrollbar-color: var(--color-border) var(--color-bg-secondary);
   }
 
   .piano-content-wrapper {
@@ -145,12 +146,12 @@
     width: 100%;
     height: 2em;
     position: relative;
-    background-color: rgb(219, 220, 226);
+    background-color: var(--color-bg-secondary);
   }
 
   .dummy-ruler-line {
     width: 100%;
     height: 50%;
-    border-bottom: 1px dashed rgb(154, 157, 170);
+    border-bottom: 1px dashed var(--color-border);
   }
 </style>

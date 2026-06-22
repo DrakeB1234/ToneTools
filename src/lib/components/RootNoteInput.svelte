@@ -29,65 +29,53 @@
   }
 </script>
 
-<div class="root-note-input-wrapper">
-  <Label>Note</Label>
-  <div class="note-buttons">
-    {#each naturalNoteNames as note}
-      <Button
-        color="surface"
-        variant="outline"
-        shape="large"
-        active={activeNote === note}
-        onclick={() => handleNoteNamePressed(note)}
-      >
-        {note}
-      </Button>
-    {/each}
+<div class="lay-col">
+  <div class="lay-input-label-col">
+    <Label>Note</Label>
+    <div class="note-buttons lay-row">
+      {#each naturalNoteNames as note}
+        <Button
+          variant="secondary"
+          state={activeNote === note ? "on" : "off"}
+          onclick={() => handleNoteNamePressed(note)}
+        >
+          {note}
+        </Button>
+      {/each}
+    </div>
   </div>
 
-  <Label>Accidental</Label>
-  <div class="accidental-buttons">
-    <Button
-      color="surface"
-      variant="outline"
-      shape="large"
-      active={activeAccidental === "n"}
-      onclick={() => handleAccidentalPressed("n")}
-    >
-      n
-    </Button>
-    <Button
-      color="surface"
-      variant="outline"
-      shape="large"
-      active={activeAccidental === "#"}
-      onclick={() => handleAccidentalPressed("#")}
-    >
-      #
-    </Button>
-    <Button
-      color="surface"
-      variant="outline"
-      shape="large"
-      active={activeAccidental === "b"}
-      onclick={() => handleAccidentalPressed("b")}
-    >
-      b
-    </Button>
+  <div class="lay-input-label-col">
+    <Label>Accidental</Label>
+    <div class="accidental-buttons lay-row">
+      <Button
+        variant="secondary"
+        state={activeAccidental === "n" ? "on" : "off"}
+        onclick={() => handleAccidentalPressed("n")}
+      >
+        n
+      </Button>
+      <Button
+        variant="secondary"
+        state={activeAccidental === "#" ? "on" : "off"}
+        onclick={() => handleAccidentalPressed("#")}
+      >
+        #
+      </Button>
+      <Button
+        variant="secondary"
+        state={activeAccidental === "b" ? "on" : "off"}
+        onclick={() => handleAccidentalPressed("b")}
+      >
+        b
+      </Button>
+    </div>
   </div>
 </div>
 
 <style>
-  .root-note-input-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-8);
-  }
-
   .note-buttons,
   .accidental-buttons {
-    display: flex;
-    gap: var(--space-4);
     flex-wrap: wrap;
   }
 </style>

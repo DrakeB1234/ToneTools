@@ -1,153 +1,164 @@
 <script lang="ts">
-  // Can create buttons that are either <a> or <button> elements depending on whether on element prop value
-
   import type { Snippet } from "svelte";
 
   interface Props {
     element?: "a" | "button";
-    color?: "brand" | "app" | "surface" | "surface-dark" | "destructive";
-    variant?: "raised" | "outline" | "text";
-    shape?: "small" | "medium" | "large" | "circle";
-    active?: boolean;
+    variant?:
+      | "primary"
+      | "secondary"
+      | "outlined"
+      | "text"
+      | "destructive"
+      | "destructive-outlined";
+    size?: "small" | "base" | "icon-small" | "icon-base" | "icon-large";
+    state?: "on" | "off";
+    fullWidth?: boolean;
+    circle?: boolean;
     class?: string;
-    [key: string]: any;
     children?: Snippet;
+    [key: string]: any;
   }
 
   let {
     element = "button",
-    color = "brand",
-    variant = "raised",
-    shape = "medium",
+    variant = "primary",
+    size = "base",
+    state,
+    fullWidth = false,
+    circle = false,
     class: className = "",
-    active = false,
     children,
     ...rest
   }: Props = $props();
-
-  let classes = $derived(
-    ["btn", `color-${color}`, `variant-${variant}`, `shape-${shape}`, className]
-      .filter(Boolean)
-      .join(" "),
-  );
 </script>
 
-<svelte:element this={element} class={classes} class:active {...rest}>
+<svelte:element
+  this={element}
+  data-state={state}
+  class="btn variant-{variant} size-{size} {circle && 'circle'} {fullWidth &&
+    'full-width'} {className}"
+  {...rest}
+>
   {@render children?.()}
 </svelte:element>
 
 <style>
-  /* base btn class hoisted to global css file */
+  .btn {
+    color: var(--color-on-bg-surface);
+  }
+  .btn:disabled {
+    opacity: 0.7;
+  }
 
-  .shape-small {
-    padding: var(--space-4);
-  }
-  .shape-medium {
-    padding: var(--space-4) var(--space-8);
-  }
-  .shape-large {
+  .size-base {
     padding: var(--space-8) var(--space-12);
   }
-  .shape-icon {
+  .size-small {
+    padding: var(--space-4) var(--space-8);
+  }
+  .size-icon-small {
     padding: var(--space-4);
+    aspect-ratio: 1/1;
   }
-  .shape-circle {
-    display: grid;
-    place-items: center;
-
-    width: 40px;
-    height: 40px;
-
-    border-radius: var(--radius-full);
+  .size-icon-base {
+    padding: var(--space-8);
+    aspect-ratio: 1/1;
+  }
+  .size-icon-large {
+    padding: var(--space-12);
+    aspect-ratio: 1/1;
   }
 
-  .variant-raised {
-    border-color: transparent !important;
-    box-shadow: var(--shadow-elevation-1);
+  .full-width {
+    width: 100%;
+  }
+
+  .circle {
+    border-radius: 50%;
+  }
+
+  .btn[data-state="on"] {
+    --color-on-bg-surface: var(--color-on-bg-primary-subtle);
+
+    background-color: var(--color-bg-primary-subtle);
+    border-color: var(--color-on-bg-primary-subtle);
+  }
+
+  .variant-primary {
+    background-color: var(--color-bg-primary);
+    color: var(--color-on-bg-primary);
+  }
+
+  .variant-secondary {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-on-bg-secondary);
+  }
+
+  .variant-destructive {
+    background-color: var(--color-bg-danger);
+    color: var(--color-on-bg-primary);
+  }
+
+  .variant-outlined {
+    background-color: transparent;
+    border-color: var(--color-border);
+    color: var(--color-on-bg-surface);
   }
 
   .variant-text {
-    border-color: transparent !important;
+    background-color: transparent;
+    color: var(--color-on-bg-surface);
   }
 
-  .color-brand {
-    background-color: var(--color-bg-brand);
-    color: var(--color-text-inverse);
-  }
-  .color-app {
-    background-color: var(--color-bg-app);
-    border-color: var(--color-border);
-  }
-  .color-surface {
-    background-color: var(--color-bg-surface);
-    border-color: var(--color-border);
-  }
-  .color-surface-dark {
-    background-color: var(--color-bg-surface-dark);
-    border-color: var(--color-border);
-  }
-  .color-destructive {
-    background-color: var(--color-deco-red-base);
-    border-color: var(--color-deco-red-base);
-    color: var(--color-text-inverse);
-  }
-
-  /* active state */
-
-  .btn.active {
-    background-color: var(--color-bg-brand);
-    border-color: transparent;
-    color: var(--color-text-inverse);
-  }
-
-  /* disabled state */
-  .btn:disabled {
-    cursor: default;
-  }
-  .color-brand:disabled {
-    background-color: var(--color-brand-disabled);
+  .variant-destructive-outlined {
+    background-color: transparent;
+    border-color: var(--color-bg-danger);
+    color: var(--color-bg-danger);
   }
 
   @media (hover: hover) {
-    /* hover state */
-    .color-brand:hover:not(:disabled) {
-      background-color: var(--color-brand-hover);
+    .variant-primary:hover:not(:disabled) {
+      background-color: var(--color-bg-primary-active);
     }
-    .color-app:hover {
-      background-color: var(--color-app-hover);
+    .variant-secondary:hover:not(:disabled) {
+      background-color: var(--color-bg-secondary-active);
     }
-    .color-surface:hover {
-      background-color: var(--color-surface-hover);
+    .variant-destructive:hover:not(:disabled) {
+      background-color: var(--color-bg-danger-active);
     }
-    .color-surface-dark:hover {
-      background-color: var(--color-surface-dark-hover);
+
+    .variant-outlined:hover:not(:disabled),
+    .variant-text:hover:not(:disabled) {
+      background-color: var(--color-bg-surface-1-active);
     }
-    .btn.active:hover {
-      background-color: var(--color-bg-brand);
+    .variant-destructive-outlined:hover:not(:disabled) {
+      background-color: var(--color-bg-tint-danger);
     }
-    .btn.color-destructive:hover {
-      background-color: var(--color-deco-red-dark);
+    .btn[data-state="on"]:hover {
+      background-color: var(--color-bg-primary-subtle);
     }
   }
 
   @media (hover: none) {
-    .color-brand:active:not(:disabled) {
-      background-color: var(--color-brand-hover);
+    .variant-primary:active:not(:disabled) {
+      background-color: var(--color-bg-primary-active);
     }
-    .color-app:active {
-      background-color: var(--color-app-hover);
+    .variant-secondary:active:not(:disabled) {
+      background-color: var(--color-bg-secondary-active);
     }
-    .color-surface:active {
-      background-color: var(--color-surface-hover);
+    .variant-destructive:active:not(:disabled) {
+      background-color: var(--color-bg-danger-active);
     }
-    .color-surface-dark:active {
-      background-color: var(--color-surface-dark-hover);
+
+    .variant-outlined:active:not(:disabled),
+    .variant-text:active:not(:disabled) {
+      background-color: var(--color-bg-surface-2);
     }
-    .btn.active:active {
-      background-color: var(--color-bg-brand);
+    .variant-destructive-outlined:active:not(:disabled) {
+      background-color: var(--color-bg-tint-danger);
     }
-    .btn.color-destructive:active {
-      background-color: var(--color-deco-red-dark);
+    .btn[data-state="on"]:active {
+      background-color: var(--color-bg-primary-subtle);
     }
   }
 </style>

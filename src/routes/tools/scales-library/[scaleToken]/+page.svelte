@@ -93,16 +93,14 @@
       fallbackHref="/tools/scales-library"
     />
 
-    <section class="card-base scale-card">
-      <div class="scale-notes-header space-below">
+    <section class="card">
+      <div class="scale-notes-header">
         <div>
           <h1>{data.noteToken}&nbsp;{data.scaleToken}&nbsp;Scale</h1>
         </div>
         <Button
+          size="icon-small"
           onclick={handlePlayScale}
-          color="brand"
-          variant="outline"
-          shape="small"
           disabled={playScaleInterval}
         >
           <Icon icon="volumeUp" />
@@ -117,9 +115,9 @@
         />
       </div>
 
-      <hr class="space-above" />
+      <hr class="space-above-base" />
 
-      <div class="scale-notes-container">
+      <div class="scale-notes-container lay-row">
         {#each data.scaleNotes as note, index (note)}
           {@const rawNote = note.letter + note.accidental}
           {@const displayNote = isSimplifyNotesSelected
@@ -127,11 +125,10 @@
             : rawNote}
 
           <Button
+            variant="secondary"
             onclick={() => handlePlayNote(index)}
-            color="surface"
-            variant="outline"
-            shape="large"
-            active={currentPlayedScaleIdx === index + 1}>{displayNote}</Button
+            state={currentPlayedScaleIdx === index + 1 ? "on" : "off"}
+            >{displayNote}</Button
           >
         {/each}
       </div>
@@ -148,9 +145,9 @@
 
       <hr class="divider" />
 
-      <div class="inner-card-base">
-        <h3 class="text-heading-3 space-below">Numerals</h3>
-        <p>
+      <div class="card-high">
+        <h3 class="text-heading-3">Numerals</h3>
+        <p class="space-above-small">
           {#each data.numerals as note, i (note)}
             {note}
             {#if i < data.numerals.length - 1}
@@ -161,50 +158,48 @@
 
         <hr class="divider" />
 
-        <h3 class="text-heading-3 space-below">
+        <h3 class="text-heading-3">
           Formula <span class="text-caption">(relative to major)</span>
         </h3>
-        <p>
+        <p class="space-above-small">
           {#each data.formula as note (note)}
             {note}&nbsp;&nbsp;
           {/each}
         </p>
 
         <hr class="divider" />
-        <h3 class="text-heading-3 space-below">Relative Modes</h3>
-        <p>
+        <h3 class="text-heading-3">Relative Modes</h3>
+        <p class="space-above-small">
           {data.relativeModes?.majorMode}&nbsp;|&nbsp;{data.relativeModes
             ?.minorMode}
         </p>
       </div>
     </section>
 
-    <section class="card-base diatonic-card">
-      <h2 class="space-below">Diatonic Chords</h2>
+    <section class="card">
+      <h2>Diatonic Chords</h2>
 
-      <div class="inner-card-base chords-container">
+      <div class="lay-col space-above-small">
         {#each data.triads as triadObj, index (triadObj.name)}
           <InteractiveElement
-            variant="text"
+            variant="outlined"
             onclick={() => handlePlayChord(index)}
           >
-            <div class="chord-button">
-              <h3 class="pill">{data.numerals[index]}</h3>
+            <div class="chord-button lay-row">
+              <h3 class="pill primary">{data.numerals[index]}</h3>
               <div class="text-container">
                 <h3>{triadObj.tonic + triadObj.symbol}</h3>
-                <p class="text-caption-muted">
+                <div class="lay-row">
                   {#each triadObj.notes as note, i (note)}
                     {@const rawNote = note.letter + note.accidental}
                     {@const displayNote = isSimplifyNotesSelected
                       ? simplifyNoteName(rawNote)
                       : rawNote}
-
-                    {displayNote}
-                    {#if i < triadObj.notes.length - 1}
-                      {" - "}
-                    {/if}
+                    <p class="text-caption-muted">
+                      {displayNote}
+                    </p>
                   {/each}
-                </p>
+                </div>
               </div>
             </div>
           </InteractiveElement>
@@ -224,20 +219,6 @@
     padding: var(--app-padding);
   }
 
-  .space-below {
-    margin-bottom: var(--space-12);
-  }
-
-  .text-container {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-
-  .scale-card {
-    padding-block: var(--space-16);
-  }
-
   .toggle-button-container {
     width: fit-content;
     margin-left: auto;
@@ -251,11 +232,10 @@
   }
 
   .scale-notes-container {
-    display: flex;
     flex-wrap: wrap;
-    gap: var(--space-4);
 
-    margin-block: var(--space-16);
+    padding-block: var(--space-16);
+    padding-bottom: var(--space-24);
   }
 
   .piano-roll-container {
@@ -269,30 +249,13 @@
     margin-block: var(--space-16);
   }
 
-  .diatonic-card {
-    padding-block: var(--space-16);
-  }
-
-  .chords-container {
-    display: grid;
-    gap: var(--space-8);
-    padding: 0;
-    margin-top: var(--space-16);
-
-    background-color: transparent;
-  }
-
   .chord-button {
     display: flex;
     align-items: center;
-    gap: var(--space-16);
-    background-color: transparent;
 
-    padding: var(--space-12);
-    width: 100%;
-  }
-  .chord-button:hover {
-    background-color: var(--color-surface-hover);
+    gap: var(--space-16);
+
+    text-align: left;
   }
 
   .pill {

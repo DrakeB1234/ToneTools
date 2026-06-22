@@ -32,7 +32,7 @@
 
   .toggle-label[aria-disabled="true"] {
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   .toggle-label input {
@@ -48,13 +48,13 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--color-bg-surface-dark, #ccc);
+    background-color: var(--color-bg-secondary);
     transition: var(--transition-color);
     border-radius: var(--radius-full);
   }
 
   .slider:hover {
-    background-color: var(--color-surface-dark-hover);
+    background-color: var(--color-bg-secondary-active);
   }
 
   .slider:before {
@@ -64,14 +64,14 @@
     width: 16px;
     left: 4px;
     bottom: 4px;
-    background-color: white;
-    transition: 0.3s;
+    background-color: var(--color-bg-surface-1);
+    transition: transform 0.1s;
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   input:checked + .slider {
-    background-color: var(--color-bg-brand, #8a2be2);
+    background-color: var(--color-bg-primary);
   }
 
   input:checked + .slider:before {
@@ -79,7 +79,7 @@
   }
 
   input:focus-visible + .slider {
-    outline: 2px solid var(--color-bg-brand, #8a2be2);
+    outline: 2px solid var(--color-bg-primary);
     outline-offset: 2px;
   }
 </style>

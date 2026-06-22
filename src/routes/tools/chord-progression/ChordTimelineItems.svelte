@@ -21,11 +21,11 @@
       style="grid-column: span {progressionObj.beats || 4};"
     >
       <InteractiveElement
-        color="surface"
-        variant="outline"
-        element="button"
-        activeStyle="active-style-2"
-        active={playerRef.isPlaying && playerRef.currentProgressionIdx === i}
+        variant="outlined"
+        style="padding: 0; overflow: hidden;"
+        state={playerRef.isPlaying && playerRef.currentProgressionIdx === i
+          ? "on"
+          : "off"}
         onclick={() => onChordClick(i)}
       >
         <div class="chord-progression-item">
@@ -45,13 +45,13 @@
       </InteractiveElement>
     </div>
   {/each}
-  <div class="grid-cell-wrapper add-cell">
+  <div class="grid-cell-wrapper">
     <InteractiveElement
-      element="button"
-      variant="outline"
+      variant="outlined"
+      style="padding: 0; overflow: hidden;"
       onclick={onAddChordClick}
     >
-      <div class="add-cell-icon">
+      <div class="add-cell lay-grid-center">
         <Icon icon="plus" />
       </div>
     </InteractiveElement>
@@ -75,8 +75,7 @@
     gap: var(--space-8);
 
     padding: var(--space-8);
-    background-color: var(--color-bg-surface-dark);
-    border-radius: var(--radius-8);
+    border-radius: var(--radius-base);
   }
 
   .chord-progression-item {
@@ -114,12 +113,8 @@
   .add-cell {
     grid-column: span 1;
     min-height: 70px;
-  }
 
-  .add-cell-icon {
-    display: grid;
-    place-items: center;
-    width: 100%;
+    color: var(--color-on-bg-surface);
   }
 
   @media (max-width: 600px) {

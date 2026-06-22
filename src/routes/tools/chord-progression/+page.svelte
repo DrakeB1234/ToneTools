@@ -82,7 +82,7 @@
       "C",
     );
 
-    player.changeStyle("bossa-nova-2");
+    player.changeStyle("bossa-nova");
   });
 
   onDestroy(() => {
@@ -97,7 +97,7 @@
     fallbackHref="/"
   />
 
-  <section class="card-base">
+  <section class="card">
     <div class="header-container">
       <h1 class="text-heading-2">Chord Progression Creator Mk9000</h1>
     </div>
@@ -125,11 +125,11 @@
     <div class="content-container">
       <div class="info-container">
         <div class="play-button-container">
-          <Button variant="text" shape="circle" onclick={player.togglePlay}>
+          <Button size="icon-base" circle onclick={player.togglePlay}>
             <Icon icon={player.isPlaying ? "stop" : "playArrow"} />
           </Button>
         </div>
-        <div class="input-label-container">
+        <div class="lay-input-label-col">
           <Label labelFor="volume">Volume</Label>
           <Input
             id="volume"
@@ -140,7 +140,7 @@
             min="0"
           />
         </div>
-        <div class="input-label-container">
+        <div class="lay-input-label-col">
           <Label labelFor="tempo">Tempo</Label>
           <Input
             id="tempo"
@@ -151,7 +151,7 @@
             min="40"
           />
         </div>
-        <div class="input-label-container">
+        <div class="lay-input-label-col">
           <Label labelFor="style">Style</Label>
           <Select
             id="style"
@@ -161,12 +161,11 @@
               { label: "Basic 1", value: "basic-1" },
               { label: "Basic 2", value: "basic-2" },
               { label: "Pop 1", value: "pop-1" },
-              { label: "Bossa Nova 1", value: "bossa-nova-1" },
-              { label: "Bossa Nova 2", value: "bossa-nova-2" },
+              { label: "Bossa Nova", value: "bossa-nova" },
             ]}
           />
         </div>
-        <div class="input-label-container">
+        <div class="lay-input-label-col">
           <Label labelFor="key">Key</Label>
           <Select
             id="key"
@@ -218,11 +217,12 @@
     gap: var(--space-16);
 
     max-width: 1000px;
-    padding: var(--space-16);
+    padding: var(--space-8);
+    padding-top: var(--space-16);
     margin: auto;
   }
 
-  .card-base {
+  .card {
     padding: 0;
 
     overflow: hidden;
@@ -231,10 +231,10 @@
   .header-container {
     padding: var(--space-16);
 
-    background-color: var(--color-bg-brand);
+    background-color: var(--color-bg-primary);
 
     * {
-      color: var(--color-text-inverse);
+      color: var(--color-on-bg-primary);
     }
   }
 
@@ -247,26 +247,19 @@
     align-items: center;
     gap: var(--space-8);
 
+    padding: var(--space-8);
+
     overflow-x: auto;
-    background-color: var(--color-bg-surface-dark);
-    border-radius: var(--radius-8);
+    background-color: var(--color-bg-surface-2);
+    border-radius: var(--radius-base);
   }
 
   .play-button-container {
     position: sticky;
     left: 0;
+    flex-shrink: 0;
 
     padding: var(--space-12);
-
-    background-color: var(--color-bg-surface-dark);
-  }
-
-  .input-label-container {
-    display: grid;
-    gap: var(--space-4);
-    padding: var(--space-12);
-
-    min-width: 100px;
   }
 
   .piano-roll-container {
@@ -275,6 +268,6 @@
     padding-top: var(--space-12);
   }
   .piano-roll-container > hr {
-    border-color: var(--color-deco-red-dark);
+    border-color: var(--color-bg-addon-red-contrast);
   }
 </style>

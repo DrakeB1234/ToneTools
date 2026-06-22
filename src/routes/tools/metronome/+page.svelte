@@ -3,6 +3,7 @@
   import Icon from "$lib/components/Icons/Icon.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import Button from "$lib/components/UI/Button.svelte";
+  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import Label from "$lib/components/UI/Label.svelte";
   import Select from "$lib/components/UI/Select.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
@@ -144,17 +145,16 @@
       fallbackHref="/"
     />
 
-    <section class="card-base">
-      <div class="bpm-container">
+    <section class="card">
+      <div class="bpm-container lay-grid-center">
         <h2 class="ui-xlarge">{inputBpmAmount}</h2>
         <p>BPM</p>
       </div>
 
-      <div class="input-container">
+      <div class="input-container lay-row space-above-base">
         <Button
-          color="surface"
-          variant="text"
-          shape="small"
+          variant="outlined"
+          size="icon-small"
           onclick={() => handleBpmButtonPress(-1)}><Icon icon="minus" /></Button
         >
         <input
@@ -166,50 +166,60 @@
           class="slider"
         />
         <Button
-          color="surface"
-          variant="text"
-          shape="small"
+          variant="outlined"
+          size="icon-small"
           onclick={() => handleBpmButtonPress(1)}><Icon icon="plus" /></Button
         >
       </div>
 
-      <div class="play-input-container">
-        <button class="btn tap-button" onclick={handleTap}>TAP</button>
-
-        <div class="play-button-wrapper">
-          <Button shape="circle" onclick={handlePlayPressed}>
+      <div class="play-input-container lay-row space-above-large">
+        <div class="tap-button-wrapper">
+          <InteractiveElement
+            variant="text"
+            onclick={handleTap}
+            fullWidth
+            fullHeight
+          >
+            <p>TAP</p>
+          </InteractiveElement>
+        </div>
+        <div class="lay-grid-center">
+          <Button size="icon-base" circle onclick={handlePlayPressed}>
             <Icon icon={metrnomeInterval ? "stop" : "playArrow"} />
           </Button>
         </div>
-
-        <p class="beat-counter">{currentBeatCount || "-"}</p>
+        <div class="lay-grid-center">
+          <p>{currentBeatCount || "-"}</p>
+        </div>
       </div>
 
-      <hr />
+      <hr class="space-above-large" />
 
-      <div class="time-signature-input-container">
-        <Label>Time Signature</Label>
-        <div class="input-row">
-          <Select
-            onchange={handleInputChange}
-            bind:value={inputBeatCount}
-            options={Array.from({ length: 16 }, (_, i) => ({
-              label: `${i + 1}`,
-              value: i + 1,
-            }))}
-          />
-          <p>/</p>
-          <Select
-            onchange={handleInputChange}
-            bind:value={inputBeatValueCount}
-            options={[
-              { label: "1", value: 1 },
-              { label: "2", value: 2 },
-              { label: "4", value: 4 },
-              { label: "8", value: 8 },
-              { label: "16", value: 16 },
-            ]}
-          />
+      <div class="time-signature-input-container space-above-small">
+        <div class="lay-input-label-col">
+          <Label>Time Signature</Label>
+          <div class="lay-row">
+            <Select
+              onchange={handleInputChange}
+              bind:value={inputBeatCount}
+              options={Array.from({ length: 16 }, (_, i) => ({
+                label: `${i + 1}`,
+                value: i + 1,
+              }))}
+            />
+            <p>/</p>
+            <Select
+              onchange={handleInputChange}
+              bind:value={inputBeatValueCount}
+              options={[
+                { label: "1", value: 1 },
+                { label: "2", value: 2 },
+                { label: "4", value: 4 },
+                { label: "8", value: 8 },
+                { label: "16", value: 16 },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -227,8 +237,7 @@
   }
 
   .bpm-container {
-    display: grid;
-    place-items: center;
+    gap: 0;
   }
 
   input[type="range"].slider {
@@ -236,8 +245,8 @@
     width: 100%;
     max-width: 200px;
     height: 4px;
-    background-color: var(--color-bg-surface-dark);
-    border-radius: var(--radius-full);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-base);
     outline: none;
   }
 
@@ -246,81 +255,33 @@
     appearance: none;
     width: 18px;
     height: 18px;
-    background: var(--color-bg-brand);
+    background: var(--color-bg-primary);
     cursor: pointer;
     border-radius: var(--radius-full);
   }
 
   .input-container {
-    display: flex;
     justify-content: center;
-    align-items: center;
     gap: var(--space-16);
-
-    margin-top: var(--space-16);
   }
 
   .play-input-container {
-    display: flex;
-    align-items: center;
     justify-content: space-between;
 
     height: 60px;
     max-width: 350px;
     margin-inline: auto;
-    margin-top: var(--space-24);
-    margin-bottom: var(--space-24);
 
-    background-color: var(--color-bg-surface-dark);
-    border-radius: var(--radius-8);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-base);
   }
-
-  .tap-button {
-    flex: 1;
-    display: grid;
-    place-items: center;
-
-    height: 100%;
-    padding: 0;
-    border: none;
-
-    background-color: transparent;
-    color: var(--color-text, #111111);
-  }
-  .tap-button:hover {
-    background-color: var(--color-surface-dark-hover);
-  }
-
-  .play-button-wrapper {
-    flex: 1;
-    display: grid;
-    place-items: center;
-
-    height: 100%;
-  }
-
-  .beat-counter {
+  .play-input-container > div {
     flex: 1;
     height: 100%;
-
-    text-align: center;
-    align-content: center;
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
   }
 
   .time-signature-input-container {
-    display: grid;
-    gap: var(--space-4);
-
     max-width: 400px;
-    margin: 0 auto;
-    margin-top: var(--space-16);
-  }
-
-  .input-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-12);
+    margin-inline: auto;
   }
 </style>

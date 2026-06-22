@@ -6,7 +6,7 @@
 
   type InputType = Exclude<HTMLInputTypeAttribute, "file">;
 
-  type Props = Omit<HTMLInputAttributes, "type" | "class"> & {
+  type Props = Omit<HTMLInputAttributes, "type"> & {
     ref?: HTMLInputElement | null;
   } & (
       | { type: "file"; files?: FileList }
@@ -31,12 +31,12 @@
     padding: var(--space-8);
 
     font-size: var(--font-size-base);
-    color: var(--color-text);
-    background-color: var(--color-bg-surface);
-    border-radius: var(--radius-8);
+    color: var(--color-on-bg-surface);
+    background-color: var(--color-bg-surface-1);
+    border-radius: var(--radius-base);
     border: 1px solid var(--color-border);
   }
   input::placeholder {
-    color: var(--color-text-muted);
+    color: var(--color-on-bg-surface-subtle);
   }
 </style>
