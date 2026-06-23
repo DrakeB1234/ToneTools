@@ -121,6 +121,7 @@ svg {
   --color-bg-surface-1: var(--custom-slate-25);
   --color-bg-surface-1-active: oklch(95.5% 0.01 256);
   --color-bg-surface-2: var(--palette-slate-100);
+  --color-bg-surface-2-active: var(--palette-slate-200);
   --color-on-bg-surface: var(--palette-slate-900);
   --color-on-bg-surface-subtle: var(--palette-slate-500);
 
@@ -142,18 +143,20 @@ svg {
   --color-bg-tint-danger: var(--palette-red-50);
   --color-on-bg-danger: var(--palette-white);
 
-  --color-bg-dark: var(--palette-slate-800);
+  --color-bg-dark: var(--palette-slate-900);
 
   --color-bg-addon-purple: var(--palette-purple-base);
   --color-bg-addon-violet: var(--palette-violet-base);
   --color-bg-addon-blue: var(--palette-blue-base);
   --color-bg-addon-green: var(--palette-green-base);
+  --color-bg-addon-red: var(--palette-red-500);
 
   --color-bg-addon-green-contrast: oklch(66% 0.24 143);
   --color-bg-addon-red-contrast: oklch(48% 0.4 25);
 
   --color-border: var(--palette-slate-400);
   --color-border-subtle: var(--palette-slate-300);
+  --color-border-hr: var(--palette-slate-300);
 
   --color-focus: #fff;
 
@@ -184,12 +187,13 @@ svg {
 
 /* Dark Mode Override Colors */
 body.dark {
-  --color-bg-page: oklch(20.8% 0.024 265.755);
-  --color-bg-surface-1: oklch(27.9% 0.026 260.031);
+  --color-bg-page: oklch(20.8% 0.02 265);
+  --color-bg-surface-1: oklch(27% 0.026 260.031);
   --color-bg-surface-1-active: oklch(34.2% 0.026 257);
-  --color-bg-surface-2: oklch(36% 0.034 257.287);
+  --color-bg-surface-2: oklch(34% 0.034 257);
+  --color-bg-surface-2-active: oklch(39% 0.034 257);
   --color-on-bg-surface: var(--palette-white);
-  --color-on-bg-surface-subtle: oklch(78% 0.03 256.788);
+  --color-on-bg-surface-subtle: oklch(80% 0.025 256);
 
   --color-bg-primary: oklch(58% 0.2 259.815);
   --color-bg-primary-subtle: oklch(34% 0.054 260);
@@ -205,7 +209,9 @@ body.dark {
   --color-bg-addon-green-contrast: oklch(80% 0.5 143);
   --color-bg-addon-red-contrast: oklch(80% 0.5 25);
 
+  --color-border: oklch(50% 0.04 256);
   --color-border-subtle: oklch(37.203% 0.02295 272.953);
+  --color-border-hr: oklch(54% 0.04 256);
 
   --shadow-card: 0 2px 6px -2px rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.2);
 }
@@ -217,7 +223,9 @@ body {
 }
 
 hr {
-  border-top: 1px solid var(--color-border-subtle);
+  border: none;
+  height: 1px;
+  background-color: var(--color-border-hr);
 }
 
 a {
@@ -227,7 +235,8 @@ a {
 p,
 h1,
 h2,
-h3 {
+h3,
+span {
   color: var(--color-on-bg-surface);
 }
 
@@ -253,7 +262,7 @@ h2,
 
 h3,
 .text-heading-3 {
-  line-height: 1.5;
+  line-height: 1.3;
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
 }
@@ -333,6 +342,7 @@ span,
   border-radius: var(--radius-large);
   padding: var(--space-12);
   background-color: var(--color-bg-surface-2);
+  border: 1px solid var(--color-border-subtle);
 }
 
 .btn {

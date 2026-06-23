@@ -11,6 +11,7 @@
       | "destructive"
       | "destructive-outlined";
     size?: "small" | "base" | "icon-small" | "icon-base" | "icon-large";
+    overrideHoverOnColor?: "surface-2";
     state?: "on" | "off";
     fullWidth?: boolean;
     circle?: boolean;
@@ -23,6 +24,7 @@
     element = "button",
     variant = "primary",
     size = "base",
+    overrideHoverOnColor,
     state,
     fullWidth = false,
     circle = false,
@@ -30,15 +32,22 @@
     children,
     ...rest
   }: Props = $props();
+
+  // svelte-ignore state_referenced_locally
+  let buttonClass = [
+    "btn",
+    `variant-${variant}`,
+    `size-${size}`,
+    circle && "circle",
+    fullWidth && "full-width",
+    overrideHoverOnColor && `override-hover-color-${overrideHoverOnColor}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
-<svelte:element
-  this={element}
-  data-state={state}
-  class="btn variant-{variant} size-{size} {circle && 'circle'} {fullWidth &&
-    'full-width'} {className}"
-  {...rest}
->
+<svelte:element this={element} data-state={state} class={buttonClass} {...rest}>
   {@render children?.()}
 </svelte:element>
 
@@ -137,6 +146,11 @@
     .btn[data-state="on"]:hover {
       background-color: var(--color-bg-primary-subtle);
     }
+
+    /* Overiddes hover state */
+    .btn.override-hover-color-surface-2:hover:not(.btn[data-state="on"]) {
+      background-color: var(--color-bg-surface-2-active) !important;
+    }
   }
 
   @media (hover: none) {
@@ -159,6 +173,11 @@
     }
     .btn[data-state="on"]:active {
       background-color: var(--color-bg-primary-subtle);
+    }
+
+    /* Overiddes hover state */
+    .btn.override-hover-color-surface-2:active:not(.btn[data-state="on"]) {
+      background-color: var(--color-bg-surface-2-active) !important;
     }
   }
 </style>

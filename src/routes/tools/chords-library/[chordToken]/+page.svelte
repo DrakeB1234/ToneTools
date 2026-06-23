@@ -158,8 +158,6 @@
         </p>
       </div>
 
-      <hr class="space-above-large" />
-
       {#if isChordInversions}
         <h3 class="space-above-base">Inversions</h3>
         <div class="lay-col space-above-xsmall">

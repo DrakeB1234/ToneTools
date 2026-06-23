@@ -40,6 +40,6 @@
 @media (min-width: 600px) {
   .popup-card {
     margin-inline: auto;
-    max-width: 500px;
+    max-width: 550px;
   }
 }

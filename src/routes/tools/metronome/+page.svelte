@@ -6,6 +6,7 @@
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import Label from "$lib/components/UI/Label.svelte";
   import Select from "$lib/components/UI/Select.svelte";
+  import Slider from "$lib/components/UI/Slider.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { onDestroy, onMount } from "svelte";
 
@@ -151,23 +152,25 @@
         <p>BPM</p>
       </div>
 
-      <div class="input-container lay-row space-above-base">
+      <div class="bpm-slider-container lay-row space-above-base">
         <Button
           variant="outlined"
           size="icon-small"
+          ariaLabel="Decrease Bpm Value by 1"
           onclick={() => handleBpmButtonPress(-1)}><Icon icon="minus" /></Button
         >
-        <input
-          type="range"
-          min="40"
-          max="240"
-          onchange={handleInputChange}
+        <Slider
+          min={40}
+          max={240}
           bind:value={inputBpmAmount}
-          class="slider"
+          onchange={handleInputChange}
+          ariaLabel="Metronome Tempo"
+          class="bpm-slider"
         />
         <Button
           variant="outlined"
           size="icon-small"
+          ariaLabel="Increase Bpm Value by 1"
           onclick={() => handleBpmButtonPress(1)}><Icon icon="plus" /></Button
         >
       </div>
@@ -240,29 +243,14 @@
     gap: 0;
   }
 
-  input[type="range"].slider {
-    -webkit-appearance: none;
-    width: 100%;
-    max-width: 200px;
-    height: 4px;
-    background-color: var(--color-bg-secondary);
-    border-radius: var(--radius-base);
-    outline: none;
-  }
-
-  input[type="range"].slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    background: var(--color-bg-primary);
-    cursor: pointer;
-    border-radius: var(--radius-full);
-  }
-
-  .input-container {
-    justify-content: center;
+  .bpm-slider-container {
     gap: var(--space-16);
+
+    max-width: 300px;
+    margin-inline: auto;
+  }
+  :global(.custom-slider) {
+    flex: 1;
   }
 
   .play-input-container {

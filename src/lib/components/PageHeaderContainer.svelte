@@ -30,14 +30,14 @@
     variant="text"
     size="icon-small"
     onclick={handleBack}
-    aria-label="Go back"
+    aria-label="Go back to previous page"
   >
     <Icon icon="arrowLeftAlt" />
   </Button>
 
   <div>
     <p class="text-caption-muted">{subText}</p>
-    <h3>{headerText}</h3>
+    <p class="text-heading-3">{headerText}</p>
   </div>
 </div>
 

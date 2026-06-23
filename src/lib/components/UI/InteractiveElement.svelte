@@ -21,15 +21,24 @@
     ...rest
   }: Props = $props();
 
-  let element: "a" | "button" = $derived(href ? "a" : "button");
+  // svelte-ignore state_referenced_locally
+  let element: "a" | "button" = href ? "a" : "button";
+  // svelte-ignore state_referenced_locally
+  let buttonClass = [
+    "interactive-element",
+    `variant-${variant}`,
+    fullWidth && "full-width",
+    fullHeight && "full-height",
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
 <svelte:element
   this={element}
   {href}
   data-state={state}
-  class="interactive-element {variant && `variant-${variant}`} {fullWidth &&
-    `full-width`} {fullHeight && `full-height`}"
+  class={buttonClass}
   {...rest}
 >
   {@render children?.()}

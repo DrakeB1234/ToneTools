@@ -12,13 +12,13 @@
   let { id, value, onStepperClick }: Props = $props();
 </script>
 
-<div class="lay-row">
+<div class="lay-row" role="group" aria-labelledby={id}>
   <div class="decrement-button-wrapper">
     <Button
       variant="outlined"
       size="icon-small"
       onclick={() => onStepperClick(-1)}
-      aria-label="Decrease {id}"
+      aria-label="Decrease value"
     >
       <Icon icon="minus" />
     </Button>
@@ -26,7 +26,6 @@
 
   <div class="input-wrapper">
     <Input
-      {id}
       {value}
       placeholder="0"
       style="text-align: center; border-color: transparent;"
@@ -40,7 +39,7 @@
       variant="outlined"
       size="icon-small"
       onclick={() => onStepperClick(1)}
-      aria-label="Decrease {id}"
+      aria-label="Increase value"
     >
       <Icon icon="plus" />
     </Button>

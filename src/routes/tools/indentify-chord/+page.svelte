@@ -60,7 +60,7 @@
 
       <div class="card-content space-above-base">
         <p>Selected Notes:</p>
-        <div class="notes-container lay-row">
+        <div class="notes-container lay-row space-above-small">
           {#each selectedNotes as note}
             <p>{note}</p>
           {/each}
@@ -120,14 +120,11 @@
 
     width: 100%;
     min-height: 21px;
-    margin-top: var(--space-8);
   }
 
   .chords-container {
     display: grid;
     gap: var(--space-8);
-
-    margin-top: var(--space-8);
   }
 
   .empty-container {

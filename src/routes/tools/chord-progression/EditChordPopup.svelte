@@ -135,10 +135,11 @@
   </div>
 
   <div class="popup-body">
-    <h1>{chordName}</h1>
+    <p class="text-caption-muted">Current Chord</p>
+    <h2 class="text-heading-1">{chordName}</h2>
 
-    <div class="lay-input-label-col space-above-large">
-      <Label labelFor="duration">Duration</Label>
+    <div class="lay-input-label-col space-above-base">
+      <Label id="duration">Duration</Label>
       <StepperInput
         id="duration"
         value={localBeats}
@@ -153,8 +154,10 @@
       onclick={removeChord}
     >
       <Icon icon="delete" />
-      Remove
+      Remove Chord
     </Button>
+
+    <hr class="space-above-large" />
 
     <h2 class="text-heading-3 space-above-large">Build Chord</h2>
     <div class="lay-row space-above-small">

@@ -74,6 +74,10 @@
     background-color: var(--color-bg-primary);
   }
 
+  input:checked + .slider:hover {
+    background-color: var(--color-bg-primary-active);
+  }
+
   input:checked + .slider:before {
     transform: translateX(24px);
   }

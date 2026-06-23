@@ -50,12 +50,16 @@ class PianoAudioService {
   private isLoading = $state(false);
   private isMuted = $state(false);
 
+  private INITIAL_VOLUME = 0.7;
+  private volume: number = $state(0.7);
+
   error = $state<string | null>(null);
 
   async init() {
     if (this.sound || this.isLoading) return;
 
     this.isLoading = true;
+    Howler.volume(this.volume);
 
     return new Promise<void>((resolve, reject) => {
       this.sound = new Howl({
@@ -92,6 +96,23 @@ class PianoAudioService {
     };
   }
 
+  get volumeValue(): number {
+    return this.volume * 100;
+  };
+
+  changeVolume(newValue: number) {
+    const fixedValue = Math.max(0, Math.min(100, newValue));
+
+    this.volume = fixedValue / 100;
+
+    Howler.volume(this.volume);
+  }
+
+  resetVolumeToDefault() {
+    this.changeVolume(this.INITIAL_VOLUME * 100);
+    console.log(this.volume)
+  }
+
   playNote(note: GeneralNote, sustainType: sustainFadeMsTypes = "high") {
     if (!this.isReady || !this.sound) {
       console.warn("Audio requested, but pianoAudioService was never initialized.");
@@ -118,7 +139,6 @@ class PianoAudioService {
 
     const rate = Math.pow(2, strategy.semitoneShift / 12);
     this.sound.rate(rate, noteSoundId);
-    this.sound.volume(1.0, noteSoundId);
 
     if (sustainType !== "high") {
       this.sound.fade(1.0, 0, SUSTAIN_FADE_MS_MAP[sustainType], noteSoundId);

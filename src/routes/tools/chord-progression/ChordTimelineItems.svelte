@@ -27,6 +27,7 @@
           ? "on"
           : "off"}
         onclick={() => onChordClick(i)}
+        aria-label="Edit Chord #{i + 1}"
       >
         <div class="chord-progression-item">
           <div class="chord-progression-text">
@@ -50,6 +51,7 @@
       variant="outlined"
       style="padding: 0; overflow: hidden;"
       onclick={onAddChordClick}
+      aria-label="Add Chord to Progression"
     >
       <div class="add-cell lay-grid-center">
         <Icon icon="plus" />
@@ -74,7 +76,6 @@
     grid-template-columns: repeat(16, 1fr);
     gap: var(--space-8);
 
-    padding: var(--space-8);
     border-radius: var(--radius-base);
   }
 
