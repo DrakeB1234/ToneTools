@@ -112,7 +112,7 @@ export function getAllCategoryChords(category: string) {
   return chordCategoryEntries[category];
 }
 
-export function findChord(note: string, chordSymbol: string, bassNote?: string, startingOctave: number = 4) {
+export function getChord(note: string, chordSymbol: string, bassNote?: string, startingOctave: number = 4) {
   const fixedChordSymbol = chordSymbol + (bassNote ? `/${bassNote}` : "");
   const chordObj = Chord.get(note + fixedChordSymbol);
 
@@ -135,12 +135,30 @@ export function findChord(note: string, chordSymbol: string, bassNote?: string, 
   } as GeneralChord;
 }
 
+export function getChordAbsoulteOctave(note: string, chordSymbol: string, bassNote?: string) {
+  return getChord(note, chordSymbol, bassNote, 0);
+}
+
+export function findChordInversionFromNotes(notes: string[], fullChordSymbol: string) {
+  if (notes.length === 0) return 0;
+
+  // Remove Bass Symbol
+  const baseSymbol = fullChordSymbol.split("/")[0];
+  const lowestPitchClass = getPitchClassFromNoteName(notes[0]);
+
+  const chordObj = Chord.get(baseSymbol);
+
+  const inversionIdx = chordObj.notes.indexOf(lowestPitchClass);
+
+  return Math.max(0, inversionIdx);
+}
+
 // findChord function may return null, if there is any null chord, return null to caller
 export function getChordInversions(note: string, chordSymbol: string, startingOctave: number = 4) {
   const chordObj = Chord.get(note + chordSymbol);
 
   const chordInversions = chordObj.notes.map(e => {
-    return findChord(note, chordSymbol, e, startingOctave);
+    return getChord(note, chordSymbol, e, startingOctave);
   });
 
   if (chordInversions.includes(null)) return null;
@@ -157,7 +175,7 @@ export function getChordInversions(note: string, chordSymbol: string, startingOc
 export function getChordSecondaryDominant(note: string) {
   const secondaryDominantRoot = incrementNoteNameByInterval(note, "5P");
 
-  return findChord(secondaryDominantRoot, "7");
+  return getChord(secondaryDominantRoot, "7");
 }
 
 export function getChordIntervalFormula(note: string, chordSymbol: string) {

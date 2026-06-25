@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { findChord, getChordAliases, getChordIntervalFormula, getChordInversions, getChordSecondaryDominant, getFullNoteNameFromObj, getSimilarChords } from '$lib/helpers/musicTheory';
+import { getChord, getChordAliases, getChordIntervalFormula, getChordInversions, getChordSecondaryDominant, getFullNoteNameFromObj, getSimilarChords } from '$lib/helpers/musicTheory';
 import type { PageLoad } from './$types';
 import { regexChordSymbolToken } from '$lib/helpers/musicTheoryConstants';
 import { decodeUrlNote, decodeUrlChord } from '$lib/helpers/helpers';
@@ -20,7 +20,7 @@ export const load: PageLoad = ({ params }) => {
   let fixedSymbol = decodeUrlChord(symbol);
   const fixedBassNote = decodeUrlNote(bassNote);
 
-  const chordObj = findChord(fixedNote, fixedSymbol, fixedBassNote);
+  const chordObj = getChord(fixedNote, fixedSymbol, fixedBassNote);
 
   if (!chordObj) {
     const message = encodeURIComponent("Unable to find chord");

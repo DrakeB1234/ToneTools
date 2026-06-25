@@ -110,7 +110,6 @@ class PianoAudioService {
 
   resetVolumeToDefault() {
     this.changeVolume(this.INITIAL_VOLUME * 100);
-    console.log(this.volume)
   }
 
   playNote(note: GeneralNote, sustainType: sustainFadeMsTypes = "high") {

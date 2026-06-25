@@ -5,7 +5,8 @@
   import PianoMiniRoll from "$lib/components/Piano/PianoMiniRoll.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import {
-    findChord,
+    getChord,
+    getChordAbsoulteOctave,
     getDiatonicChordsFromScale,
   } from "$lib/helpers/musicTheory";
   import { onDestroy, onMount } from "svelte";
@@ -16,6 +17,7 @@
   import type { GeneralChord } from "$lib/helpers/musicTheoryTypes";
   import SummaryActionButton from "./SummaryActionButton.svelte";
   import EditPlayerSettingsPopup from "./EditPlayerSettingsPopup.svelte";
+  import { styleLibrary } from "./chordProgressionHelpers";
 
   const player = new ProgressionPlayer();
 
@@ -49,7 +51,7 @@
     if (diatonicChords) rawChord = diatonicChords[0].chords[0];
     else rawChord = { tonic: "C", symbol: "M" };
 
-    const foundChord = findChord(rawChord.tonic, rawChord.symbol);
+    const foundChord = getChord(rawChord.tonic, rawChord.symbol);
     if (foundChord)
       player.progression.push({
         beats: 4,
@@ -60,18 +62,17 @@
   onMount(() => {
     pianoAudioService.init();
 
-    // Init progression with chords that MATCH key arg
-    player.initProgression(
-      [
-        { chordInfo: findChord("D", "m7"), beats: 4 },
-        { chordInfo: findChord("G", "7"), beats: 4 },
-        { chordInfo: findChord("C", "maj7"), beats: 4 },
-        { chordInfo: findChord("A", "7"), beats: 4 },
-      ],
-      "C",
-    );
+    const startingProgression = [
+      { chordInfo: getChordAbsoulteOctave("D", "m7"), beats: 4 },
+      { chordInfo: getChordAbsoulteOctave("G", "7"), beats: 4 },
+      { chordInfo: getChordAbsoulteOctave("C", "maj7"), beats: 4 },
+      { chordInfo: getChordAbsoulteOctave("A", "7"), beats: 4 },
+    ];
+    const startStyleString = Object.keys(styleLibrary)[1];
+    const startingStyle = styleLibrary[startStyleString].id;
 
-    player.changeStyle("bossa-nova");
+    // Init progression with chords that MATCH key arg
+    player.initPlayer(startingStyle, "C", startingProgression);
   });
 
   onDestroy(() => {

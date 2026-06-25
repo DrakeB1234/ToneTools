@@ -22,7 +22,7 @@
   let autoVoicingToggled = $derived(player.autoMelodyChordInversions);
   let volumeValue = $derived(pianoAudioService.volumeValue);
   let bpmValue = $derived(player.bpm);
-  let style = $derived(player.currentStyle);
+  let style = $derived(player.currentStyleData.id);
   let key = $derived(player.globalKey);
   let autoTransposeToggled = $state(true);
 
@@ -42,11 +42,10 @@
       pianoAudioService.changeVolume(volumeValue);
     }
 
+    player.changeStyleById(style);
+
     if (bpmValue < 40 || bpmValue > 240) bpmValue = 120;
     player.bpm = bpmValue;
-
-    if (!styleIds.includes(style)) style = styleIds[0];
-    player.currentStyle = style;
 
     if (key !== player.globalKey) {
       player.changeKey(key, autoTransposeToggled);

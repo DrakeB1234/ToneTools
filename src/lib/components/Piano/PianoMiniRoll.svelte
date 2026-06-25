@@ -11,7 +11,7 @@
   let {
     activeNotes = [],
     range = {
-      startNote: "C2",
+      startNote: "C1",
       endNote: "C6",
     },
   }: {
