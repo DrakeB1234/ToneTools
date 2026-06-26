@@ -138,6 +138,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Metronome | Music App</title>
+</svelte:head>
+
 <Wrapper>
   <main>
     <PageHeaderContainer
@@ -182,6 +186,7 @@
             onclick={handleTap}
             fullWidth
             fullHeight
+            aria-label="Click repeatedly to estimate tapped bpm"
           >
             <p>TAP</p>
           </InteractiveElement>

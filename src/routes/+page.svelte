@@ -8,6 +8,10 @@
   const lastUsedItems = [exercisesData[0], toolsData[0], toolsData[1]];
 </script>
 
+<svelte:head>
+  <title>Music App</title>
+</svelte:head>
+
 <Wrapper>
   <main>
     <HeroCard />

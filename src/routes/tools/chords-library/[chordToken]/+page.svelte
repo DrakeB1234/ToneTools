@@ -169,7 +169,9 @@
             >
               <div class="lay-row">
                 <div>
-                  <p class="pill inversion-pill">{inversion.inversionName}</p>
+                  <p class="inversion-pill pill primary">
+                    {inversion.inversionName}
+                  </p>
                 </div>
                 <div>
                   <p>{inversion.chord.tonic + inversion.chord.symbol}</p>
@@ -263,7 +265,6 @@
   }
 
   .inversion-pill {
-    color: var(--color-on-bg-secondary);
     width: 5ch;
   }
 

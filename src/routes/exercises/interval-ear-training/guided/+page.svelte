@@ -16,6 +16,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Guided Intervals Ear Training | Music App</title>
+</svelte:head>
+
 <Wrapper>
   <main>
     <PageHeaderContainer

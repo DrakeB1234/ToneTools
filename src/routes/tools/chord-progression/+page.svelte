@@ -81,6 +81,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Chord Progression | Music App</title>
+</svelte:head>
+
 <main>
   <PageHeaderContainer
     subText="Tools"

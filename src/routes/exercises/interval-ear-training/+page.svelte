@@ -50,6 +50,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Intervals Ear Training | Music App</title>
+</svelte:head>
+
 <Wrapper>
   <main>
     <PageHeaderContainer

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
+  import { afterNavigate, goto } from "$app/navigation";
   import { page } from "$app/state";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { onMount } from "svelte";
@@ -10,9 +10,21 @@
     config?: IntervalEarConfig;
   };
 
+  let hasPreviousPage = $state(false);
+
   function handleExit() {
-    history.back();
+    if (hasPreviousPage) {
+      history.back();
+    } else {
+      goto("/exercises/interval-ear-training");
+    }
   }
+
+  afterNavigate(({ from }) => {
+    if (from) {
+      hasPreviousPage = true;
+    }
+  });
 
   // Ensures that navigate methods are called on client side, and not SSR (server)
   onMount(() => {
@@ -21,6 +33,10 @@
     }
   });
 </script>
+
+<svelte:head>
+  <title>Intervals Ear Training | Music App</title>
+</svelte:head>
 
 <Wrapper>
   {#if config}

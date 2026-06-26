@@ -5,7 +5,6 @@ export const regexScaleToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)
 
 export const naturalNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
 export const accidentalNames = ["n", "#", "b"];
-export const chordCategories = ["Common", "Major", "Minor"];
 
 export const keyNamesFlatted = ["C", "G", "D", "A", "E", "B", "F", "Bb", "Eb", "Ab", "Db", "Gb"];
 
@@ -25,44 +24,57 @@ export const intervalObjs: IntervalEntry[] = [
   { name: "Perfect Octave", interval: "P8" },
 ]
 
+export const chordCategories = ["Common", "Major", "Minor", "Dominant", "Diminished", "Suspended"];
 export const chordCategoryEntries: Record<string, Pick<GeneralChord, "name" | "symbol">[]> = {
   "Common": [
     { name: "major", symbol: "maj" },
     { name: "minor", symbol: "min" },
-    { name: "augmented", symbol: "aug" },
-    { name: "diminished", symbol: "dim" },
-    { name: "suspended second", symbol: "sus2" },
-    { name: "suspended fourth", symbol: "sus4" },
     { name: "major seventh", symbol: "maj7" },
     { name: "minor seventh", symbol: "min7" },
     { name: "dominant seventh", symbol: "7" },
-    { name: "half diminished", symbol: "7b5" },
+    { name: "sixth", symbol: "6" },
+    { name: "suspended second", symbol: "sus2" },
+    { name: "suspended fourth", symbol: "sus4" },
+    { name: "augmented", symbol: "aug" },
+    { name: "diminished", symbol: "dim" },
   ],
   "Major": [
     { name: "major", symbol: "maj" },
     { name: "major seventh", symbol: "maj7" },
     { name: "major ninth", symbol: "maj9" },
-    { name: "major eleventh", symbol: "maj11" },
     { name: "major thirteenth", symbol: "maj13" },
+    { name: "sixth", symbol: "6" },
     { name: "added ninth", symbol: "add9" },
     { name: "added eleventh", symbol: "add11" },
     { name: "added thirteenth", symbol: "add13" },
-    { name: "sixth", symbol: "6" },
-    { name: "dominant seventh", symbol: "7" },
-    { name: "ninth", symbol: "9" },
-    { name: "eleventh", symbol: "11" },
-    { name: "thirteenth", symbol: "13" },
   ],
   "Minor": [
     { name: "minor", symbol: "min" },
     { name: "minor sixth", symbol: "min6" },
     { name: "minor seventh", symbol: "min7" },
     { name: "minor ninth", symbol: "min9" },
-    { name: "minor eleventh", symbol: "min11" },
     { name: "minor thirteenth", symbol: "min13" },
-  ]
-}
-
+    { name: "minor major seventh", symbol: "mmaj7" },
+  ],
+  "Dominant": [
+    { name: "dominant seventh", symbol: "7" },
+    { name: "ninth", symbol: "9" },
+    { name: "eleventh", symbol: "11" },
+    { name: "thirteenth", symbol: "13" },
+    { name: "dominant seventh suspended fourth", symbol: "7sus4" },
+    { name: "dominant ninth suspended fourth", symbol: "9sus4" },
+  ],
+  "Diminished": [
+    { name: "diminished", symbol: "dim" },
+    { name: "diminished seventh", symbol: "dim7" },
+    { name: "half diminished", symbol: "m7b5" },
+  ],
+  "Suspended": [
+    { name: "suspended second", symbol: "sus2" },
+    { name: "suspended fourth", symbol: "sus4" },
+    { name: "dominant seventh suspended fourth", symbol: "7sus4" },
+  ],
+};
 export const modeNumeralMap: Record<string, string[]> = {
   "major": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],
   "ionian": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],

@@ -2,67 +2,24 @@
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { getAllCategoryChords } from "$lib/helpers/musicTheory";
   import { chordCategories } from "$lib/helpers/musicTheoryConstants";
-  import { onDestroy, onMount } from "svelte";
-  import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
-  import type { GeneralChord } from "$lib/helpers/musicTheoryTypes";
   import Button from "$lib/components/UI/Button.svelte";
   import RootNoteInput from "$lib/components/RootNoteInput.svelte";
   import { encodeUrlChord } from "$lib/helpers/helpers";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
 
-  // Page Specific Types
-
-  interface uiState {
-    inputNote: string;
-    inputChordCategory: string;
-
-    categoryChords: ReturnType<typeof getAllCategoryChords>;
-  }
-
-  // State
-
-  let uiState: uiState = $state({
-    inputNote: "C",
-    inputChordCategory: "Common",
-
-    categoryChords: [],
-
-    chordObj: {} as GeneralChord,
-    pianoRollNotes: [],
-
-    currentInversionSelected: 0,
-  });
-
-  // Functions
-
-  function setData() {
-    if (!uiState.inputNote || !uiState.inputChordCategory) return;
-
-    const categoryChords = getAllCategoryChords(uiState.inputChordCategory);
-
-    uiState.categoryChords = categoryChords;
-  }
-
-  function handleInputChange() {
-    setData();
-  }
+  let inputNote = $state("C");
+  let inputChordCategory = $state("Common");
+  let categoryChords = $derived(getAllCategoryChords(inputChordCategory) ?? []);
 
   function handleChordCategoryButtonPressed(category: string) {
-    uiState.inputChordCategory = category;
-
-    setData();
+    inputChordCategory = category;
   }
-
-  onMount(() => {
-    setData();
-    pianoAudioService.init();
-  });
-
-  onDestroy(() => {
-    pianoAudioService.stopAll();
-  });
 </script>
+
+<svelte:head>
+  <title>Chords Library | Music App</title>
+</svelte:head>
 
 <Wrapper>
   <main>
@@ -74,31 +31,30 @@
 
     <section class="card">
       <div class="input-group">
-        <RootNoteInput
-          bind:value={uiState.inputNote}
-          onChange={handleInputChange}
-        />
+        <RootNoteInput bind:value={inputNote} />
       </div>
 
       <div class="toggle-buttons-container">
         {#each chordCategories as category (category)}
           <Button
             variant="outlined"
-            state={uiState.inputChordCategory === category ? "on" : "off"}
+            state={inputChordCategory === category ? "on" : "off"}
             onclick={() => handleChordCategoryButtonPressed(category)}
+            aria-label="Show chords under category {category}"
             >{category}</Button
           >
         {/each}
       </div>
 
       <div class="chord-categories-container">
-        {#each uiState.categoryChords as chord (chord.symbol)}
+        {#each categoryChords as chord (chord.symbol)}
           <InteractiveElement
             variant="outlined"
             style="padding: var(--space-12)"
-            href={encodeUrlChord(uiState.inputNote, chord.symbol)}
+            href={encodeUrlChord(inputNote, chord.symbol)}
+            aria-label="Open link to see chord {inputNote + chord.symbol}"
           >
-            <p>{uiState.inputNote + chord.symbol}</p>
+            <p>{inputNote + chord.symbol}</p>
             <p class="text-body-muted">{chord.name}</p>
           </InteractiveElement>
         {/each}

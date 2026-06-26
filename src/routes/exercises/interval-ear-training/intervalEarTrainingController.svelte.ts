@@ -55,7 +55,8 @@ export class IntervalEarTrainingController {
 
     const randomInterval = this.selectedIntervals[Math.floor(Math.random() * this.selectedIntervals.length)];
     const randomNoteLetter = naturalNoteNames[Math.floor(Math.random() * naturalNoteNames.length)];
-    const randomOctave = Math.max(Math.floor(Math.random() * this.config.octaveRangeHigh), this.config.octaveRangeLow);
+    const randomOctave = this.config.octaveRangeLow +
+      Math.floor(Math.random() * (this.config.octaveRangeHigh - this.config.octaveRangeLow + 1))
 
     const rootName = randomNoteLetter + randomOctave;
     const rootNoteObj = convertNoteNameToObj(rootName);
@@ -80,9 +81,10 @@ export class IntervalEarTrainingController {
   }
 
   private handleInput(guessedInterval: string) {
-    if (!this.currentQuestion || this.status !== "playing") return;
+    const currentQuestion = this.currentQuestion;
+    if (!currentQuestion || this.status !== "playing") return;
 
-    if (this.currentQuestion.targetInterval.interval === guessedInterval) {
+    if (currentQuestion.targetInterval.interval === guessedInterval) {
       this.correctAnswers += 1;
       this.wrongGuessInterval = "";
       sfxAudioService.play("correct");
@@ -92,7 +94,7 @@ export class IntervalEarTrainingController {
       sfxAudioService.play("wrong");
     }
 
-    this.correctGuessInterval = this.currentQuestion!.targetInterval.interval;
+    this.correctGuessInterval = currentQuestion!.targetInterval.interval;
 
     if (this.questionNumber >= this.config.questionsAmount) {
       this.status = "finished";
@@ -101,13 +103,13 @@ export class IntervalEarTrainingController {
     }
 
     // After input, draw the correct interval to the staff
-    const rootNote = getFullNoteNameFromObj(this.currentQuestion.rootNote);
+    const rootNote = getFullNoteNameFromObj(currentQuestion.rootNote);
 
-    const correctNotesToDraw = [rootNote, getFullNoteNameFromObj(this.currentQuestion.intervalNote)];
+    const correctNotesToDraw = [rootNote, getFullNoteNameFromObj(currentQuestion.intervalNote)];
     this.drawVectorScoreNotes(correctNotesToDraw);
     this.applyClassesVectorScoreNotes(0, "correct-note");
 
-    const gussedIntervaledNote = this.getIntervalNoteByDirection(this.currentQuestion.rootNote, guessedInterval, this.currentQuestion.direction);
+    const gussedIntervaledNote = this.getIntervalNoteByDirection(currentQuestion.rootNote, guessedInterval, currentQuestion.direction);
     const gussedNotesToDraw = [rootNote, getFullNoteNameFromObj(gussedIntervaledNote)];
     this.drawVectorScoreNotes(gussedNotesToDraw);
     if (this.wrongGuessInterval === "") this.applyClassesVectorScoreNotes(2, "correct-note");

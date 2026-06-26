@@ -40,6 +40,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Identify Chord | Music App</title>
+</svelte:head>
+
 <Wrapper>
   <main>
     <PageHeaderContainer
@@ -72,7 +76,7 @@
       <h3>Results</h3>
       <hr />
       <div class="chords-container">
-        {#each identifiedChords as chord}
+        {#each identifiedChords as chord (chord.tonic + chord.symbol)}
           <InteractiveElement
             variant="card"
             style="border-radius: var(--radius-base);"

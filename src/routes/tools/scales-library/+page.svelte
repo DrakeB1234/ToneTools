@@ -10,6 +10,10 @@
   let inputNote = $state("C");
 </script>
 
+<svelte:head>
+  <title>Scales Library | Music App</title>
+</svelte:head>
+
 <Wrapper>
   <main>
     <PageHeaderContainer
