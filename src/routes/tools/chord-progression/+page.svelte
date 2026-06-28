@@ -18,6 +18,11 @@
   import SummaryActionButton from "./SummaryActionButton.svelte";
   import EditPlayerSettingsPopup from "./EditPlayerSettingsPopup.svelte";
   import { styleLibrary } from "./chordProgressionHelpers";
+  import Popover from "$lib/components/UI/Popover.svelte";
+  import Input from "$lib/components/UI/Input.svelte";
+  import Slider from "$lib/components/UI/Slider.svelte";
+  import Select from "$lib/components/UI/Select.svelte";
+  import Toggle from "$lib/components/UI/Toggle.svelte";
 
   const player = new ProgressionPlayer();
 
@@ -102,6 +107,61 @@
       <PianoMiniRoll activeNotes={player.currentPlayedNotes} />
     </section>
 
+    <Button
+      variant="text"
+      popovertarget="popover-target-bpm"
+      aria-label="open popover for bpm settings"
+    >
+      <div class="lay-col lay-gap-4">
+        <p class="text-caption">BPM</p>
+        <p class="text-heading-3">120</p>
+      </div>
+    </Button>
+    <Popover id="popover-target-bpm">
+      <div>
+        <p>BPM</p>
+        <Input type="number" placeholder="BPM" />
+      </div>
+    </Popover>
+    <Button
+      variant="text"
+      popovertarget="popover-target-volume"
+      aria-label="open popover for volume settings"
+    >
+      <div class="lay-col lay-gap-4">
+        <p class="text-caption">Volume</p>
+        <p class="text-heading-3">70</p>
+      </div>
+    </Button>
+    <Popover id="popover-target-volume">
+      <div class="popover-volume-container">
+        <p>Volume</p>
+        <Slider value={70} min={0} max={100} ariaLabel="change volume" />
+      </div>
+    </Popover>
+    <Button
+      variant="text"
+      popovertarget="popover-target-key-scale"
+      aria-label="open popover for key and scale settings"
+    >
+      <div class="lay-col lay-gap-4">
+        <p class="text-heading-3">C</p>
+        <p class="text-caption">major</p>
+      </div>
+    </Button>
+    <Popover id="popover-target-key-scale">
+      <div>
+        <p>Key</p>
+        <Select options={["C"]} />
+        <p class="space-above-small">Scale</p>
+        <Select options={["Major"]} />
+        <div class="lay-col space-above-base">
+          <p>Transpose chords</p>
+          <Toggle />
+        </div>
+      </div>
+    </Popover>
+
     <section class="input-container card-high lay-row">
       <Button
         size="icon-base"
@@ -155,6 +215,10 @@
     padding: 0;
 
     overflow: hidden;
+  }
+
+  .popover-volume-container {
+    min-width: 200px;
   }
 
   .header-container {

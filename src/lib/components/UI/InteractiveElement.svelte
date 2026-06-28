@@ -78,7 +78,7 @@
     border-radius: var(--radius-large);
     border-color: var(--color-border-subtle);
     background-color: var(--color-bg-surface-1);
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-1);
   }
   .variant-secondary {
     background-color: var(--color-bg-secondary);

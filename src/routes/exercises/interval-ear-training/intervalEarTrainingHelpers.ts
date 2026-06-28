@@ -110,7 +110,7 @@ export const earTrainingGuideEntry: EarTrainingGuideEntry[] = [
       selectedTypes: ["melodic"],
       selectedDirections: ["ascending"],
       octaveRangeHigh: 5,
-      octaveRangeLow: 4,
+      octaveRangeLow: 3,
       questionsAmount: 10
     }
   },
@@ -125,7 +125,7 @@ export const earTrainingGuideEntry: EarTrainingGuideEntry[] = [
       selectedTypes: ["melodic"],
       selectedDirections: ["ascending"],
       octaveRangeHigh: 5,
-      octaveRangeLow: 4,
+      octaveRangeLow: 3,
       questionsAmount: 10
     }
   },
@@ -160,7 +160,7 @@ export const earTrainingGuideEntry: EarTrainingGuideEntry[] = [
       selectedTypes: ["melodic"],
       selectedDirections: ["ascending"],
       octaveRangeHigh: 5,
-      octaveRangeLow: 4,
+      octaveRangeLow: 3,
       questionsAmount: 10
     }
   },
@@ -175,7 +175,7 @@ export const earTrainingGuideEntry: EarTrainingGuideEntry[] = [
       selectedTypes: ["melodic"],
       selectedDirections: ["ascending"],
       octaveRangeHigh: 5,
-      octaveRangeLow: 4,
+      octaveRangeLow: 3,
       questionsAmount: 10
     }
   }

@@ -259,6 +259,34 @@ export const styleBasic1: MusicStyle = {
   }
 };
 
+export const styleBasic2: MusicStyle = {
+  id: "basic-2",
+  name: "Basic 2",
+  startingBPM: 160,
+
+  relativeNoteRanges: {
+    melody: { baseMin: "G3", baseMax: "F4" },
+    bass: { baseMin: "C2", baseMax: "B2" }
+  },
+
+  melodyTrack: {
+    stepCount: 8,
+    toneCount: 4,
+
+    events: [
+      { step: 0, noteLength: "legato", tones: [0] },
+      { step: 1, noteLength: "legato", tones: [1] },
+      { step: 2, noteLength: "legato", tones: [2] },
+      { step: 3, noteLength: "legato", tones: [3] },
+    ]
+  },
+
+  bassTrack: {
+    stepCount: 0,
+    events: []
+  }
+};
+
 export const styleMelodic1: MusicStyle = {
   id: "melodic-1",
   name: "Melodic 1",
@@ -532,6 +560,7 @@ export const styleReggae: MusicStyle = {
 
 export const styleLibrary: Record<string, MusicStyle> = {
   "basic-1": styleBasic1,
+  "basic-2": styleBasic2,
   "melodic-1": styleMelodic1,
   "melodic-2": styleMelodic2,
   "pop-1": stylePop1,
