@@ -1,6 +1,6 @@
 <script lang="ts">
-  import ConfirmationCard from "$lib/components/Popups/ConfirmationPopupCard.svelte";
-  import Popup from "$lib/components/Popups/Popup.svelte";
+  import ConfirmationCard from "$lib/components/Modal/ConfirmationModalCard.svelte";
+  import Modal from "$lib/components/Modal/Modal.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import { onDestroy, onMount } from "svelte";
@@ -9,6 +9,7 @@
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
   import Icon from "$lib/components/Icons/Icon.svelte";
+  import ConfirmationModalCard from "$lib/components/Modal/ConfirmationModalCard.svelte";
 
   type Props = {
     config: IntervalEarConfig;
@@ -20,22 +21,22 @@
   // svelte-ignore state_referenced_locally
   const exerciseController = new IntervalEarTrainingController(config);
 
-  let isExitPopupOpen = $state(false);
+  let isExitModalOpen = $state(false);
   let staffElement: HTMLDivElement | null = $state(null);
 
   function handleExitPressed() {
     if (exerciseController.isExerciseOver) {
       handleExit();
     } else {
-      isExitPopupOpen = true;
+      isExitModalOpen = true;
     }
   }
 
-  function handleExitPopupResponse(wantsExit: boolean) {
+  function handleExitModalResponse(wantsExit: boolean) {
     if (wantsExit) {
       handleExit();
     }
-    isExitPopupOpen = false;
+    isExitModalOpen = false;
   }
 
   onMount(() => {
@@ -121,20 +122,17 @@
   </div>
 </main>
 
-<Popup bind:isOpen={isExitPopupOpen}>
-  <ConfirmationCard
+<Modal bind:isOpen={isExitModalOpen}>
+  <ConfirmationModalCard
     title="Exit Exercise"
     message="Are you sure you want to exit this exercise? Any stats from this session will be lost."
     confirmationText="Exit"
-    onResponse={handleExitPopupResponse}
+    onResponse={handleExitModalResponse}
   />
-</Popup>
+</Modal>
 
 <style>
   main {
-    display: flex;
-    flex-direction: column;
-
     padding: var(--space-8) var(--space-12);
   }
 

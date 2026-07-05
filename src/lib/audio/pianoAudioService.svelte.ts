@@ -97,7 +97,7 @@ class PianoAudioService {
   }
 
   get volumeValue(): number {
-    return this.volume * 100;
+    return Math.round(this.volume * 100);
   };
 
   changeVolume(newValue: number) {

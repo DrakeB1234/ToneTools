@@ -2,14 +2,14 @@
   import { goto } from "$app/navigation";
   import Icon from "$lib/components/Icons/Icon.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
-  import Popup from "$lib/components/Popups/Popup.svelte";
+  import Modal from "$lib/components/Modal/Modal.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { intervalObjs } from "$lib/helpers/musicTheoryConstants";
   import type { IntervalEntry } from "$lib/helpers/musicTheoryTypes";
-  import ConfigPopupCard from "./ConfigPopupCard.svelte";
   import { defaultConfig } from "./intervalEarTrainingHelpers";
+  import ConfigModalCard from "./ConfigModalCard.svelte";
 
   let configOptions = $state(defaultConfig);
   let activeIntervalStrings: string[] = $derived(
@@ -35,7 +35,7 @@
     }
   }
 
-  function onPopupFinished() {
+  function onModalFinished() {
     isConfigOpen = false;
   }
 
@@ -129,12 +129,12 @@
   </main>
 </Wrapper>
 
-<Popup bind:isOpen={isConfigOpen}>
-  <ConfigPopupCard
+<Modal bind:isOpen={isConfigOpen}>
+  <ConfigModalCard
     bind:configData={configOptions}
-    onComplete={onPopupFinished}
+    onComplete={onModalFinished}
   />
-</Popup>
+</Modal>
 
 <style>
   main {

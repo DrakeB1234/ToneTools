@@ -1,5 +1,5 @@
 import { Chord, Interval, Midi, Mode, Note, Scale } from "tonal";
-import { chordCategoryEntries, chordInversionNames, intervalObjs, modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
+import { chordCategoryEntries, chordInversionNames, intervalObjs, majorModes, minorModes, modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
 import { type DiatonicChordSet, type GeneralChord, type GeneralNote } from "./musicTheoryTypes";
 
 // Intervals
@@ -176,6 +176,48 @@ export function getChordSecondaryDominant(note: string) {
   const secondaryDominantRoot = incrementNoteNameByInterval(note, "5P");
 
   return getChord(secondaryDominantRoot, "7");
+}
+
+export function getSecondaryDominantsFromScale(tonic: string, scaleType: string): DiatonicChordSet[] | null {
+  const diatonicTargets = getDiatonicChordsFromScale(tonic, scaleType);
+  if (!diatonicTargets) return null;
+
+  const result = diatonicTargets.map((diatonicObj) => {
+    const targetTonic = diatonicObj.chords[0].tonic;
+
+    const rawSecDomTonic = incrementNoteNameByInterval(targetTonic, "5P");
+    const secDomTonic = simplifyNoteName(rawSecDomTonic);
+
+    const secDomDegree = `V7/${diatonicObj.degree}`;
+
+    return {
+      degree: secDomDegree,
+      chords: [
+        { tonic: secDomTonic, symbol: "7" },
+        { tonic: secDomTonic, symbol: "9" },
+        { tonic: secDomTonic, symbol: "7b9" }
+      ]
+    };
+  });
+
+  return result;
+}
+
+// Major / Minor modes are considered by the modes listed in exported consts majorModes and minorModes
+export function getBorrowedChordsFromScale(tonic: string, scaleType: string): DiatonicChordSet[] | null {
+  let borrowedScaleType = "minor";
+
+  if (majorModes.includes(scaleType.toLowerCase())) {
+    borrowedScaleType = "minor";
+  } else if (minorModes.includes(scaleType.toLowerCase())) {
+    borrowedScaleType = "major";
+  }
+
+  const borrowedChords = getDiatonicChordsFromScale(tonic, borrowedScaleType);
+
+  if (!borrowedChords) return null;
+
+  return borrowedChords;
 }
 
 export function getChordIntervalFormula(note: string, chordSymbol: string) {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "$lib/components/Popups/popup.css";
+  import "$lib/components/Modal/modal.css";
   import Icon from "../Icons/Icon.svelte";
   import Button from "../UI/Button.svelte";
 
@@ -22,8 +22,8 @@
   }
 </script>
 
-<div class="popup-card">
-  <div class="popup-header">
+<div class="modal-card">
+  <div class="modal-header">
     <h2 class="text-heading-3">{title}</h2>
     <Button
       variant="text"
@@ -34,11 +34,11 @@
     </Button>
   </div>
 
-  <div class="popup-body">
+  <div class="modal-body">
     <p class="muted">{message}</p>
   </div>
 
-  <div class="popup-footer">
+  <div class="modal-footer">
     <Button variant="outlined" onclick={() => handleResponse(false)}
       >Cancel</Button
     >
@@ -47,7 +47,7 @@
 </div>
 
 <style>
-  .popup-footer {
+  .modal-footer {
     border: none;
   }
 </style>

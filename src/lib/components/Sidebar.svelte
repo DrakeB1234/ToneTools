@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { onNavigate } from "$app/navigation";
   import { page } from "$app/state";
   import { toolsData, exercisesData } from "$lib/data/appData";
@@ -6,7 +7,9 @@
   import Button from "./UI/Button.svelte";
 
   let isOpen = $state(false);
-  let isDarkMode = $state(false);
+  let isDarkMode = $state(
+    browser ? document.documentElement.classList.contains("dark") : false,
+  );
 
   function toggleSidebar() {
     isOpen = !isOpen;
@@ -18,11 +21,9 @@
 
   function handleToggleLightMode() {
     isDarkMode = !isDarkMode;
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+    document.documentElement.classList.toggle("dark", isDarkMode);
   }
-
-  $effect(() => {
-    document.body.classList.toggle("dark", isDarkMode);
-  });
 
   onNavigate(() => {
     closeSidebar();
@@ -122,11 +123,12 @@
         onclick={handleToggleLightMode}
         aria-label="Switch Light/Dark Mode"
         fullWidth
+        class="lay-row--start-justify"
       >
-        <div class="lay-row">
-          <Icon icon={isDarkMode ? "lightMode" : "darkMode"} />
+        <Icon icon={isDarkMode ? "lightMode" : "darkMode"} />
+        <p class="text-truncate">
           Switch to {isDarkMode ? "light mode" : "dark mode"}
-        </div>
+        </p>
       </Button>
     </div>
   </div>
@@ -205,7 +207,7 @@
 
   .mobile-navbar {
     justify-content: space-between;
-    padding: var(--space-12);
+    padding: var(--space-8) var(--space-12);
     width: 100%;
 
     background-color: var(--color-bg-surface-1);

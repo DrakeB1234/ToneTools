@@ -8,6 +8,10 @@
 
   let scales = getAllModes();
   let inputNote = $state("C");
+  let inputAccidental = $state("n");
+  let fullNote = $derived(
+    inputNote + (inputAccidental === "n" ? "" : inputAccidental),
+  );
 </script>
 
 <svelte:head>
@@ -23,16 +27,19 @@
     />
 
     <section class="card">
-      <RootNoteInput bind:value={inputNote} />
+      <RootNoteInput
+        bind:noteValue={inputNote}
+        bind:accidentalValue={inputAccidental}
+      />
 
       <div class="scales-container lay-col space-above-large">
         {#each scales as scale (scale)}
           <InteractiveElement
             variant="outlined"
             style="padding: var(--space-12)"
-            href={encodeUrlScale(inputNote, scale)}
+            href={encodeUrlScale(fullNote, scale)}
           >
-            <p>{inputNote}&nbsp;{scale}</p>
+            <p>{fullNote}&nbsp;{scale}</p>
             <p class="text-body-muted">{scale}</p>
           </InteractiveElement>
         {/each}

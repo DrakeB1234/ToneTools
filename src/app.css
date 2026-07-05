@@ -116,8 +116,10 @@ svg {
 
 /* ==== Semantic Variables ==== */
 :root {
+  color-scheme: light;
   /* Color Roles */
   --color-bg-page: var(--palette-slate-100);
+  --color-bg-page-active: var(--palette-slate-200);
   --color-bg-surface-1: var(--custom-slate-25);
   --color-bg-surface-1-active: oklch(95.5% 0.01 256);
   --color-bg-surface-2: var(--palette-slate-100);
@@ -172,6 +174,7 @@ svg {
   --radius-large: 14px;
   --radius-full: 9999px;
 
+  --icon-size-small: 20px;
   --icon-size-base: 24px;
   --icon-size-large: 32px;
 
@@ -188,8 +191,10 @@ svg {
 }
 
 /* Dark Mode Override Colors */
-body.dark {
+:root.dark {
+  color-scheme: dark;
   --color-bg-page: oklch(20.8% 0.02 265);
+  --color-bg-page-active: oklch(25.5% 0.03 265);
   --color-bg-surface-1: oklch(27% 0.026 260.031);
   --color-bg-surface-1-active: oklch(34.2% 0.026 257);
   --color-bg-surface-2: oklch(34% 0.034 257);
@@ -216,7 +221,11 @@ body.dark {
   --color-border-hr: oklch(54% 0.04 256);
 
   --shadow-1: 0 2px 6px -2px rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.2);
+  --shadow-2: 0 4px 12px -2px rgba(0, 0, 0, 0.33), 0 2px 4px -1px rgba(0, 0, 0, 0.22);
+  --shadow-3: 0 5px 16px -2px rgba(0, 0, 0, 0.4), 0 3px 5px -1px rgba(0, 0, 0, 0.25);
 }
+
+@media(prefers-color-scheme: dark) {}
 
 /* ==== Global Elements ==== */
 body {
@@ -264,7 +273,7 @@ h2,
 
 h3,
 .text-heading-3 {
-  line-height: 1.3;
+  line-height: 1.5;
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
 }
@@ -330,6 +339,12 @@ span,
   overflow: hidden;
 }
 
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ==== Component Utils ==== */
 .card {
   padding: var(--space-16);
@@ -345,27 +360,6 @@ span,
   padding: var(--space-12);
   background-color: var(--color-bg-surface-2);
   border: 1px solid var(--color-border-subtle);
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-4);
-
-  width: fit-content;
-  padding: var(--space-4) var(--space-8);
-  border-radius: var(--radius-base);
-
-  color: var(--color-on-bg-surface);
-  border-color: var(--color-border);
-  font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-base);
-  cursor: pointer;
-  text-decoration: none;
-  border: 1px solid transparent;
-
-  -webkit-tap-highlight-color: transparent;
-  transition: var(--transition-color);
 }
 
 .icon-container {
@@ -444,10 +438,19 @@ span,
   gap: var(--space-8);
 }
 
+.lay-row--start-justify {
+  justify-content: start !important;
+}
+
 .lay-col {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: var(--space-8);
+}
+
+.lay-grid-col {
+  display: grid;
   gap: var(--space-8);
 }
 
@@ -468,6 +471,10 @@ span,
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+
+.lay-gap-16 {
+  gap: var(--space-16);
 }
 
 .lay-gap-4 {

@@ -4,26 +4,23 @@
   import Label from "./UI/Label.svelte";
 
   let {
-    value = $bindable(),
+    noteValue = $bindable(),
+    accidentalValue = $bindable(),
     onChange,
   }: {
-    value: string;
+    noteValue: string;
+    accidentalValue: string;
     onChange?: () => void;
   } = $props();
 
-  let activeNote = $derived(value?.charAt(0) || "C");
-  let activeAccidental = $derived(value?.length > 1 ? value?.charAt(1) : "n");
-
   function handleNoteNamePressed(note: string) {
-    const accidentalSuffix = activeAccidental === "n" ? "" : activeAccidental;
-    value = note + accidentalSuffix;
+    noteValue = note;
 
     if (onChange) onChange();
   }
 
   function handleAccidentalPressed(accidental: string) {
-    const accidentalSuffix = accidental === "n" ? "" : accidental;
-    value = activeNote + accidentalSuffix;
+    accidentalValue = accidental;
 
     if (onChange) onChange();
   }
@@ -36,7 +33,7 @@
       {#each naturalNoteNames as note}
         <Button
           variant="secondary"
-          state={activeNote === note ? "on" : "off"}
+          state={noteValue === note ? "on" : "off"}
           onclick={() => handleNoteNamePressed(note)}
         >
           {note}
@@ -50,21 +47,21 @@
     <div class="accidental-buttons lay-row">
       <Button
         variant="secondary"
-        state={activeAccidental === "n" ? "on" : "off"}
+        state={accidentalValue === "n" ? "on" : "off"}
         onclick={() => handleAccidentalPressed("n")}
       >
         n
       </Button>
       <Button
         variant="secondary"
-        state={activeAccidental === "#" ? "on" : "off"}
+        state={accidentalValue === "#" ? "on" : "off"}
         onclick={() => handleAccidentalPressed("#")}
       >
         #
       </Button>
       <Button
         variant="secondary"
-        state={activeAccidental === "b" ? "on" : "off"}
+        state={accidentalValue === "b" ? "on" : "off"}
         onclick={() => handleAccidentalPressed("b")}
       >
         b

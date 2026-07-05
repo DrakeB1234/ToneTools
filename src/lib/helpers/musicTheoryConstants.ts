@@ -8,6 +8,9 @@ export const accidentalNames = ["n", "#", "b"];
 
 export const keyNamesFlatted = ["C", "G", "D", "A", "E", "B", "F", "Bb", "Eb", "Ab", "Db", "Gb"];
 
+export const majorModes = ["major", "ionian", "lydian", "mixolydian"];
+export const minorModes = ["minor", "aeolian", "dorian", "phrygian", "locrian"];
+
 export const intervalObjs: IntervalEntry[] = [
   { name: "Perfect Unison", interval: "P1" },
   { name: "Minor Second", interval: "m2" },

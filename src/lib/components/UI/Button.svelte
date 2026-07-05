@@ -11,9 +11,9 @@
       | "destructive"
       | "destructive-outlined";
     size?: "small" | "base" | "icon-small" | "icon-base" | "icon-large";
-    overrideHoverOnColor?: "surface-2";
     state?: "on" | "off";
     fullWidth?: boolean;
+    fullHeight?: boolean;
     circle?: boolean;
     class?: string;
     children?: Snippet;
@@ -24,9 +24,9 @@
     element = "button",
     variant = "primary",
     size = "base",
-    overrideHoverOnColor,
     state,
     fullWidth = false,
+    fullHeight = false,
     circle = false,
     class: className = "",
     children,
@@ -40,7 +40,7 @@
     `size-${size}`,
     circle && "circle",
     fullWidth && "full-width",
-    overrideHoverOnColor && `override-hover-color-${overrideHoverOnColor}`,
+    fullHeight && "full-height",
     className,
   ]
     .filter(Boolean)
@@ -53,8 +53,24 @@
 
 <style>
   .btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-4);
+
+    border-radius: var(--radius-base);
+
     color: var(--color-on-bg-surface);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid transparent;
+
+    -webkit-tap-highlight-color: transparent;
+    transition: var(--transition-color);
   }
+
   .btn:disabled {
     opacity: 0.7;
   }
@@ -81,16 +97,18 @@
   .full-width {
     width: 100%;
   }
+  .full-height {
+    height: 100%;
+  }
 
   .circle {
     border-radius: 50%;
   }
 
   .btn[data-state="on"] {
-    --color-on-bg-surface: var(--color-on-bg-primary-subtle);
-
     background-color: var(--color-bg-primary-subtle);
     border-color: var(--color-on-bg-primary-subtle);
+    color: var(--color-on-bg-primary-subtle);
   }
 
   .variant-primary {
@@ -146,11 +164,6 @@
     .btn[data-state="on"]:hover {
       background-color: var(--color-bg-primary-subtle);
     }
-
-    /* Overiddes hover state */
-    .btn.override-hover-color-surface-2:hover:not(.btn[data-state="on"]) {
-      background-color: var(--color-bg-surface-2-active) !important;
-    }
   }
 
   @media (hover: none) {
@@ -173,11 +186,6 @@
     }
     .btn[data-state="on"]:active {
       background-color: var(--color-bg-primary-subtle);
-    }
-
-    /* Overiddes hover state */
-    .btn.override-hover-color-surface-2:active:not(.btn[data-state="on"]) {
-      background-color: var(--color-bg-surface-2-active) !important;
     }
   }
 </style>

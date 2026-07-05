@@ -7,7 +7,7 @@
     id?: string;
     ariaLabel?: string;
     class?: string;
-    onchange?: (event: Event) => void;
+    onchange?: (event: Event & { currentTarget: HTMLInputElement }) => void;
     [key: string]: any;
   }
 

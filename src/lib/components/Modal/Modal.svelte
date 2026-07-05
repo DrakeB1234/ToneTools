@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { scale, fade } from "svelte/transition";
-  import { cubicOut } from "svelte/easing";
   import type { Snippet } from "svelte";
 
   let {
@@ -27,14 +25,13 @@
 <svelte:window onkeydown={handleKeydown} />
 
 {#if isOpen}
-  <div class="popup-backdrop" transition:fade={{ duration: 200 }}>
+  <div class="modal-backdrop">
     <div
       onmousedown={handleBackdropClick}
       role="dialog"
       aria-modal="true"
       tabindex="0"
-      class="popup-animation-wrapper"
-      transition:scale={{ duration: 300, start: 0.95, easing: cubicOut }}
+      class="modal-animation-wrapper"
     >
       {@render children()}
     </div>
@@ -42,14 +39,14 @@
 {/if}
 
 <style>
-  .popup-backdrop {
+  .modal-backdrop {
     position: fixed;
     inset: 0;
     z-index: 9999;
     background-color: rgba(0, 0, 0, 0.6);
   }
 
-  .popup-animation-wrapper {
+  .modal-animation-wrapper {
     position: fixed;
     inset: 0;
 
@@ -60,7 +57,7 @@
   }
 
   @media (min-width: 600px) {
-    .popup-animation-wrapper {
+    .modal-animation-wrapper {
       padding: var(--space-16);
     }
   }

@@ -5,12 +5,21 @@
     id: string;
     children: Snippet;
     placement?: "bottom-start" | "bottom-end" | "top-start" | "top-end";
+    ref?: HTMLElement;
+    [key: string]: any;
   };
 
-  let { id, children, placement = "bottom-start", ...rest }: Props = $props();
+  let {
+    id,
+    children,
+    placement = "bottom-start",
+    ref = $bindable(),
+    ...rest
+  }: Props = $props();
 </script>
 
 <div
+  bind:this={ref}
   {id}
   popover="auto"
   class="popover-panel"
@@ -33,7 +42,7 @@
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-base);
     background-color: var(--color-bg-surface-1);
-    box-shadow: var(--shadow-3);
+    box-shadow: var(--shadow-2);
 
     opacity: 0;
   }

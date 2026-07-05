@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "$lib/components/Popups/popup.css";
+  import "$lib/components/Modal/modal.css";
   import Icon from "$lib/components/Icons/Icon.svelte";
   import Label from "$lib/components/UI/Label.svelte";
   import Select from "$lib/components/UI/Select.svelte";
@@ -39,7 +39,7 @@
     }
   }
 
-  function handlePopupDone() {
+  function handleModalDone() {
     if (configData.selectedTypes.length < 1)
       configData.selectedTypes.push("melodic");
 
@@ -59,15 +59,15 @@
   }
 </script>
 
-<div class="popup-card">
-  <div class="popup-header">
+<div class="modal-card">
+  <div class="modal-header">
     <h2 class="text-heading-3">Configure</h2>
-    <Button variant="text" size="icon-small" onclick={handlePopupDone}>
+    <Button variant="text" size="icon-small" onclick={handleModalDone}>
       <Icon icon="close" />
     </Button>
   </div>
 
-  <div class="popup-body">
+  <div class="modal-body">
     <div class="lay-input-label-col">
       <p class="text-caption">Type</p>
       <div class="lay-row">
@@ -144,8 +144,8 @@
     </div>
   </div>
 
-  <div class="popup-footer">
-    <Button onclick={handlePopupDone}>Confirm</Button>
+  <div class="modal-footer">
+    <Button onclick={handleModalDone}>Confirm</Button>
   </div>
 </div>
 

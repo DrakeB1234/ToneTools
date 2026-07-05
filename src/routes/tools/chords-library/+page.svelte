@@ -9,8 +9,13 @@
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
 
   let inputNote = $state("C");
+  let inputAccidental = $state("n");
   let inputChordCategory = $state("Common");
   let categoryChords = $derived(getAllCategoryChords(inputChordCategory) ?? []);
+
+  let fullNote = $derived(
+    inputNote + (inputAccidental === "n" ? "" : inputAccidental),
+  );
 
   function handleChordCategoryButtonPressed(category: string) {
     inputChordCategory = category;
@@ -31,7 +36,10 @@
 
     <section class="card">
       <div class="input-group">
-        <RootNoteInput bind:value={inputNote} />
+        <RootNoteInput
+          bind:noteValue={inputNote}
+          bind:accidentalValue={inputAccidental}
+        />
       </div>
 
       <div class="toggle-buttons-container">
@@ -51,10 +59,10 @@
           <InteractiveElement
             variant="outlined"
             style="padding: var(--space-12)"
-            href={encodeUrlChord(inputNote, chord.symbol)}
-            aria-label="Open link to see chord {inputNote + chord.symbol}"
+            href={encodeUrlChord(fullNote, chord.symbol)}
+            aria-label="Open link to see chord {fullNote + chord.symbol}"
           >
-            <p>{inputNote + chord.symbol}</p>
+            <p>{fullNote + chord.symbol}</p>
             <p class="text-body-muted">{chord.name}</p>
           </InteractiveElement>
         {/each}
