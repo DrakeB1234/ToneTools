@@ -11,7 +11,7 @@
   </p>
 
   <div class="space-above-base">
-    <Button element="a" href="/exercises">
+    <Button element="a" href="/">
       View Exercises
       <Icon icon="arrowRightAlt" />
     </Button>
