@@ -7,10 +7,7 @@ const config = {
 		runes: ({ filename }) => (filename.split(/[/\\]/).includes('node_modules') ? undefined : true)
 	},
 	kit: {
-		adapter: adapter({
-			// Provide fallback for SPA routing
-			fallback: 'index.html'
-		})
+		adapter: adapter()
 	}
 };
 
