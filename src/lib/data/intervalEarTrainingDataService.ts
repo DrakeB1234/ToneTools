@@ -1,3 +1,6 @@
+import { browser } from "$app/environment";
+import { intervalObjs } from "$lib/helpers/musicTheoryConstants";
+
 export type IntervalEarTrainingStats = {
   [interval: string]: { correct: number; wrong: number };
 };
@@ -5,10 +8,23 @@ export type IntervalEarTrainingStats = {
 const STATS_STORAGE_KEY = "ToneTools_IntervalStats";
 
 export const statsDataService = {
+
   getStats(): IntervalEarTrainingStats {
+    if (!browser) return {};
+
     try {
       const existingData = localStorage.getItem(STATS_STORAGE_KEY);
-      return existingData ? JSON.parse(existingData) : {};
+      const rawStats = existingData ? JSON.parse(existingData) : {};
+      const orderedStats: IntervalEarTrainingStats = {};
+
+      for (const intervalObj of intervalObjs) {
+        const key = intervalObj.interval;
+        if (rawStats[key]) {
+          orderedStats[key] = rawStats[key];
+        }
+      }
+
+      return orderedStats;
     } catch (error) {
       console.error("Failed to parse interval stats:", error);
       return {};
@@ -30,6 +46,14 @@ export const statsDataService = {
       localStorage.setItem(STATS_STORAGE_KEY, JSON.stringify(allStats));
     } catch (error) {
       console.error("Failed to save interval stats:", error);
+    }
+  },
+
+  resetSessionStats() {
+    try {
+      localStorage.removeItem(STATS_STORAGE_KEY);
+    } catch (error) {
+      console.error("Failed to reset stats data:", error);
     }
   }
 };

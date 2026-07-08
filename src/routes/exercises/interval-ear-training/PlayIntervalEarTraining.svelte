@@ -1,5 +1,4 @@
 <script lang="ts">
-  import ConfirmationCard from "$lib/components/Modal/ConfirmationModalCard.svelte";
   import Modal from "$lib/components/Modal/Modal.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
@@ -64,9 +63,9 @@
   </div>
 
   <div class="score-container">
-    <div class="score-item red">
-      <p class="text-caption">Wrong</p>
-      <p class="text-heading-2">{exerciseController.wrongAnswers}</p>
+    <div class="score-item green">
+      <p class="text-caption">Correct</p>
+      <p class="text-heading-2">{exerciseController.correctAnswers}</p>
     </div>
     <div class="score-item">
       <p class="text-caption">Question</p>
@@ -74,9 +73,9 @@
         {exerciseController.questionNumber}/{config.questionsAmount}
       </p>
     </div>
-    <div class="score-item green">
-      <p class="text-caption">Correct</p>
-      <p class="text-heading-2">{exerciseController.correctAnswers}</p>
+    <div class="score-item red">
+      <p class="text-caption">Wrong</p>
+      <p class="text-heading-2">{exerciseController.wrongAnswers}</p>
     </div>
   </div>
 
@@ -125,7 +124,7 @@
 <Modal bind:isOpen={isExitModalOpen}>
   <ConfirmationModalCard
     title="Exit Exercise"
-    message="Are you sure you want to exit this exercise? Any stats from this session will be lost."
+    message="Are you sure you want to exit this exercise? You still have questions left to answer."
     confirmationText="Exit"
     onResponse={handleExitModalResponse}
   />

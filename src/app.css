@@ -145,6 +145,8 @@ svg {
   --color-bg-tint-danger: var(--palette-red-50);
   --color-on-bg-danger: var(--palette-white);
 
+  --color-bg-success: oklch(66% 0.24 143);
+
   --color-bg-dark: var(--palette-slate-900);
 
   --color-bg-addon-purple: var(--palette-purple-base);
@@ -471,6 +473,10 @@ span,
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+
+.lay-gap-24 {
+  gap: var(--space-24);
 }
 
 .lay-gap-16 {

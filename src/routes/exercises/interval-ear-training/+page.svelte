@@ -83,7 +83,7 @@
       </InteractiveElement>
       <InteractiveElement
         variant="text"
-        href="/exercises/interval-ear-training/guided"
+        href="/exercises/interval-ear-training/stats"
         style="padding: var(--space-12); padding-bottom: var(--space-16);"
       >
         <div class="lay-grid-center link-container">
