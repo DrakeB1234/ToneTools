@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-  <title>Music App</title>
+  <title>Tone Tools</title>
 </svelte:head>
 
 <Wrapper>

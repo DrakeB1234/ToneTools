@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-  <title>Scales Library | Music App</title>
+  <title>Scales Library | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>

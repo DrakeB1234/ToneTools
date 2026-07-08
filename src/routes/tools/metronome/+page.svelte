@@ -139,7 +139,7 @@
 </script>
 
 <svelte:head>
-  <title>Metronome | Music App</title>
+  <title>Metronome | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>

@@ -23,7 +23,7 @@
 </script>
 
 <svelte:head>
-  <title>Chords Library | Music App</title>
+  <title>Chords Library | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>

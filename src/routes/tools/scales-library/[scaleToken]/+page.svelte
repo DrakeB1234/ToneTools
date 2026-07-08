@@ -82,7 +82,7 @@
 </script>
 
 <svelte:head>
-  <title>{data.noteToken}&nbsp;{data.scaleToken} Scale | Music App</title>
+  <title>{data.noteToken}&nbsp;{data.scaleToken} Scale | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>

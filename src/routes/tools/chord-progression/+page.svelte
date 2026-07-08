@@ -51,7 +51,7 @@
 </script>
 
 <svelte:head>
-  <title>Chord Progression | Music App</title>
+  <title>Chord Progression | Tone Tools</title>
 </svelte:head>
 
 <main>

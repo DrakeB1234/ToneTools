@@ -17,7 +17,7 @@
 </script>
 
 <svelte:head>
-  <title>Guided Intervals Ear Training | Music App</title>
+  <title>Guided Intervals Ear Training | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>

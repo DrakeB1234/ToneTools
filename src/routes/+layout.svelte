@@ -8,8 +8,8 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href="/images/logo.svg" />
-	<title>Music App</title>
+	<link rel="icon" href="/icon-192x192.webp" />
+	<title>Tone Tools</title>
 </svelte:head>
 
 {#if dev}

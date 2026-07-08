@@ -77,7 +77,7 @@
 </script>
 
 <svelte:head>
-  <title>{data.chordObj.tonic}{data.chordObj.symbol} Chord | Music App</title>
+  <title>{data.chordObj.tonic}{data.chordObj.symbol} Chord | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>

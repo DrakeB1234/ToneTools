@@ -32,8 +32,8 @@
 
 <header class="lay-row mobile-navbar">
   <a href="/" class="lay-row mobile-logo-container">
-    <img src="/images/logo.svg" alt="Music App Logo" width="32" height="32" />
-    <h1 class="text-heading-2">Music App</h1>
+    <img src="/images/logo.svg" alt="Tone Tools Logo" width="32" height="32" />
+    <h1 class="text-heading-2">Tone Tools</h1>
   </a>
   <Button
     variant="text"
@@ -54,24 +54,24 @@
     <div class="lay-row desktop-header">
       <a href="/" class="logo-container">
         <img
-          src="/images/logo.svg"
-          alt="Music App Logo"
+          src="/icon-192x192.webp"
+          alt="Tone Tools Logo"
           width="32"
           height="32"
         />
-        <h1 class="text-heading-2">Music App</h1>
+        <h1 class="text-heading-2">Tone Tools</h1>
       </a>
     </div>
 
     <div class="lay-row mobile-header">
       <a href="/" class="logo-container">
         <img
-          src="/images/logo.svg"
-          alt="Music App Logo"
+          src="/icon-192x192.webp"
+          alt="Tone Tools Logo"
           width="32"
           height="32"
         />
-        <h1 class="text-heading-2">Music App</h1>
+        <h1 class="text-heading-2">Tone Tools</h1>
       </a>
       <Button
         variant="text"

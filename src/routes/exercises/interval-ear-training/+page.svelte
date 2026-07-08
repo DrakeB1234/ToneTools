@@ -51,7 +51,7 @@
 </script>
 
 <svelte:head>
-  <title>Intervals Ear Training | Music App</title>
+  <title>Intervals Ear Training | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>

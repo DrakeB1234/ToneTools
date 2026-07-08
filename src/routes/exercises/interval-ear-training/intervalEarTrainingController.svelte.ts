@@ -5,6 +5,7 @@ import { naturalNoteNames } from "$lib/helpers/musicTheoryConstants";
 import type { GeneralNote, IntervalEntry } from "$lib/helpers/musicTheoryTypes";
 import { MusicStaff } from "vector-score";
 import type { IntervalEarConfig } from "./intervalEarTrainingHelpers";
+import { statsDataService, type IntervalEarTrainingStats } from "$lib/data/intervalEarTrainingDataService";
 
 type ExerciseState = "idle" | "playing" | "answered" | "finished";
 type UIAnswerState = "none" | "correct" | "wrong";
@@ -39,6 +40,7 @@ export class IntervalEarTrainingController {
   private config: IntervalEarConfig;
   private intervalAudioTimer: ReturnType<typeof setTimeout> | null = null;
   private staffInstance: MusicStaff | null = null;
+  private sessionStats: IntervalEarTrainingStats = {};
 
   constructor(config: IntervalEarConfig) {
     this.config = config;
@@ -83,16 +85,26 @@ export class IntervalEarTrainingController {
   private handleInput(guessedInterval: string) {
     const currentQuestion = this.currentQuestion;
     if (!currentQuestion || this.status !== "playing") return;
+    const targetInterval = currentQuestion.targetInterval.interval;
+    let localStat: IntervalEarTrainingStats = {
+      [targetInterval]: {
+        correct: 0,
+        wrong: 0
+      }
+    };
 
-    if (currentQuestion.targetInterval.interval === guessedInterval) {
+    if (targetInterval === guessedInterval) {
       this.correctAnswers += 1;
       this.wrongGuessInterval = "";
+      localStat[targetInterval].correct += 1;
       sfxAudioService.play("correct");
     } else {
       this.wrongAnswers += 1;
       this.wrongGuessInterval = guessedInterval;
+      localStat[targetInterval].wrong += 1;
       sfxAudioService.play("wrong");
     }
+    statsDataService.saveSessionStats(localStat);
 
     this.correctGuessInterval = currentQuestion!.targetInterval.interval;
 

@@ -18,9 +18,9 @@ export default defineConfig({
 
 			// The manifest tells mobile devices how to install your app
 			manifest: {
-				name: 'Music Theory Tools',
-				short_name: 'MusicTools',
-				description: 'Interactive tools for chord progressions, scales, and ear training.',
+				name: 'Tone Tools',
+				short_name: 'ToneTools',
+				description: 'Various tools for music theory topics.',
 				theme_color: '#2b7fff',
 				background_color: '#fff',
 				display: 'standalone',

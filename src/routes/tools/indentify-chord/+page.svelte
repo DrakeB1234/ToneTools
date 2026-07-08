@@ -41,7 +41,7 @@
 </script>
 
 <svelte:head>
-  <title>Identify Chord | Music App</title>
+  <title>Identify Chord | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>
