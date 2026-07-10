@@ -27,7 +27,15 @@ export const exercisesData: DataEntry[] = [
     urlName: "interval-ear-training",
     color: "violet",
     icon: "book"
-  }
+  },
+  {
+    name: "Sight Reading",
+    description: "Play the corresponding note shown on the staff, customize the exercise to match your skill level!",
+    href: "/exercises/sight-reading",
+    urlName: "sight-reading",
+    color: "green",
+    icon: "musicNote"
+  },
 ];
 
 export const toolsData: DataEntry[] = [

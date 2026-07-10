@@ -12,7 +12,7 @@
 </script>
 
 <InteractiveElement variant="card" {href}>
-  <div class="lay-row">
+  <div class="lay-col">
     <div
       class="icon-container"
       style="background-color: var(--color-bg-addon-{color});"
@@ -31,8 +31,8 @@
 </InteractiveElement>
 
 <style>
-  .lay-row {
-    gap: var(--space-16);
+  .lay-col {
+    min-width: 200px;
   }
   .text-container {
     flex: 1;

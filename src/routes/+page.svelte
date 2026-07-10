@@ -5,7 +5,12 @@
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { exercisesData, toolsData } from "$lib/data/appData";
 
-  const lastUsedItems = [exercisesData[0], toolsData[0], toolsData[1]];
+  const lastUsedItems = [
+    exercisesData[0],
+    toolsData[0],
+    toolsData[1],
+    exercisesData[1],
+  ];
 </script>
 
 <svelte:head>
@@ -16,10 +21,10 @@
   <main>
     <HeroCard />
 
-    <section>
+    <section class="space-above-large">
       <h3>Last Used</h3>
 
-      <div class="lay-col space-above-small">
+      <div class="last-used lay-row space-above-base">
         {#each lastUsedItems as item}
           <LastUsedCard
             title={item.name}
@@ -32,10 +37,28 @@
       </div>
     </section>
 
-    <section>
+    <hr class="space-above-base" />
+
+    <section class="space-above-large">
+      <h3>Exercises</h3>
+
+      <div class="lay-grid-cards space-above-base">
+        {#each exercisesData as item}
+          <ToolCard
+            title={item.name}
+            description={item.description}
+            href={item.href}
+            color={item.color}
+            icon={item.icon}
+          />
+        {/each}
+      </div>
+    </section>
+
+    <section class="space-above-large">
       <h3>Tools</h3>
 
-      <div class="lay-grid-cards space-above-small">
+      <div class="lay-grid-cards space-above-base">
         {#each toolsData as item}
           <ToolCard
             title={item.name}
@@ -56,7 +79,8 @@
     padding: var(--app-padding);
   }
 
-  section {
-    margin-top: var(--space-36);
+  .last-used {
+    padding-bottom: var(--space-8);
+    overflow-x: auto;
   }
 </style>

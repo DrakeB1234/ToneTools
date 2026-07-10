@@ -1,0 +1,219 @@
+<script lang="ts">
+  import { goto } from "$app/navigation";
+  import Icon from "$lib/components/Icons/Icon.svelte";
+  import Modal from "$lib/components/Modal/Modal.svelte";
+  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
+  import Button from "$lib/components/UI/Button.svelte";
+  import Input from "$lib/components/UI/Input.svelte";
+  import Label from "$lib/components/UI/Label.svelte";
+  import Select from "$lib/components/UI/Select.svelte";
+  import Wrapper from "$lib/components/Wrapper.svelte";
+  import { convertNoteNameToMidi } from "$lib/helpers/musicTheory";
+  import {
+    defaultConfig,
+    StaffTypeNoteRanges,
+    validateNoteRange,
+    type ConfigOptions,
+    type NoteRange,
+  } from "./helpers";
+  import NoteRangeModal from "./NoteRangeModal.svelte";
+
+  let configOptions: ConfigOptions = $state(defaultConfig);
+  let currentStaffTypeNoteRange = $derived(
+    StaffTypeNoteRanges[configOptions.clef],
+  );
+  let isNoteRangeModalOpen = $state(false);
+
+  function handleClefChange() {
+    const currentLowMidi = convertNoteNameToMidi(configOptions.noteRange.low);
+    const currentHighMidi = convertNoteNameToMidi(configOptions.noteRange.high);
+    const staffLowMidi = convertNoteNameToMidi(currentStaffTypeNoteRange.low);
+    const staffHighMidi = convertNoteNameToMidi(currentStaffTypeNoteRange.high);
+    if (!currentLowMidi || !currentHighMidi || !staffLowMidi || !staffHighMidi)
+      return;
+
+    if (currentLowMidi < staffLowMidi) {
+      configOptions.noteRange.low = currentStaffTypeNoteRange.low;
+    }
+    if (currentHighMidi > staffHighMidi) {
+      configOptions.noteRange.high = currentStaffTypeNoteRange.high;
+    }
+  }
+
+  function handleAccidentalClick(accidental: "n" | "#" | "b") {
+    const currentAccidentals = configOptions.allowedAccidentals;
+    if (currentAccidentals.includes(accidental)) {
+      if (currentAccidentals.length === 1) return;
+      configOptions.allowedAccidentals = currentAccidentals.filter(
+        (a) => a !== accidental,
+      );
+    } else {
+      configOptions.allowedAccidentals = [...currentAccidentals, accidental];
+    }
+  }
+
+  function handleModalFinished(confirmed: boolean, newRange?: NoteRange) {
+    if (confirmed && newRange) {
+      const validatedRange = validateNoteRange(
+        newRange.low,
+        newRange.high,
+        currentStaffTypeNoteRange.low,
+        currentStaffTypeNoteRange.high,
+      );
+      if (!validatedRange) return;
+
+      configOptions = {
+        ...configOptions,
+        noteRange: validatedRange,
+      };
+    }
+    isNoteRangeModalOpen = false;
+  }
+
+  function onStartClick() {
+    const snapshotConfig = $state.snapshot(configOptions);
+
+    goto("/exercises/sight-reading/play", {
+      state: {
+        config: snapshotConfig,
+      },
+    });
+  }
+</script>
+
+<svelte:head>
+  <title>Sight Reading | Tone Tools</title>
+</svelte:head>
+
+<Wrapper>
+  <main>
+    <PageHeaderContainer
+      subText="Exercises"
+      headerText="Sight Reading"
+      fallbackHref="/"
+      useHistory={false}
+    />
+
+    <section class="top-card card">
+      <Button
+        element="a"
+        variant="text"
+        href="/exercises/sight-reading/presets"
+        fullWidth
+        style="justify-content: start;"
+      >
+        <div class="top-card__link lay-row lay-gap-16">
+          <div class="icon-container purple">
+            <Icon icon="stacks" />
+          </div>
+          <div class="lay-col lay-gap-0">
+            <p class="text-heading-3">Presets</p>
+            <p class="text-caption-muted">
+              Choose from pre-made sight reading exercises.
+            </p>
+          </div>
+        </div>
+      </Button>
+    </section>
+
+    <section class="card">
+      <Button onclick={onStartClick}>Start Exercise</Button>
+      <hr class="space-above-base" />
+      <p class="space-above-base">Config</p>
+      <div class="lay-col space-above-base lay-gap-16">
+        <div class="input lay-input-label-col">
+          <Label labelFor="clef">Clef</Label>
+          <Select
+            id="clef"
+            bind:value={configOptions.clef}
+            onchange={handleClefChange}
+            options={[
+              { label: "Grand", value: "grand" },
+              { label: "Treble", value: "treble" },
+              { label: "Bass", value: "bass" },
+            ]}
+          />
+        </div>
+        <div class="input lay-input-label-col">
+          <Label labelFor="timer">Timer</Label>
+          <Input
+            id="timer"
+            type="number"
+            min="1"
+            max="60"
+            placeholder="60"
+            bind:value={configOptions.timer}
+          />
+        </div>
+        <div class="input lay-input-label-col">
+          <p class="text-caption">Note Range</p>
+          <p class="text-heading-3">
+            {configOptions.noteRange.low} - {configOptions.noteRange.high}
+          </p>
+          <Button
+            variant="outlined"
+            class="space-above-small"
+            onclick={() => (isNoteRangeModalOpen = true)}>Set Note Range</Button
+          >
+        </div>
+
+        <div class="lay-input-label-col">
+          <p class="text-caption">Accidentals</p>
+          <div class="lay-row">
+            <Button
+              variant="outlined"
+              state={configOptions.allowedAccidentals.includes("n")
+                ? "on"
+                : "off"}
+              onclick={() => handleAccidentalClick("n")}>n</Button
+            >
+            <Button
+              variant="outlined"
+              state={configOptions.allowedAccidentals.includes("#")
+                ? "on"
+                : "off"}
+              onclick={() => handleAccidentalClick("#")}>#</Button
+            >
+            <Button
+              variant="outlined"
+              state={configOptions.allowedAccidentals.includes("b")
+                ? "on"
+                : "off"}
+              onclick={() => handleAccidentalClick("b")}>b</Button
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Wrapper>
+
+<Modal bind:isOpen={isNoteRangeModalOpen}>
+  <NoteRangeModal
+    currentRange={configOptions.noteRange}
+    currentStaffType={configOptions.clef}
+    {currentStaffTypeNoteRange}
+    onResponse={handleModalFinished}
+  />
+</Modal>
+
+<style>
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+
+    width: 100%;
+    padding: var(--app-padding);
+  }
+  .top-card {
+    padding: 0;
+    overflow: hidden;
+  }
+  .top-card__link {
+    padding: var(--space-8);
+  }
+  .input {
+    max-width: 250px;
+  }
+</style>

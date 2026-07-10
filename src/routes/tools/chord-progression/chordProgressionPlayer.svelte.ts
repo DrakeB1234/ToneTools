@@ -16,7 +16,7 @@ import {
   resolveMelodyTones,
   applySmartOmission,
 } from "./chordProgressionHelpers";
-import { convertNoteNameToObj, findChordInversionFromNotes, getFullNoteNameFromObj, incrementNoteNameByInterval } from "$lib/helpers/musicTheory";
+import { convertNoteNameToObj, getFullNoteNameFromObj, incrementNoteNameByInterval } from "$lib/helpers/musicTheory";
 import { keyNamesFlatted } from "$lib/helpers/musicTheoryConstants";
 
 export class ProgressionPlayer {

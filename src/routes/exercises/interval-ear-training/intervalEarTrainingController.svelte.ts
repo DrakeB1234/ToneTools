@@ -8,7 +8,6 @@ import type { IntervalEarConfig } from "./intervalEarTrainingHelpers";
 import { statsDataService, type IntervalEarTrainingStats } from "$lib/data/intervalEarTrainingDataService";
 
 type ExerciseState = "idle" | "playing" | "answered" | "finished";
-type UIAnswerState = "none" | "correct" | "wrong";
 
 type CurrentQuestion = {
   rootNote: GeneralNote;
@@ -232,7 +231,7 @@ export class IntervalEarTrainingController {
       staffType: 'grand',
       staffColor: 'var(--color-on-bg-surface)',
       staffBackgroundColor: 'var(--color-bg-surface-1)',
-      width: 200,
+      width: 220,
       noteStartX: 20,
       scale: 1.2,
       spaceAbove: 2,

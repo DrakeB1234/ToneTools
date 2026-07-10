@@ -142,10 +142,12 @@ svg {
 
   --color-bg-danger: var(--palette-red-500);
   --color-bg-danger-active: var(--palette-red-600);
+  --color-bg-danger-subtle: var(--palette-red-50);
   --color-bg-tint-danger: var(--palette-red-50);
   --color-on-bg-danger: var(--palette-white);
 
-  --color-bg-success: oklch(66% 0.24 143);
+  --color-bg-success: oklch(60% 0.24 143);
+  --color-bg-success-subtle: oklch(97% 0.03 143);
 
   --color-bg-dark: var(--palette-slate-900);
 
@@ -213,7 +215,10 @@ svg {
   --color-bg-secondary-active: oklch(34% 0.035 260);
   --color-on-bg-secondary: var(--palette-white);
 
+  --color-bg-danger: oklch(66% 0.22 25.331);
   --color-bg-tint-danger: oklch(38% 0.025 26);
+
+  --color-bg-success: oklch(80% 0.26 143);
 
   --color-bg-addon-green-contrast: oklch(80% 0.5 143);
   --color-bg-addon-red-contrast: oklch(80% 0.5 25);

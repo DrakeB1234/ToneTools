@@ -42,7 +42,7 @@ export function convertNoteNameToObj(noteName: string): GeneralNote {
 
   return {
     letter: tonalNoteObj.letter,
-    accidental: tonalNoteObj.acc,
+    accidental: tonalNoteObj.acc !== "" ? tonalNoteObj.acc : null,
     octave: tonalNoteObj.oct ?? null,
   }
 }
@@ -57,7 +57,7 @@ export function convertNoteNameToChroma(note: string): number | null {
 }
 
 export function getFullNoteNameFromObj(note: GeneralNote) {
-  return `${note.letter}${note.accidental}${note.octave ?? ""}`;
+  return `${note.letter}${note.accidental ?? ""}${note.octave ?? ""}`;
 }
 
 export function simplifyNoteNames(noteNames: string[]) {
@@ -79,6 +79,26 @@ export function getLetterFromNoteName(noteName: string) {
 export function getAccidentalFromNoteName(noteName: string) {
   const accidental = Note.get(noteName).acc;
   return accidental !== "" ? accidental : "n";
+}
+
+export function stepNoteName(noteName: string, direction: number) {
+  const noteObj = Note.get(noteName);
+  if (noteObj.empty) return noteName;
+
+  let nextStep = noteObj.step + direction;
+  let nextOctave = noteObj.oct;
+
+  if (nextStep > 6) {
+    nextStep = 0;
+    if (nextOctave !== undefined) nextOctave += direction;
+  }
+  else if (nextStep < 0) {
+    nextStep = 6;
+    if (nextOctave !== undefined) nextOctave += direction;
+  };
+
+  const nextLetter = naturalNoteNames[nextStep];
+  return nextOctave !== undefined ? `${nextLetter}${nextOctave}` : nextLetter;
 }
 
 // Chords

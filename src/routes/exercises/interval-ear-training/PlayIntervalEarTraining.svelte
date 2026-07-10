@@ -9,6 +9,7 @@
   import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
   import Icon from "$lib/components/Icons/Icon.svelte";
   import ConfirmationModalCard from "$lib/components/Modal/ConfirmationModalCard.svelte";
+  import ExerciseLayout from "$lib/components/Exercises/ExerciseLayout.svelte";
 
   type Props = {
     config: IntervalEarConfig;
@@ -53,32 +54,12 @@
 </script>
 
 <main>
-  <Button variant="outlined" onclick={handleExitPressed}>Exit</Button>
-
-  <div class="game-container">
-    <div class="message-container">
-      <p>{exerciseController.currentMessage}</p>
-    </div>
-    <div class="staff-container" bind:this={staffElement}></div>
-  </div>
-
-  <div class="score-container">
-    <div class="score-item green">
-      <p class="text-caption">Correct</p>
-      <p class="text-heading-2">{exerciseController.correctAnswers}</p>
-    </div>
-    <div class="score-item">
-      <p class="text-caption">Question</p>
-      <p class="text-heading-2">
-        {exerciseController.questionNumber}/{config.questionsAmount}
-      </p>
-    </div>
-    <div class="score-item red">
-      <p class="text-caption">Wrong</p>
-      <p class="text-heading-2">{exerciseController.wrongAnswers}</p>
-    </div>
-  </div>
-
+  <ExerciseLayout
+    handleExitClick={handleExitPressed}
+    gameContainerMessage={exerciseController.currentMessage}
+    gameContainerSnippet={gameContainer}
+    scoreContainerSnippet={scoreContainer}
+  />
   <div class="input-wrapper">
     {#each exerciseController.selectedIntervals as intervalObj (intervalObj.interval)}
       <InteractiveElement
@@ -100,7 +81,6 @@
       </InteractiveElement>
     {/each}
   </div>
-
   <div class="bottom-container lay-row">
     <Button
       variant="secondary"
@@ -121,6 +101,26 @@
   </div>
 </main>
 
+{#snippet gameContainer()}
+  <div class="staff-container" bind:this={staffElement}></div>
+{/snippet}
+{#snippet scoreContainer()}
+  <div class="score-item green">
+    <p class="text-caption">Correct</p>
+    <p class="text-heading-2">{exerciseController.correctAnswers}</p>
+  </div>
+  <div class="score-item">
+    <p class="text-caption">Question</p>
+    <p class="text-heading-2">
+      {exerciseController.questionNumber}/{config.questionsAmount}
+    </p>
+  </div>
+  <div class="score-item red">
+    <p class="text-caption">Wrong</p>
+    <p class="text-heading-2">{exerciseController.wrongAnswers}</p>
+  </div>
+{/snippet}
+
 <Modal bind:isOpen={isExitModalOpen}>
   <ConfirmationModalCard
     title="Exit Exercise"
@@ -135,49 +135,10 @@
     padding: var(--space-8) var(--space-12);
   }
 
-  .game-container {
-    margin-top: var(--space-8);
-
-    border: 1px solid var(--color-border-subtle);
-    background-color: var(--color-bg-surface-1);
-  }
-
   .staff-container {
     display: flex;
     justify-content: center;
     padding-block: var(--space-12);
-  }
-
-  .message-container {
-    display: grid;
-    place-items: center;
-
-    padding-top: var(--space-4);
-  }
-
-  .score-container {
-    display: flex;
-    justify-content: space-between;
-
-    padding-top: var(--space-4);
-    padding-bottom: var(--space-16);
-  }
-
-  .score-item {
-    text-align: center;
-  }
-  .score-item:first-child {
-    text-align: left;
-  }
-  .score-item:last-child {
-    text-align: right;
-  }
-
-  .green p {
-    color: var(--color-bg-addon-green);
-  }
-  .red p {
-    color: var(--color-bg-danger);
   }
 
   .input-wrapper {

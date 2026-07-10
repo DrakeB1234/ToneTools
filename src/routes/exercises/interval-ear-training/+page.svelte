@@ -63,41 +63,46 @@
       useHistory={false}
     />
 
-    <section class="card links-card">
-      <InteractiveElement
+    <section class="top-card card">
+      <Button
+        element="a"
         variant="text"
         href="/exercises/interval-ear-training/guided"
-        style="padding: var(--space-12); padding-bottom: var(--space-16);"
+        fullWidth
+        style="justify-content: start;"
       >
-        <div class="lay-grid-center link-container">
+        <div class="top-card__link lay-row lay-gap-16">
           <div class="icon-container purple">
             <Icon icon="book" />
           </div>
-          <div class="text-container">
-            <h2 class="text-heading-3">Guided</h2>
+          <div class="lay-col lay-gap-0">
+            <p class="text-heading-3">Guided</p>
             <p class="text-caption-muted">
               Learn intervals through a guided set of exercises.
             </p>
           </div>
         </div>
-      </InteractiveElement>
-      <InteractiveElement
+      </Button>
+      <hr />
+      <Button
+        element="a"
         variant="text"
         href="/exercises/interval-ear-training/stats"
-        style="padding: var(--space-12); padding-bottom: var(--space-16);"
+        fullWidth
+        style="justify-content: start;"
       >
-        <div class="lay-grid-center link-container">
+        <div class="top-card__link lay-row lay-gap-16">
           <div class="icon-container green">
             <Icon icon="leaderBoard" />
           </div>
-          <div class="text-container">
-            <h2 class="text-heading-3">Stats</h2>
+          <div class="lay-col lay-gap-0">
+            <p class="text-heading-3">Stats</p>
             <p class="text-caption-muted">
-              See how well you can identify each type of interval
+              Check out how well you can indentify each interval.
             </p>
           </div>
         </div>
-      </InteractiveElement>
+      </Button>
     </section>
 
     <section class="card">
@@ -145,22 +150,12 @@
     width: 100%;
     padding: var(--app-padding);
   }
-
-  .links-card {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: stretch;
-    grid-auto-rows: 1fr;
-    gap: var(--space-16) var(--space-4);
-
+  .top-card {
     padding: 0;
+    overflow: hidden;
   }
-  .link-container {
-    flex: 1;
-  }
-  .text-container {
-    margin-top: var(--space-8);
-    text-align: center;
+  .top-card__link {
+    padding: var(--space-8);
   }
 
   .start-container {
