@@ -1,7 +1,7 @@
 <script lang="ts">
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import RootNoteInput from "$lib/components/RootNoteInput.svelte";
-  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
+  import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { encodeUrlScale } from "$lib/helpers/helpers";
   import { getAllModes } from "$lib/helpers/musicTheory";
@@ -34,14 +34,17 @@
 
       <div class="scales-container lay-col space-above-large">
         {#each scales as scale (scale)}
-          <InteractiveElement
+          <Button
+            element="a"
             variant="outlined"
-            style="padding: var(--space-12)"
             href={encodeUrlScale(fullNote, scale)}
+            class="lay-row--start-justify"
           >
-            <p>{fullNote}&nbsp;{scale}</p>
-            <p class="text-body-muted">{scale}</p>
-          </InteractiveElement>
+            <div class="scale-button lay-col lay-gap-0">
+              <p>{fullNote}&nbsp;{scale}</p>
+              <p class="text-body-muted">{scale}</p>
+            </div>
+          </Button>
         {/each}
       </div>
     </section>
@@ -56,5 +59,9 @@
 
     width: 100%;
     padding: var(--app-padding);
+  }
+  .scale-button {
+    align-items: start;
+    padding: var(--space-4);
   }
 </style>

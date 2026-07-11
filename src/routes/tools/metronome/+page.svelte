@@ -3,7 +3,6 @@
   import Icon from "$lib/components/Icons/Icon.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import Button from "$lib/components/UI/Button.svelte";
-  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import Label from "$lib/components/UI/Label.svelte";
   import Select from "$lib/components/UI/Select.svelte";
   import Slider from "$lib/components/UI/Slider.svelte";
@@ -181,7 +180,7 @@
 
       <div class="play-input-container lay-row space-above-large">
         <div class="tap-button-wrapper">
-          <InteractiveElement
+          <Button
             variant="text"
             onclick={handleTap}
             fullWidth
@@ -189,7 +188,7 @@
             aria-label="Click repeatedly to estimate tapped bpm"
           >
             <p>TAP</p>
-          </InteractiveElement>
+          </Button>
         </div>
         <div class="lay-grid-center">
           <Button size="icon-base" circle onclick={handlePlayPressed}>
@@ -265,7 +264,7 @@
     max-width: 350px;
     margin-inline: auto;
 
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-surface-2);
     border-radius: var(--radius-base);
   }
   .play-input-container > div {

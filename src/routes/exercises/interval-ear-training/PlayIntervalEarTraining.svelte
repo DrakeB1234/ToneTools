@@ -1,7 +1,6 @@
 <script lang="ts">
   import Modal from "$lib/components/Modal/Modal.svelte";
   import Button from "$lib/components/UI/Button.svelte";
-  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import { onDestroy, onMount } from "svelte";
   import { IntervalEarTrainingController } from "./intervalEarTrainingController.svelte";
   import type { IntervalEarConfig } from "./intervalEarTrainingHelpers";
@@ -62,10 +61,9 @@
   />
   <div class="input-wrapper">
     {#each exerciseController.selectedIntervals as intervalObj (intervalObj.interval)}
-      <InteractiveElement
+      <Button
         variant="text"
         style="padding: 0;"
-        fullWidth
         onclick={() =>
           exerciseController.handleIntervalButtonClick(intervalObj.interval)}
       >
@@ -78,7 +76,7 @@
         >
           <p>{intervalObj.name}</p>
         </div>
-      </InteractiveElement>
+      </Button>
     {/each}
   </div>
   <div class="bottom-container lay-row">

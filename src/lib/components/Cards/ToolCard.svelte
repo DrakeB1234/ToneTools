@@ -1,6 +1,6 @@
 <script>
   import Icon from "../Icons/Icon.svelte";
-  import InteractiveElement from "../UI/InteractiveElement.svelte";
+  import Button from "../UI/Button.svelte";
 
   let {
     title = "Title",
@@ -11,7 +11,7 @@
   } = $props();
 </script>
 
-<InteractiveElement variant="card" {href}>
+<Button element="a" variant="text" class="card-button" {href}>
   <div class="lay-col">
     <div
       class="icon-container"
@@ -30,9 +30,15 @@
       <Icon icon="arrowRightAlt" color="var(--color-on-bg-surface-subtle)" />
     </div>
   </div>
-</InteractiveElement>
+</Button>
 
 <style>
+  :global(.btn.card-button) {
+    padding: var(--space-16);
+    background-color: var(--color-bg-surface-1);
+    border: 1px solid var(--color-border-subtle);
+    box-shadow: var(--shadow-1);
+  }
   .lay-col {
     height: 100%;
   }

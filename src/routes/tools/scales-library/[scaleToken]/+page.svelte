@@ -5,7 +5,6 @@
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import type { PageProps } from "./$types";
   import PianoSnapshot from "$lib/components/Piano/PianoSnapshot.svelte";
-  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import Icon from "$lib/components/Icons/Icon.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import Label from "$lib/components/UI/Label.svelte";
@@ -119,7 +118,7 @@
 
       <div class="scale-notes-container lay-row">
         {#each data.scaleNotes as note, index (note)}
-          {@const rawNote = note.letter + note.accidental}
+          {@const rawNote = note.letter + (note.accidental ?? "")}
           {@const displayNote = isSimplifyNotesSelected
             ? simplifyNoteName(rawNote)
             : rawNote}
@@ -181,17 +180,18 @@
 
       <div class="lay-col space-above-small">
         {#each data.triads as triadObj, index (triadObj.name)}
-          <InteractiveElement
+          <Button
             variant="outlined"
             onclick={() => handlePlayChord(index)}
+            class="lay-row--start-justify"
           >
-            <div class="chord-button lay-row">
+            <div class="chord-button lay-row lay-gap-16">
               <h3 class="pill primary">{data.numerals[index]}</h3>
               <div class="text-container">
                 <h3>{triadObj.tonic + triadObj.symbol}</h3>
                 <div class="lay-row">
                   {#each triadObj.notes as note, i (note)}
-                    {@const rawNote = note.letter + note.accidental}
+                    {@const rawNote = note.letter + (note.accidental ?? "")}
                     {@const displayNote = isSimplifyNotesSelected
                       ? simplifyNoteName(rawNote)
                       : rawNote}
@@ -202,7 +202,7 @@
                 </div>
               </div>
             </div>
-          </InteractiveElement>
+          </Button>
         {/each}
       </div>
     </section>
@@ -250,11 +250,7 @@
   }
 
   .chord-button {
-    display: flex;
-    align-items: center;
-
-    gap: var(--space-16);
-
+    padding: var(--space-8);
     text-align: left;
   }
 

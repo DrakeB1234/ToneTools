@@ -121,7 +121,7 @@ svg {
   --color-bg-page: var(--palette-slate-100);
   --color-bg-page-active: var(--palette-slate-200);
   --color-bg-surface-1: var(--custom-slate-25);
-  --color-bg-surface-1-active: oklch(95.5% 0.01 256);
+  --color-bg-surface-1-active: oklch(94% 0.01 256);
   --color-bg-surface-2: var(--palette-slate-100);
   --color-bg-surface-2-active: var(--palette-slate-200);
   --color-on-bg-surface: var(--palette-slate-900);
@@ -447,6 +447,10 @@ span,
 
 .lay-row--start-justify {
   justify-content: start !important;
+}
+
+.lay-col--start-justify {
+  align-items: start !important;
 }
 
 .lay-col {

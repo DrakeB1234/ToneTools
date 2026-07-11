@@ -7,7 +7,6 @@
   import PianoSnapshot from "$lib/components/Piano/PianoSnapshot.svelte";
   import Icon from "$lib/components/Icons/Icon.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
-  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
   import {
     getFullNoteNameFromObj,
     simplifyNoteName,
@@ -120,7 +119,7 @@
 
       <div class="note-buttons-container space-above-base">
         {#each chordObj.notes as note, index (note)}
-          {@const rawNote = note.letter + note.accidental}
+          {@const rawNote = note.letter + (note.accidental ?? "")}
           {@const displayNote = isSimplifyNotesSelected
             ? simplifyNoteName(rawNote)
             : rawNote}
@@ -162,22 +161,21 @@
         <h3 class="space-above-base">Inversions</h3>
         <div class="lay-col space-above-xsmall">
           {#each chordInversions as inversion, index (index)}
-            <InteractiveElement
+            <Button
               variant="outlined"
               state={currentInversionSelected === index ? "on" : "off"}
               onclick={() => handleInversionPressed(index)}
+              class="lay-row--start-justify"
             >
-              <div class="lay-row">
-                <div>
-                  <p class="inversion-pill pill primary">
-                    {inversion.inversionName}
-                  </p>
-                </div>
-                <div>
+              <div class="inversion-button lay-row lay-gap-16">
+                <p class="inversion-pill pill primary">
+                  {inversion.inversionName}
+                </p>
+                <div class="lay-col lay-gap-0">
                   <p>{inversion.chord.tonic + inversion.chord.symbol}</p>
-                  <div class="inversion-button-notes lay-row">
+                  <div class="lay-row lay-gap-4">
                     {#each inversion.chord.notes as note}
-                      {@const rawNote = note.letter + note.accidental}
+                      {@const rawNote = note.letter + (note.accidental ?? "")}
                       {@const displayNote = isSimplifyNotesSelected
                         ? simplifyNoteName(rawNote)
                         : rawNote}
@@ -189,7 +187,7 @@
                   </div>
                 </div>
               </div>
-            </InteractiveElement>
+            </Button>
           {/each}
         </div>
       {/if}
@@ -202,13 +200,14 @@
 
       <div class="similar-chords-container">
         {#each similarChords as chord}
-          <InteractiveElement
-            variant="card"
+          <Button
+            variant="text"
             href={encodeUrlChord(chord.tonic!, chord.symbol)}
+            class="similar-chord-button lay-col lay-col--start-justify"
           >
             <p>{chord.tonic + chord.symbol}</p>
             <p class="text-body-muted">{chord.name}</p>
-          </InteractiveElement>
+          </Button>
         {/each}
       </div>
     </section>
@@ -260,8 +259,8 @@
     margin-left: auto;
   }
 
-  .inversion-button-notes {
-    gap: var(--space-4);
+  .inversion-button {
+    padding-block: var(--space-8);
   }
 
   .inversion-pill {
@@ -273,5 +272,13 @@
     gap: var(--space-8);
 
     margin-top: var(--space-16);
+  }
+
+  :global(.btn.similar-chord-button) {
+    padding: var(--space-16);
+    background-color: var(--color-bg-surface-1);
+    border: 1px solid var(--color-border-subtle);
+    gap: var(--space-0);
+    box-shadow: var(--shadow-1);
   }
 </style>

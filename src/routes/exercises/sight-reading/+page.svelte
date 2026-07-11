@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import IconDetailCardButton from "$lib/components/Cards/IconDetailCardButton.svelte";
   import Icon from "$lib/components/Icons/Icon.svelte";
   import Modal from "$lib/components/Modal/Modal.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
@@ -95,25 +96,13 @@
     />
 
     <section class="top-card card">
-      <Button
-        element="a"
-        variant="text"
+      <IconDetailCardButton
+        icon="stacks"
+        color="purple"
+        title="Presets"
+        description="Choose from pre-made sight reading exercises."
         href="/exercises/sight-reading/presets"
-        fullWidth
-        style="justify-content: start;"
-      >
-        <div class="top-card__link lay-row lay-gap-16">
-          <div class="icon-container purple">
-            <Icon icon="stacks" />
-          </div>
-          <div class="lay-col lay-gap-0">
-            <p class="text-heading-3">Presets</p>
-            <p class="text-caption-muted">
-              Choose from pre-made sight reading exercises.
-            </p>
-          </div>
-        </div>
-      </Button>
+      />
     </section>
 
     <section class="card">
@@ -209,9 +198,6 @@
   .top-card {
     padding: 0;
     overflow: hidden;
-  }
-  .top-card__link {
-    padding: var(--space-8);
   }
   .input {
     max-width: 250px;

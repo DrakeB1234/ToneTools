@@ -6,7 +6,6 @@
   import RootNoteInput from "$lib/components/RootNoteInput.svelte";
   import { encodeUrlChord } from "$lib/helpers/helpers";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
-  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
 
   let inputNote = $state("C");
   let inputAccidental = $state("n");
@@ -56,15 +55,17 @@
 
       <div class="chord-categories-container">
         {#each categoryChords as chord (chord.symbol)}
-          <InteractiveElement
+          <Button
+            element="a"
             variant="outlined"
-            style="padding: var(--space-12)"
             href={encodeUrlChord(fullNote, chord.symbol)}
-            aria-label="Open link to see chord {fullNote + chord.symbol}"
+            class="lay-row--start-justify"
           >
-            <p>{fullNote + chord.symbol}</p>
-            <p class="text-body-muted">{chord.name}</p>
-          </InteractiveElement>
+            <div class="chord-button lay-col lay-gap-0">
+              <p>{fullNote + chord.symbol}</p>
+              <p class="text-body-muted">{chord.name}</p>
+            </div>
+          </Button>
         {/each}
       </div>
     </section>
@@ -103,6 +104,11 @@
     gap: var(--space-8);
 
     margin-top: var(--space-16);
+  }
+
+  .chord-button {
+    align-items: start;
+    padding: var(--space-4);
   }
 
   @media (max-width: 768px) {

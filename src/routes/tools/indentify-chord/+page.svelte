@@ -2,7 +2,7 @@
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import PianoInteractive from "$lib/components/Piano/PianoInteractive.svelte";
-  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
+  import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { encodeUrlChord } from "$lib/helpers/helpers";
   import {
@@ -77,10 +77,10 @@
       <hr />
       <div class="chords-container">
         {#each identifiedChords as chord (chord.tonic + chord.symbol)}
-          <InteractiveElement
-            variant="card"
-            style="border-radius: var(--radius-base);"
+          <Button
+            variant="text"
             href={encodeUrlChord(chord.tonic!, chord.symbol)}
+            class="link-card lay-col lay-col--start-justify"
           >
             <p>{chord.tonic + chord.symbol}</p>
             <div class="notes-container lay-row">
@@ -88,7 +88,7 @@
                 <p class="text-body-muted">{note}</p>
               {/each}
             </div>
-          </InteractiveElement>
+          </Button>
         {:else}
           <div class="empty-container">
             <p class="text-body-muted">No chords found</p>
@@ -136,5 +136,13 @@
     justify-content: center;
 
     padding: var(--space-12) var(--space-16);
+  }
+
+  :global(.btn.link-card) {
+    padding: var(--space-16);
+    background-color: var(--color-bg-surface-1);
+    border: 1px solid var(--color-border-subtle);
+    gap: var(--space-0);
+    box-shadow: var(--shadow-1);
   }
 </style>

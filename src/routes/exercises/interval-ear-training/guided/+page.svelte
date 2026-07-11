@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
-  import InteractiveElement from "$lib/components/UI/InteractiveElement.svelte";
+  import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { earTrainingGuideEntry } from "../intervalEarTrainingHelpers";
 
@@ -34,10 +34,11 @@
       </div>
       <div class="content-container lay-col space-above-small">
         {#each earTrainingGuideEntry as entry, i}
-          <InteractiveElement
+          <Button
             element="button"
             variant="text"
             onclick={() => handleEarEntryClick(i)}
+            class="lay-row--start-justify"
           >
             <div class="lay-row entry-container">
               <div class="entry-number-badge">
@@ -53,7 +54,7 @@
                 <p class="space-above-xsmall">{entry.description}</p>
               </div>
             </div>
-          </InteractiveElement>
+          </Button>
         {/each}
       </div>
     </section>
@@ -92,6 +93,7 @@
   .entry-container {
     align-items: start;
     gap: var(--space-12);
+    padding-block: var(--space-4);
   }
 
   .entry-number-badge {
