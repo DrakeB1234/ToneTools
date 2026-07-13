@@ -352,6 +352,10 @@ span,
   text-overflow: ellipsis;
 }
 
+.separated-item:not(:first-child)::before {
+  content: "- ";
+}
+
 /* ==== Component Utils ==== */
 .card {
   padding: var(--space-16);

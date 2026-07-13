@@ -7,6 +7,9 @@
   import Button from "./UI/Button.svelte";
 
   let isOpen = $state(false);
+  let isCollapsed = $state(
+    browser ? localStorage.getItem("sidebarCollapsed") === "true" : false,
+  );
   let isDarkMode = $state(
     browser ? document.documentElement.classList.contains("dark") : false,
   );
@@ -17,6 +20,11 @@
 
   function closeSidebar() {
     isOpen = false;
+  }
+
+  function toggleCollapse() {
+    isCollapsed = !isCollapsed;
+    localStorage.setItem("sidebarCollapsed", String(isCollapsed));
   }
 
   function handleToggleLightMode() {
@@ -32,7 +40,12 @@
 
 <header class="lay-row mobile-navbar">
   <a href="/" class="lay-row mobile-logo-container">
-    <img src="/images/logo.svg" alt="Tone Tools Logo" width="32" height="32" />
+    <img
+      src="/icon-192x192.webp"
+      alt="Tone Tools Logo"
+      width="32"
+      height="32"
+    />
     <h1 class="text-heading-2">Tone Tools</h1>
   </a>
   <Button
@@ -49,10 +62,10 @@
   <div class="backdrop" onclick={closeSidebar} role="none"></div>
 {/if}
 
-<aside class:open={isOpen}>
+<aside class:open={isOpen} class:collapsed={isCollapsed}>
   <div>
     <div class="lay-row desktop-header">
-      <a href="/" class="logo-container">
+      <a href="/" class="logo-container lay-row">
         <img
           src="/icon-192x192.webp"
           alt="Tone Tools Logo"
@@ -61,10 +74,19 @@
         />
         <h1 class="text-heading-2">Tone Tools</h1>
       </a>
+      <Button
+        variant="text"
+        size="icon-base"
+        onclick={toggleCollapse}
+        aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+      >
+        <Icon icon={isCollapsed ? "leftPanelOpen" : "leftPanelClose"} />
+      </Button>
     </div>
 
     <div class="lay-row mobile-header">
-      <a href="/" class="logo-container">
+      <a href="/" class="logo-container lay-row">
         <img
           src="/icon-192x192.webp"
           alt="Tone Tools Logo"
@@ -82,6 +104,7 @@
         <Icon icon="close" />
       </Button>
     </div>
+    <hr class="space-above-base" />
 
     <nav aria-label="Main Navigation">
       <h3>Exercises</h3>
@@ -92,13 +115,16 @@
               class="nav-link"
               class:active={page.url.pathname.includes(data.urlName)}
               href={data.href}
+              title={data.name}
             >
               <Icon icon={data.icon} />
-              {data.name}
+              <span class="nav-link-text">{data.name}</span>
             </a>
           </li>
         {/each}
       </ul>
+
+      <hr class="space-above-base" />
 
       <h3>Tools</h3>
       <ul class="lay-col space-above-base" role="list">
@@ -108,25 +134,29 @@
               class="nav-link"
               class:active={page.url.pathname.includes(data.urlName)}
               href={data.href}
+              title={data.name}
             >
               <Icon icon={data.icon} />
-              {data.name}
+              <span class="nav-link-text">{data.name}</span>
             </a>
           </li>
         {/each}
       </ul>
     </nav>
 
+    <hr class="space-above-base" />
+
     <div class="light-mode-button-container space-above-large">
       <Button
         variant="text"
         onclick={handleToggleLightMode}
         aria-label="Switch Light/Dark Mode"
+        title={`Switch to ${isDarkMode ? "light mode" : "dark mode"}`}
         fullWidth
         class="lay-row--start-justify"
       >
         <Icon icon={isDarkMode ? "lightMode" : "darkMode"} />
-        <p class="text-truncate">
+        <p class="text-truncate nav-link-text">
           Switch to {isDarkMode ? "light mode" : "dark mode"}
         </p>
       </Button>
@@ -142,7 +172,9 @@
   }
 
   .desktop-header {
+    justify-content: space-between;
     gap: var(--space-12);
+    padding-right: var(--space-8);
   }
 
   aside {
@@ -156,18 +188,16 @@
 
     height: 100dvh;
     width: 25dvw;
-    min-width: 210px;
+    min-width: fit-content;
     max-width: 260px;
     overflow-y: auto;
+    overflow-x: hidden;
 
     border-right: 1px solid var(--color-border-subtle);
     background-color: var(--color-bg-surface-1);
   }
 
   .logo-container {
-    display: flex;
-    align-items: center;
-    gap: var(--space-12);
     padding: var(--space-12);
   }
 
@@ -199,10 +229,10 @@
   a.nav-link.active {
     color: var(--color-on-bg-primary-subtle);
     background-color: var(--color-bg-primary-subtle);
-  }
 
-  .mobile-logo-container {
-    gap: var(--space-16);
+    & span {
+      color: var(--color-on-bg-primary-subtle);
+    }
   }
 
   .mobile-navbar {
@@ -242,15 +272,10 @@
       left: 0;
       bottom: 0;
 
-      width: 80dvw;
+      width: 70dvw;
       max-width: 320px;
 
       transform: translateX(-100%);
-      transition: transform 0.3s ease;
-    }
-
-    aside.open {
-      transform: translateX(0);
     }
 
     .backdrop {
@@ -261,6 +286,34 @@
       z-index: 10;
 
       background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    aside.open {
+      transform: translateX(0);
+    }
+  }
+
+  @media (min-width: 769px) {
+    aside.collapsed {
+      width: 68px;
+      min-width: fit-content;
+    }
+
+    aside.collapsed .desktop-header {
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--space-8);
+      padding-right: 0;
+    }
+
+    aside.collapsed h3,
+    aside.collapsed h1,
+    aside.collapsed .nav-link-text {
+      display: none;
+    }
+
+    aside.collapsed a.nav-link {
+      justify-content: center;
     }
   }
 </style>

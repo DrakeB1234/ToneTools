@@ -68,6 +68,8 @@ export function simplifyNoteNames(noteNames: string[]) {
 
 export function simplifyNoteName(noteName: string) { return Note.simplify(noteName) };
 
+export function sortNoteNames(noteNames: string[]) { return Note.sortedNames(noteNames) };
+
 export function getPitchClassFromNoteName(noteName: string) {
   return Note.pitchClass(noteName);
 }

@@ -10,7 +10,13 @@
       | "text"
       | "destructive"
       | "destructive-outlined";
-    size?: "small" | "base" | "icon-small" | "icon-base" | "icon-large";
+    size?:
+      | "small"
+      | "base"
+      | "large"
+      | "icon-small"
+      | "icon-base"
+      | "icon-large";
     state?: "on" | "off";
     fullWidth?: boolean;
     fullHeight?: boolean;
@@ -75,6 +81,9 @@
     opacity: 0.7;
   }
 
+  .size-large {
+    padding: var(--space-12) var(--space-16);
+  }
   .size-base {
     padding: var(--space-8) var(--space-12);
   }

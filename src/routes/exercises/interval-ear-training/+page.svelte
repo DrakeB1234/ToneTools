@@ -86,7 +86,7 @@
         color="green"
         title="Stats"
         description="Check out how well you can indentify each interval."
-        href="/exercises/interval-ear-training/guided"
+        href="/exercises/interval-ear-training/stats"
       />
     </section>
 

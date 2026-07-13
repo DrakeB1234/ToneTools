@@ -117,7 +117,7 @@
 
       <hr class="divider space-above-base" />
 
-      <div class="note-buttons-container space-above-base">
+      <div class="note-buttons-container lay-row space-above-base">
         {#each chordObj.notes as note, index (note)}
           {@const rawNote = note.letter + (note.accidental ?? "")}
           {@const displayNote = isSimplifyNotesSelected
@@ -142,9 +142,9 @@
 
       <div class="card-high">
         <h3>Intervals</h3>
-        <div class="lay-row">
+        <div class="lay-row lay-gap-4">
           {#each chordIntervals as interval (interval)}
-            <p class="text-body-muted">{interval}</p>
+            <p class="separated-item text-body-muted">{interval}</p>
           {/each}
         </div>
         <h3 class="space-above-base">
@@ -171,16 +171,16 @@
                 <p class="inversion-pill pill primary">
                   {inversion.inversionName}
                 </p>
-                <div class="lay-col lay-gap-0">
+                <div class="lay-col lay-col--start-justify lay-gap-0">
                   <p>{inversion.chord.tonic + inversion.chord.symbol}</p>
-                  <div class="lay-row lay-gap-4">
+                  <div class="lay-row lay-gap-0">
                     {#each inversion.chord.notes as note}
                       {@const rawNote = note.letter + (note.accidental ?? "")}
                       {@const displayNote = isSimplifyNotesSelected
                         ? simplifyNoteName(rawNote)
                         : rawNote}
 
-                      <p class="text-body-muted">
+                      <p class="separated-item text-body-muted">
                         {displayNote}&nbsp;
                       </p>
                     {/each}
@@ -238,8 +238,6 @@
   }
 
   .note-buttons-container {
-    display: flex;
-    gap: var(--space-4);
     flex-wrap: wrap;
   }
 
@@ -251,7 +249,6 @@
     margin-right: calc(-1 * var(--space-16));
 
     margin-block: var(--space-24);
-    scrollbar-color: var(--color-border) var(--color-bg-secondary);
   }
 
   .simple-toggle-container {

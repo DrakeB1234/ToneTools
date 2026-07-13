@@ -77,18 +77,20 @@
   <div class="input lay-row space-above-base">
     <Button
       variant="outlined"
+      size="large"
       state={activeInputAccidental === "#" ? "on" : "off"}
       onclick={() => handleAccidentalInput("#")}>#</Button
     >
     <Button
       variant="outlined"
+      size="large"
       state={activeInputAccidental === "b" ? "on" : "off"}
       onclick={() => handleAccidentalInput("b")}>b</Button
     >
   </div>
   <div class="input lay-row space-above-small">
     {#each naturalNoteNames as note}
-      <Button variant="outlined" onclick={() => handleInput(note)}
+      <Button variant="outlined" size="large" onclick={() => handleInput(note)}
         >{note}</Button
       >
     {/each}

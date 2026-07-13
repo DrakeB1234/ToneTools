@@ -146,25 +146,22 @@
 
       <div class="card-high">
         <h3 class="text-heading-3">Numerals</h3>
-        <p class="space-above-small">
-          {#each data.numerals as note, i (note)}
-            {note}
-            {#if i < data.numerals.length - 1}
-              {" - "}
-            {/if}
+        <div class="space-above-small lay-row lay-gap-4">
+          {#each data.numerals as note (note)}
+            <p class="separated-item">{note}</p>
           {/each}
-        </p>
+        </div>
 
         <hr class="divider" />
 
         <h3 class="text-heading-3">
           Formula <span class="text-caption">(relative to major)</span>
         </h3>
-        <p class="space-above-small">
+        <div class="space-above-small lay-row lay-gap-4">
           {#each data.formula as note (note)}
-            {note}&nbsp;&nbsp;
+            <p class="separated-item">{note}</p>
           {/each}
-        </p>
+        </div>
 
         <hr class="divider" />
         <h3 class="text-heading-3">Relative Modes</h3>
@@ -195,7 +192,7 @@
                     {@const displayNote = isSimplifyNotesSelected
                       ? simplifyNoteName(rawNote)
                       : rawNote}
-                    <p class="text-caption-muted">
+                    <p class="separated-item text-body-muted">
                       {displayNote}
                     </p>
                   {/each}
@@ -241,6 +238,9 @@
   .piano-roll-container {
     width: 100%;
     padding-bottom: var(--space-4);
+
+    margin-left: calc(-1 * var(--space-16));
+    margin-right: calc(-1 * var(--space-16));
 
     overflow-x: auto;
   }

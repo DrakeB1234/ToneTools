@@ -1,6 +1,7 @@
 import type { IconType } from "$lib/components/Icons/Icon.svelte";
 import DAW from "$lib/components/Icons/DAW.svelte";
 import Metronome from "$lib/components/Icons/Metronome.svelte";
+import Scale from "$lib/components/Icons/Scale.svelte";
 
 interface DataEntry {
   name: string;
@@ -35,6 +36,14 @@ export const exercisesData: DataEntry[] = [
     urlName: "sight-reading",
     color: "green",
     icon: "musicNote"
+  },
+  {
+    name: "Scale Companion",
+    description: "Companion for your daily practicing of scales, featuring midi detection, built-in metronome, and more!",
+    href: "/exercises",
+    urlName: "scale-companion",
+    color: "purple",
+    icon: Scale
   },
 ];
 

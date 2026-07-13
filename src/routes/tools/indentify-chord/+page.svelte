@@ -9,6 +9,7 @@
     convertMidiToNoteName,
     convertNoteNameToObj,
     detectChordsByNoteNames,
+    sortNoteNames,
   } from "$lib/helpers/musicTheory";
   import { onDestroy, onMount } from "svelte";
 
@@ -26,6 +27,8 @@
 
         pianoAudioService.playNote(convertNoteNameToObj(noteName), "low");
       }
+
+      selectedNotes = sortNoteNames(selectedNotes);
     }
   }
 
@@ -66,7 +69,7 @@
         <p>Selected Notes:</p>
         <div class="notes-container lay-row space-above-small">
           {#each selectedNotes as note}
-            <p>{note}</p>
+            <p class="separated-item">{note}</p>
           {/each}
         </div>
       </div>
@@ -85,7 +88,7 @@
             <p>{chord.tonic + chord.symbol}</p>
             <div class="notes-container lay-row">
               {#each chord.notes as note (note)}
-                <p class="text-body-muted">{note}</p>
+                <p class="separated-item text-body-muted">{note}</p>
               {/each}
             </div>
           </Button>

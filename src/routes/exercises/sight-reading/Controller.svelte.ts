@@ -132,7 +132,7 @@ export class Controller {
 
     if (parsedNote.letter === currentQuestion.letter && parsedNote.accidental === currentQuestion.accidental) {
       this.correctAnswers++;
-      pianoAudioService.playNote(currentQuestion);
+      pianoAudioService.playNote(currentQuestion, "med");
     } else {
       this.wrongAnswers++;
       sfxAudioService.play("wrong");
@@ -148,7 +148,7 @@ export class Controller {
 
     if (parsedNote.letter === currentQuestion.letter && parsedNote.accidental === currentQuestion.accidental && parsedNote.octave === currentQuestion.octave) {
       this.correctAnswers++;
-      pianoAudioService.playNote(currentQuestion);
+      pianoAudioService.playNote(currentQuestion, "med");
     } else {
       this.wrongAnswers++;
       sfxAudioService.play("wrong");
