@@ -23,8 +23,7 @@
 <Wrapper>
   <main>
     <PageHeaderContainer
-      subText="Guide"
-      headerText="Intervals Ear Training"
+      headerText="Guided Intervals"
       fallbackHref="/exercises/interval-ear-training"
     />
 

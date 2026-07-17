@@ -8,7 +8,6 @@
 <Wrapper>
   <main>
     <PageHeaderContainer
-      subText=""
       headerText="Tools"
       fallbackHref="/"
       useHistory={false}

@@ -27,11 +27,7 @@
 
 <Wrapper>
   <main>
-    <PageHeaderContainer
-      subText="Tools"
-      headerText="Chord Library"
-      fallbackHref="/"
-    />
+    <PageHeaderContainer headerText="Chord Library" fallbackHref="/" />
 
     <section class="card">
       <div class="input-group">

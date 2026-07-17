@@ -66,7 +66,6 @@
 <Wrapper>
   <main>
     <PageHeaderContainer
-      subText="Exercises"
       headerText="Intervals Ear Training"
       fallbackHref="/"
       useHistory={false}

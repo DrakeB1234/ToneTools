@@ -21,8 +21,7 @@
 <Wrapper>
   <main>
     <PageHeaderContainer
-      subText="Sight Reading"
-      headerText="Presets"
+      headerText="Presets Sight Reading"
       fallbackHref="/exercises/sight-reading"
       useHistory={false}
     />

@@ -5,7 +5,7 @@
   import Icon from "./Icons/Icon.svelte";
   import Button from "./UI/Button.svelte";
 
-  let { subText, headerText, useHistory = true, fallbackHref = "/" } = $props();
+  let { headerText, useHistory = true, fallbackHref = "/" } = $props();
 
   let hasPreviousPage = $state(false);
 
@@ -25,7 +25,7 @@
   }
 </script>
 
-<div class="header-container lay-row">
+<div class="header-container lay-row lay-gap-4">
   <Button
     variant="text"
     size="icon-small"
@@ -35,14 +35,5 @@
     <Icon icon="arrowLeftAlt" />
   </Button>
 
-  <div>
-    <p class="text-caption-muted">{subText}</p>
-    <p class="text-heading-3">{headerText}</p>
-  </div>
+  <p class="text-body">{headerText}</p>
 </div>
-
-<style>
-  .header-container {
-    gap: var(--space-16);
-  }
-</style>

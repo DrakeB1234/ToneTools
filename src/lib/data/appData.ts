@@ -38,10 +38,10 @@ export const exercisesData: DataEntry[] = [
     icon: "musicNote"
   },
   {
-    name: "Scale Companion",
+    name: "Scales Companion",
     description: "Companion for your daily practicing of scales, featuring midi detection, built-in metronome, and more!",
-    href: "/exercises",
-    urlName: "scale-companion",
+    href: "/exercises/scales-companion",
+    urlName: "scales-companion",
     color: "purple",
     icon: Scale
   },

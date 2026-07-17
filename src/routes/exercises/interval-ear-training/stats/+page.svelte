@@ -46,8 +46,7 @@
 <Wrapper>
   <main>
     <PageHeaderContainer
-      subText="Stats"
-      headerText="Intervals Ear Training"
+      headerText="Stats Intervals"
       fallbackHref="/exercises/interval-ear-training"
     />
 

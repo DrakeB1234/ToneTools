@@ -82,7 +82,6 @@
 <Wrapper>
   <main>
     <PageHeaderContainer
-      subText="Chord"
       headerText="Back"
       fallbackHref="/tools/chords-library"
     />

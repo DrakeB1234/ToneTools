@@ -81,7 +81,10 @@
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
-        <Icon icon={isCollapsed ? "leftPanelOpen" : "leftPanelClose"} />
+        <Icon
+          icon={isCollapsed ? "leftPanelOpen" : "leftPanelClose"}
+          color="var(--color-on-bg-surface-subtle)"
+        />
       </Button>
     </div>
 

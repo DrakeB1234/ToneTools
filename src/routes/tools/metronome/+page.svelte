@@ -143,11 +143,7 @@
 
 <Wrapper>
   <main>
-    <PageHeaderContainer
-      subText="Tools"
-      headerText="Metronome"
-      fallbackHref="/"
-    />
+    <PageHeaderContainer headerText="Metronome" fallbackHref="/" />
 
     <section class="card">
       <div class="bpm-container lay-grid-center">

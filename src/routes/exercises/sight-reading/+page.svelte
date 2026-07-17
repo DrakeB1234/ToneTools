@@ -89,7 +89,6 @@
 <Wrapper>
   <main>
     <PageHeaderContainer
-      subText="Exercises"
       headerText="Sight Reading"
       fallbackHref="/"
       useHistory={false}

@@ -49,11 +49,7 @@
 
 <Wrapper>
   <main>
-    <PageHeaderContainer
-      subText="Tools"
-      headerText="Indentify Chord"
-      fallbackHref="/"
-    />
+    <PageHeaderContainer headerText="Indentify Chord" fallbackHref="/" />
 
     <section class="card">
       <PianoInteractive
