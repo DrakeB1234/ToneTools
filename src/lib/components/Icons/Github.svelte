@@ -1,5 +1,5 @@
 <script>
-  let { size = "var(--icon-size-base)", color = "currentColor" } = $props();
+  let { size = "24px", color = "currentColor" } = $props();
 </script>
 
 <svg

@@ -1,8 +1,9 @@
 import { redirect } from '@sveltejs/kit';
-import { getChord, getChordAliases, getChordIntervalFormula, getChordInversions, getChordSecondaryDominant, getFullNoteNameFromObj, getSimilarChords } from '$lib/helpers/musicTheory';
+import { getChord, getChordAliases, getChordIntervalFormula, getChordInversions, getChordSecondaryDominant, getFullNoteNameFromObj, getSimilarChords, simplifyNoteName } from '$lib/helpers/musicTheory';
 import type { PageLoad } from './$types';
 import { regexChordSymbolToken } from '$lib/helpers/musicTheoryConstants';
 import { decodeUrlNote, decodeUrlChord } from '$lib/helpers/helpers';
+import { getChordObj } from '$lib/helpers/guitarDBHelpers';
 
 export const load: PageLoad = ({ params }) => {
   const rawUrlParam = params.chordToken;
@@ -16,11 +17,13 @@ export const load: PageLoad = ({ params }) => {
 
   const { note, accidental, symbol, bassNote } = match.groups;
 
-  const fixedNote = decodeUrlNote(note + accidental);
-  let fixedSymbol = decodeUrlChord(symbol);
-  const fixedBassNote = decodeUrlNote(bassNote);
+  const decodedNote = decodeUrlNote(note + accidental);
+  const decodedSymbol = decodeUrlChord(symbol);
+  const decodedBassNote = decodeUrlNote(bassNote);
 
-  const chordObj = getChord(fixedNote, fixedSymbol, fixedBassNote);
+  const simplifiedNote = simplifyNoteName(decodedNote);
+
+  const chordObj = getChord(simplifiedNote, decodedSymbol, decodedBassNote);
 
   if (!chordObj) {
     const message = encodeURIComponent("Unable to find chord");
@@ -28,11 +31,12 @@ export const load: PageLoad = ({ params }) => {
   };
 
   const fullNoteNames = chordObj.notes.map(e => getFullNoteNameFromObj(e));
-  const chordInversions = !fixedBassNote ? getChordInversions(fixedNote, fixedSymbol) : null;
-  const chordIntervals = getChordIntervalFormula(fixedNote, fixedSymbol);
-  const chordAliases = getChordAliases(fixedNote, fixedSymbol);
-  const similarChords = getSimilarChords(fixedNote, fixedSymbol);
-  const secondaryDominantChord = getChordSecondaryDominant(fixedNote);
+  const chordInversions = !decodedBassNote ? getChordInversions(simplifiedNote, decodedSymbol) : null;
+  const chordIntervals = getChordIntervalFormula(simplifiedNote, decodedSymbol);
+  const chordAliases = getChordAliases(simplifiedNote, decodedSymbol);
+  const similarChords = getSimilarChords(simplifiedNote, decodedSymbol);
+  const secondaryDominantChord = getChordSecondaryDominant(simplifiedNote);
+  const guitarChordObj = getChordObj(chordObj.tonic, chordObj.symbol)
 
   return {
     chordObj: chordObj,
@@ -42,5 +46,7 @@ export const load: PageLoad = ({ params }) => {
     chordAliases: chordAliases,
     similarChords: similarChords,
     secondaryDominantChord: secondaryDominantChord,
+    guitarChordObj: guitarChordObj,
+    unSimplifiedNote: simplifiedNote === decodedNote ? undefined : decodedNote
   };
 }; 

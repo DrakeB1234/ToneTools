@@ -32,11 +32,7 @@
 
 <style>
   .flex-col {
-    flex: 0 0 220px;
-    margin-bottom: auto;
-  }
-
-  .icon-container {
+    width: 200px;
     margin-bottom: auto;
   }
 </style>

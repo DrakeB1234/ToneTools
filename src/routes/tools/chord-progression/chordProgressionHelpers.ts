@@ -1,5 +1,5 @@
 import { convertMidiToNoteName, convertNoteNameToMidi, getChord, getIntervalDistanceFromNoteNames, getPitchClassFromNoteName, incrementNoteNameByInterval, simplifyNoteName } from "$lib/helpers/musicTheory";
-import type { GeneralChord } from "$lib/helpers/musicTheoryTypes";
+import type { GeneralChord } from "$lib/types/musicTheoryTypes";
 
 // ==== Types / Interfaces ====
 type NoteLength = "staccato" | 'legato';

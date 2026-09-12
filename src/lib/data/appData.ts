@@ -2,6 +2,7 @@ import type { IconType } from "$lib/components/Icons/Icon.svelte";
 import DAW from "$lib/components/Icons/DAW.svelte";
 import Metronome from "$lib/components/Icons/Metronome.svelte";
 import Polyrhythm from "$lib/components/Icons/Polyrhythm.svelte";
+import TrebleClef from "$lib/components/Icons/TrebleClef.svelte";
 
 interface DataEntry {
   name: string;
@@ -35,7 +36,7 @@ export const exercisesData: DataEntry[] = [
     href: "/exercises/sight-reading",
     urlName: "sight-reading",
     color: "green",
-    icon: "musicNote"
+    icon: "queueMusic"
   },
   // {
   //   name: "Scales Companion",
@@ -82,7 +83,7 @@ export const toolsData: DataEntry[] = [
   },
   {
     name: "Scales Library",
-    description: "Find the notes and diatonic chords in any scale.",
+    description: "Choose from many scales to view useful information, such as a piano roll diagram, diatnoic chords, and more.",
     href: "/tools/scales-library",
     urlName: "scales-library",
     color: "violet",
@@ -90,7 +91,7 @@ export const toolsData: DataEntry[] = [
   },
   {
     name: "Chord Progression",
-    description: "Create and save chord progressions for practicing or writing music.",
+    description: "Experiment with chords and choose between various styles to hear your progression in!",
     href: "/tools/chord-progression",
     urlName: "chord-progression",
     color: "violet",

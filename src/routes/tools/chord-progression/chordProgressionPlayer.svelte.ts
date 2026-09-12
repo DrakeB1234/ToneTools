@@ -1,5 +1,5 @@
 import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
-import type { GeneralChord, GeneralNote } from "$lib/helpers/musicTheoryTypes";
+import type { GeneralChord, GeneralNote } from "$lib/types/musicTheoryTypes";
 import {
   applyBassNoteRange,
   applyMelodyNoteRange,

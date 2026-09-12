@@ -1,4 +1,4 @@
-import type { GeneralChord, IntervalEntry } from "./musicTheoryTypes";
+import type { GeneralChord, IntervalEntry } from "../types/musicTheoryTypes";
 
 export const regexChordSymbolToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)?)-?(?<symbol>.*?)(?:-?bass(?<bassNote>.*))?$/;
 export const regexScaleToken = /^(?<note>[A-Ga-g])-?(?<accidental>(?:sharp|flat)?)-?(?<scale>.*)$/;
@@ -46,6 +46,7 @@ export const chordCategoryEntries: Record<string, Pick<GeneralChord, "name" | "s
     { name: "major seventh", symbol: "maj7" },
     { name: "major ninth", symbol: "maj9" },
     { name: "major thirteenth", symbol: "maj13" },
+    { name: "fifth", symbol: "5" },
     { name: "sixth", symbol: "6" },
     { name: "added ninth", symbol: "add9" },
     { name: "added eleventh", symbol: "add11" },

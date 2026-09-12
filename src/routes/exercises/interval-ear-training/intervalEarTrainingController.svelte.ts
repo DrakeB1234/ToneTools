@@ -2,7 +2,7 @@ import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
 import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
 import { convertNoteNameToObj, decrementNoteNameByInterval, getFullNoteNameFromObj, incrementNoteNameByInterval } from "$lib/helpers/musicTheory";
 import { naturalNoteNames } from "$lib/helpers/musicTheoryConstants";
-import type { GeneralNote, IntervalEntry } from "$lib/helpers/musicTheoryTypes";
+import type { GeneralNote, IntervalEntry } from "$lib/types/musicTheoryTypes";
 import { MusicStaff } from "vector-score";
 import type { IntervalEarConfig } from "./intervalEarTrainingHelpers";
 import { statsDataService, type IntervalEarTrainingStats } from "$lib/data/intervalEarTrainingDataService";

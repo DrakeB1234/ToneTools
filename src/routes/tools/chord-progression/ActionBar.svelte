@@ -30,40 +30,45 @@
 
   let popoverStyleRef = $state<HTMLElement>();
   let popoverKeyRef = $state<HTMLElement>();
-
-  let localMasterVolume = $state(Howler.volume() * 100);
-
-  let localStyleId = $state(playerRef.currentStyleData.id);
-  let localVolumeValue = $state(localMasterVolume);
-  let localBPMValue = $state(playerRef.bpm);
-  let localKeyValue = $state(playerRef.globalKey);
-  let localScaleValue = $state(currentScale);
-  let localAutoTranposeValue = $state(true);
-  let localAutoVoicingValue = $state(playerRef.autoMelodyChordInversions);
-
   let isPianoRollOpen = $state(false);
 
+  // svelte-ignore state_referenced_locally
+  let localData = $state({
+    styleId: playerRef.currentStyleData.id,
+    masterVolume: Howler.volume() * 100,
+    volume: Howler.volume() * 100,
+    bpmValue: playerRef.bpm,
+    keyValue: playerRef.globalKey,
+    scaleValue: currentScale,
+    autoTransposeValue: true,
+    autoVoicingValue: playerRef.autoMelodyChordInversions,
+  });
+
   function handleVolumeChanged() {
-    if (isNaN(localVolumeValue)) return;
-    const fixedValue = Math.max(0, Math.min(100, localVolumeValue));
+    if (isNaN(localData.volume)) {
+      localData.volume = 50;
+      return;
+    }
+    const fixedValue = Math.max(0, Math.min(100, localData.volume));
     Howler.volume(fixedValue / 100);
-    localMasterVolume = fixedValue;
+    localData.masterVolume = fixedValue;
   }
 
   function handleAutoVoicingToggled() {
-    localAutoVoicingValue = !localAutoVoicingValue;
-    playerRef.autoMelodyChordInversions = localAutoVoicingValue;
+    localData.autoVoicingValue = !localData.autoVoicingValue;
+    playerRef.autoMelodyChordInversions = localData.autoVoicingValue;
   }
 
   function handleBPMChanged() {
-    if (localBPMValue < 40 || localBPMValue > 240) localBPMValue = 120;
-    playerRef.bpm = localBPMValue;
+    let value = localData.bpmValue;
+    if (value < 40 || value > 240) value = 120;
+    playerRef.bpm = value;
   }
 
   function handlePopoverStyleApplyClick() {
-    if (!styleIds.includes(localStyleId)) return;
+    if (!styleIds.includes(localData.styleId)) return;
 
-    playerRef.changeStyleById(localStyleId);
+    playerRef.changeStyleById(localData.styleId);
     popoverStyleRef?.hidePopover();
   }
 
@@ -73,8 +78,8 @@
   }
 
   function handlePopoverKeyApplyClick() {
-    playerRef.changeKey(localKeyValue, localAutoTranposeValue);
-    currentScale = localScaleValue;
+    playerRef.changeKey(localData.keyValue, localData.autoTransposeValue);
+    currentScale = localData.scaleValue;
 
     popoverKeyRef?.hidePopover();
   }
@@ -89,17 +94,17 @@
     const toggleEvent = e as ToggleEvent;
 
     if (toggleEvent.newState === "open") {
-      localStyleId = playerRef.currentStyleData.id;
-      localKeyValue = playerRef.globalKey;
-      localScaleValue = currentScale;
-      localAutoTranposeValue = true;
-      localBPMValue = playerRef.bpm;
-      localAutoVoicingValue = playerRef.autoMelodyChordInversions;
+      localData.styleId = playerRef.currentStyleData.id;
+      localData.keyValue = playerRef.globalKey;
+      localData.scaleValue = currentScale;
+      localData.autoTransposeValue = true;
+      localData.bpmValue = playerRef.bpm;
+      localData.autoVoicingValue = playerRef.autoMelodyChordInversions;
     }
   }
 </script>
 
-<section class="action-bar flex-row">
+<section class="action-bar flex-row scrollbar-custom">
   <div class="action-bar__button-container">
     <Button
       size="icon-base"
@@ -130,17 +135,17 @@
   >
     <div class="flex-col__input-label lay-gap-none">
       <p class="text-body-subtle">Volume</p>
-      <p class="text-heading-3">{localMasterVolume}</p>
+      <p class="text-heading-3">{localData.masterVolume}</p>
     </div>
   </Button>
   <Popover id="popover-volume">
     <div class="grid-col lay-gap-base">
-      <Label labelFor="input-volume">Volume {localVolumeValue}</Label>
+      <Label labelFor="input-volume">Volume {localData.volume}</Label>
       <Slider
         id="input-volume"
         min={0}
         max={100}
-        bind:value={localVolumeValue}
+        bind:value={localData.volume}
         onchange={handleVolumeChanged}
       />
     </div>
@@ -166,7 +171,7 @@
         type="number"
         min="40"
         max="240"
-        bind:value={localBPMValue}
+        bind:value={localData.bpmValue}
         onchange={handleBPMChanged}
       />
     </div>
@@ -194,7 +199,7 @@
         <Label labelFor="input-key">Key</Label>
         <Select
           id="input-key"
-          bind:value={localKeyValue}
+          bind:value={localData.keyValue}
           options={keyNamesFlatted}
         />
       </div>
@@ -202,7 +207,7 @@
         <Label labelFor="input-scale">Scale</Label>
         <Select
           id="input-scale"
-          bind:value={localScaleValue}
+          bind:value={localData.scaleValue}
           options={getAllModes()}
         />
       </div>
@@ -210,7 +215,7 @@
         <Label labelFor="toggle-auto-transpose">Tranpose Chords</Label>
         <Toggle
           id="toggle-auto-transpose"
-          bind:toggled={localAutoTranposeValue}
+          bind:toggled={localData.autoTransposeValue}
         />
       </div>
 
@@ -252,7 +257,7 @@
         <Label labelFor="music-style">Music Style</Label>
         <Select
           id="music-style"
-          bind:value={localStyleId}
+          bind:value={localData.styleId}
           options={styleSelectOptions}
         />
       </div>
@@ -280,7 +285,7 @@
     >
       <p class="text-body-subtle">Voicing</p>
       <p class="text-heading-3 text-truncate">
-        {localAutoVoicingValue ? "Auto" : "None"}
+        {localData.autoVoicingValue ? "Auto" : "None"}
       </p>
     </div>
   </Button>
@@ -289,7 +294,7 @@
       <Label labelFor="input-auto-voicing">Auto Voicing</Label>
       <Toggle
         id="input-auto-voicing"
-        toggled={localAutoVoicingValue}
+        toggled={localData.autoVoicingValue}
         onchange={handleAutoVoicingToggled}
       />
     </div>

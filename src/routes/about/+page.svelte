@@ -71,6 +71,13 @@
           </li>
           <li>
             <a
+              href="https://github.com/tombatossals/chords-db"
+              target="_blank"
+              rel="noreferrer">chords-db</a
+            > - Guitar chord database
+          </li>
+          <li>
+            <a
               href="https://github.com/DrakeB1234/VectorScore"
               target="_blank"
               rel="noreferrer">Vector Score</a

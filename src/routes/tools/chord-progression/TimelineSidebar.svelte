@@ -172,7 +172,7 @@
         </div>
         <hr class="space-above-base" />
         <p class="text-heading-3 space-above-base">Change Chord</p>
-        <div class="note-input flex-row space-above-sm">
+        <div class="flex-row lay-flex-wrap space-above-sm">
           <div class="flex-col__input-label">
             <Label labelFor="note">Note</Label>
             <Select
@@ -201,7 +201,7 @@
 
         <div class="timeline-sidebar__bottom-buttons space-above-lg flex-row">
           <Button variant="destructive-outlined" onclick={handleRemoveClick}>
-            <Icon icon="delete" size="var(--icon-size-sm)" />
+            <Icon icon="delete" size="small" />
             Remove
           </Button>
           <Button onclick={handleApplyClick}>Apply</Button>
@@ -253,10 +253,6 @@
   .timeline-sidebar__bottom-buttons {
     align-items: stretch;
     justify-content: space-between;
-  }
-  .note-input {
-    flex-wrap: wrap;
-    gap: var(--space-8);
   }
   .note-input__chord {
     flex: 1;

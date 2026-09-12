@@ -23,10 +23,10 @@
   <main>
     <HeroCard />
 
-    <section class="content">
+    <div class="content">
       <p class="text-heading-3">Last Used</p>
 
-      <div class="last-used flex-row space-above-base">
+      <div class="last-used flex-row scrollbar-custom space-above-base">
         {#each lastUsedItems as item}
           <LastUsedCard
             title={item.name}
@@ -37,11 +37,9 @@
           />
         {/each}
       </div>
-    </section>
+    </div>
 
-    <hr />
-
-    <section class="content">
+    <div class="content">
       <p class="text-heading-3">Exercises</p>
 
       <div class="lay-grid-cards space-above-base">
@@ -55,11 +53,9 @@
           />
         {/each}
       </div>
-    </section>
+    </div>
 
-    <hr />
-
-    <section class="content">
+    <div class="content">
       <p class="text-heading-3">Tools</p>
 
       <div class="lay-grid-cards space-above-base">
@@ -73,17 +69,18 @@
           />
         {/each}
       </div>
-    </section>
+    </div>
   </main>
 </Wrapper>
 
 <style>
   main {
     width: 100%;
+    padding: var(--space-24) var(--space-12);
   }
 
   .content {
-    padding: var(--space-36) var(--space-12);
+    margin-top: var(--space-36);
   }
 
   .last-used {

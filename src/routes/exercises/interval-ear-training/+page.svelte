@@ -5,7 +5,7 @@
   import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { intervalObjs } from "$lib/helpers/musicTheoryConstants";
-  import type { IntervalEntry } from "$lib/helpers/musicTheoryTypes";
+  import type { IntervalEntry } from "$lib/types/musicTheoryTypes";
   import { defaultConfig } from "./intervalEarTrainingHelpers";
   import ConfigModalCard from "./ConfigModalCard.svelte";
   import IconDetailCardButton from "$lib/components/Cards/IconDetailCardButton.svelte";

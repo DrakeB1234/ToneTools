@@ -6,7 +6,7 @@
   import type {
     DiatonicChordSet,
     GeneralChord,
-  } from "$lib/helpers/musicTheoryTypes";
+  } from "$lib/types/musicTheoryTypes";
   import type { ProgressionStep } from "./chordProgressionHelpers";
   import type { ProgressionPlayer } from "./chordProgressionPlayer.svelte";
 

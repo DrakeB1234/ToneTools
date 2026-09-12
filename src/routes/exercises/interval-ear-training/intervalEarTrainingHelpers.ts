@@ -1,4 +1,4 @@
-import type { IntervalEntry } from "$lib/helpers/musicTheoryTypes";
+import type { IntervalEntry } from "$lib/types/musicTheoryTypes";
 
 export type IntervalEarConfig = {
   selectedIntervals: IntervalEntry[];

@@ -1,12 +1,12 @@
 <script lang="ts">
-	import "../app.css";
-	import { dev } from "$app/environment";
-	import { RenderScan } from "svelte-render-scan";
-	import Navbar from "$lib/components/Navbar.svelte";
 	import { onMount } from "svelte";
+	import Navbar from "$lib/components/Navbar.svelte";
 	import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
 	import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
 	import { midiService } from "$lib/midiservice/midiService.svelte";
+	import { dev } from "$app/environment";
+	import { RenderScan } from "svelte-render-scan";
+	import "../app.css";
 
 	let { children } = $props();
 

@@ -9,7 +9,7 @@
   import type {
     DiatonicChordSet,
     GeneralChord,
-  } from "$lib/helpers/musicTheoryTypes";
+  } from "$lib/types/musicTheoryTypes";
   import type { ProgressionPlayer } from "./chordProgressionPlayer.svelte";
 
   type Props = {

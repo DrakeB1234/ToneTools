@@ -109,7 +109,9 @@
 
       <hr class="space-above-base" />
 
-      <div class="scale-notes-container flex-row space-above-base">
+      <div
+        class="scale-notes-container flex-row lay-flex-wrap space-above-base"
+      >
         {#each data.scaleNotes as note, index (note)}
           {@const rawNote = note.letter + (note.accidental ?? "")}
           {@const displayNote = isSimplifyNotesSelected
@@ -218,10 +220,6 @@
     gap: var(--space-16);
     justify-content: space-between;
     align-items: center;
-  }
-
-  .scale-notes-container {
-    flex-wrap: wrap;
   }
 
   .piano-roll-container {

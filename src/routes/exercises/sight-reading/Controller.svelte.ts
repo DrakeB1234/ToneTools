@@ -1,6 +1,6 @@
 import { MusicStaff } from "vector-score";
 import { StaffTypeNoteRanges, StaffTypeSpacing, type ConfigOptions, type NoteRange, type StaffSpacing } from "./helpers";
-import type { GeneralNote } from "$lib/helpers/musicTheoryTypes";
+import type { GeneralNote } from "$lib/types/musicTheoryTypes";
 import { convertNoteNameToMidi, convertNoteNameToObj, getFullNoteNameFromObj, stepNoteName } from "$lib/helpers/musicTheory";
 import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
 import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";

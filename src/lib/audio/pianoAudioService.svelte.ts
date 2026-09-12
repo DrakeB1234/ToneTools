@@ -1,6 +1,6 @@
 import { userPreferencesService } from '$lib/data/userPreferencesService.svelte';
 import { convertNoteNameToMidi, getFullNoteNameFromObj } from '$lib/helpers/musicTheory';
-import type { GeneralNote } from '$lib/helpers/musicTheoryTypes';
+import type { GeneralNote } from '$lib/types/musicTheoryTypes';
 import { Howl, Howler } from 'howler';
 
 const SPRITE_MAP_MIDI = [

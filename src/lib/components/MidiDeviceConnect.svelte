@@ -13,7 +13,7 @@
 </script>
 
 <Button variant="outlined" size="small" onclick={() => (isModalOpen = true)}>
-  <Icon icon="piano" size="var(--icon-size-sm)" />
+  <Icon icon="piano" size="small" />
   Device
   <span class={midiService.isDeviceConnected ? "connected" : "disconnected"}
   ></span>
@@ -46,7 +46,7 @@
       {#if !midiService.isDeviceConnected}
         <div class="refresh-button">
           <Button class="space-above-base" onclick={midiService.refreshDevices}>
-            <Icon icon="refresh" size="var(--icon-size-sm)" />
+            <Icon icon="refresh" size="small" />
             Refresh Devices
           </Button>
         </div>

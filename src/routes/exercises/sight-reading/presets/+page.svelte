@@ -28,29 +28,30 @@
 
     <section class="card">
       <div class="title">
-        <h3>Beginner</h3>
+        <h2 class="text-body">Beginner</h2>
       </div>
       {#each presets as preset, i (preset.name)}
         <Button
           variant="text"
           fullWidth
-          class="preset-link__button"
+          class="lay-justify-start"
           onclick={() => handlePresetClick(i)}
+          aria-label="Go to exercise: {preset.name}"
         >
           <div class="preset-link flex-col lay-gap-none">
-            <p class="text-heading-3">{preset.name}</p>
-            <p class="text-caption-subtle space-above-xsm text-max-width-base">
+            <p class="text-heading-2">{preset.name}</p>
+            <p class="text-caption-subtle space-above-sm text-max-width-base">
               {preset.description}
             </p>
             <div
-              class="preset-link__pills flex-row lay-gap-xsm space-above-base"
+              class="preset-link__pills flex-row lay-flex-wrap lay-gap-xsm space-above-base"
             >
               <p class="pill flex-row lay-gap-xsm">
-                <Icon icon="musicNote" size="var(--icon-size-sm)" />
+                <Icon icon="musicNote" size="small" />
                 {preset.config.noteRange.low} - {preset.config.noteRange.high}
               </p>
               <p class="pill flex-row lay-gap-xsm">
-                <Icon icon="timer" size="var(--icon-size-sm)" />
+                <Icon icon="timer" size="small" />
                 {preset.config.timer}
               </p>
             </div>
@@ -75,23 +76,12 @@
   }
   .card {
     padding: 0;
-    padding-bottom: var(--space-16);
   }
   .title {
     padding: var(--space-16);
   }
-  .card :global(.preset-link__button) {
-    justify-content: start;
-    text-align: left;
-  }
   .preset-link {
-    padding: var(--space-4);
-  }
-  .preset-link__pills {
-    flex-wrap: wrap;
-    align-items: stretch;
-  }
-  .preset-link__pills > .pill {
-    height: 100%;
+    text-align: left;
+    padding: var(--space-12) var(--space-8);
   }
 </style>

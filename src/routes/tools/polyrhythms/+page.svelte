@@ -1,8 +1,5 @@
 <script lang="ts">
-  import {
-    SFX_PERCUSSION_OPTIONS,
-    sfxAudioService,
-  } from "$lib/audio/sfxAudioService.svelte";
+  import { SFX_PERCUSSION_OPTIONS } from "$lib/audio/sfxAudioService.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import Button from "$lib/components/UI/Button.svelte";
@@ -220,11 +217,6 @@
     padding: var(--space-16) var(--space-12);
     border-bottom: 1px solid var(--color-border-subtle);
     border-left: 6px solid var(--track-color);
-  }
-
-  .track__top-container > p {
-    margin-right: var(--space-16);
-    overflow-x: auto;
   }
 
   :global {

@@ -5,19 +5,20 @@
 </script>
 
 <div class="card">
-  <div class="content">
-    <div class="flex-row">
-      <Icon icon={DAW} color="var(--color-on-bg-primary)" />
-
+  <div class="card__header flex-row">
+    <Icon icon={DAW} color="var(--color-on-bg-primary)" size="large" />
+    <div>
       <h1 class="text-heading-2">Chord Progression Creator</h1>
-    </div>
-    <p class="text-caption text-max-width-base space-above-base">
-      Experiment with chords and choose between various styles to hear your
-      progression in!
-    </p>
-
-    <div class="space-above-base">
-      <Button element="a" class="hero-button" href="/tools/chord-progression">
+      <p class="text-caption text-max-width-base space-above-sm">
+        Experiment with chords and choose between various styles to hear your
+        progression in!
+      </p>
+      <Button
+        element="a"
+        size="small"
+        class="space-above-base"
+        href="/tools/chord-progression"
+      >
         Open Tool
         <Icon icon="arrowRightAlt" />
       </Button>
@@ -30,7 +31,7 @@
     position: relative;
     padding: var(--space-24) var(--space-24);
 
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    border-radius: var(--radius-lg);
     border: none;
     background: linear-gradient(
       90deg,
@@ -38,13 +39,14 @@
       rgb(82, 171, 222) 100%
     );
   }
-  .content {
-    position: relative;
-    z-index: 1;
-    max-width: 90%;
+
+  .card__header {
+    align-items: start;
+    gap: var(--space-12);
   }
-  .content h1,
-  .content p {
+
+  .card h1,
+  .card p {
     color: var(--color-on-bg-primary);
   }
 </style>

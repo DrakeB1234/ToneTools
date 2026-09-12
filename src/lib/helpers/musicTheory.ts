@@ -1,6 +1,6 @@
 import { Chord, Interval, Midi, Mode, Note, Scale } from "tonal";
 import { chordCategoryEntries, chordInversionNames, intervalObjs, majorModes, minorModes, modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
-import { type DiatonicChordSet, type GeneralChord, type GeneralNote } from "./musicTheoryTypes";
+import { type DiatonicChordSet, type GeneralChord, type GeneralNote } from "../types/musicTheoryTypes";
 
 // Intervals
 
