@@ -32,5 +32,6 @@
   .flex-col {
     height: 100%;
     justify-content: start;
+    padding-bottom: var(--space-8);
   }
 </style>

@@ -3,21 +3,16 @@
   import { getAllCategoryChords } from "$lib/helpers/musicTheory";
   import { chordCategories } from "$lib/helpers/musicTheoryConstants";
   import Button from "$lib/components/UI/Button.svelte";
-  import RootNoteInput from "$lib/components/RootNoteInput.svelte";
   import { encodeUrlChord } from "$lib/helpers/helpers";
-  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
   import { onMount } from "svelte";
   import { lastUsedService } from "$lib/data/lastUsedService.svelte";
   import { page } from "$app/state";
+  import NoteInput from "$lib/components/UI/NoteInput.svelte";
+  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
 
   let inputNote = $state("C");
-  let inputAccidental = $state("n");
   let inputChordCategory = $state("Common");
   let categoryChords = $derived(getAllCategoryChords(inputChordCategory) ?? []);
-
-  let fullNote = $derived(
-    inputNote + (inputAccidental === "n" ? "" : inputAccidental),
-  );
 
   function handleChordCategoryButtonPressed(category: string) {
     inputChordCategory = category;
@@ -35,17 +30,12 @@
 
 <Wrapper>
   <main>
-    <PageHeaderContainer headerText="Chord Library" fallbackHref="/" />
+    <PageHeaderContainer headerText="Chords Library" fallbackHref="/" />
 
     <section class="card">
-      <div class="input-group">
-        <RootNoteInput
-          bind:noteValue={inputNote}
-          bind:accidentalValue={inputAccidental}
-        />
-      </div>
+      <NoteInput bind:activeNote={inputNote} hideEnharmonics={false} />
 
-      <div class="toggle-buttons-container">
+      <div class="toggle-buttons-container space-above-xlg">
         {#each chordCategories as category (category)}
           <Button
             variant="outlined"
@@ -56,23 +46,23 @@
           >
         {/each}
       </div>
-
-      <div class="chord-categories-container">
-        {#each categoryChords as chord (chord.symbol)}
-          <Button
-            element="a"
-            variant="outlined"
-            href={encodeUrlChord(fullNote, chord.symbol)}
-            class="lay-justify-start"
-          >
-            <div class="chord-button flex-col lay-gap-none">
-              <p>{fullNote + chord.symbol}</p>
-              <p class="text-body-subtle text-truncate">{chord.name}</p>
-            </div>
-          </Button>
-        {/each}
-      </div>
     </section>
+
+    <div class="chord-categories-container">
+      {#each categoryChords as chord (chord.symbol)}
+        <Button
+          element="a"
+          variant="outlined"
+          href={encodeUrlChord(inputNote, chord.symbol)}
+          class="lay-justify-start"
+        >
+          <div class="chord-button flex-col lay-gap-none">
+            <p>{inputNote + chord.symbol}</p>
+            <p class="text-body-subtle text-truncate">{chord.name}</p>
+          </div>
+        </Button>
+      {/each}
+    </div>
   </main>
 </Wrapper>
 
@@ -86,33 +76,26 @@
     padding: var(--app-padding);
   }
 
-  .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
   .toggle-buttons-container {
     display: flex;
     overflow-x: auto;
+    width: 100%;
     gap: var(--space-8);
 
-    padding-top: 2px;
-    padding-bottom: var(--space-12);
-    margin-top: var(--space-36);
+    padding-bottom: var(--space-8);
   }
 
   .chord-categories-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
-    gap: var(--space-8);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
 
     margin-top: var(--space-16);
   }
 
   .chord-button {
     align-items: start;
-    padding: var(--space-4);
+    padding: var(--space-8);
     overflow: hidden;
   }
 
@@ -122,7 +105,7 @@
 
   @media (max-width: 768px) {
     .chord-categories-container {
-      grid-template-columns: repeat(auto-fill, minmax(8em, 1fr));
+      grid-template-columns: 1fr;
     }
   }
 </style>

@@ -28,6 +28,7 @@
 <style>
   input {
     width: 100%;
+    height: 40px;
     padding: var(--space-8);
 
     font-size: var(--font-size-base);

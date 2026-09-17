@@ -34,5 +34,6 @@
   .flex-col {
     width: 200px;
     margin-bottom: auto;
+    padding-bottom: var(--space-8);
   }
 </style>

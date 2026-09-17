@@ -1,11 +1,12 @@
 <script lang="ts">
   import Icon from "$lib/components/Icons/Icon.svelte";
   import Button from "$lib/components/UI/Button.svelte";
-  import { onMount, untrack } from "svelte";
-  import { MusicStaff } from "vector-score";
+  import { onMount } from "svelte";
   import "$lib/components/Modal/modal.css";
   import { stepNoteName } from "$lib/helpers/musicTheory";
   import type { NoteRange, StaffTypes } from "./helpers";
+  import VSMusicStaff from "$lib/components/VSMusicStaff.svelte";
+  import { MusicStaff } from "vector-score";
 
   type Props = {
     currentRange: NoteRange;
@@ -15,7 +16,7 @@
   };
   let {
     currentRange,
-    currentStaffType,
+    currentStaffType = $bindable(),
     currentStaffTypeNoteRange,
     onResponse,
   }: Props = $props();
@@ -26,8 +27,7 @@
     | "highIncrement"
     | "highDecrement";
 
-  let staffElement: HTMLDivElement | null = $state(null);
-  let vectorScoreStaff: MusicStaff | null = $state(null);
+  let musicStaffInstance: MusicStaff | null = $state(null);
 
   let lowRange: string = $derived(currentRange.low);
   let highRange: string = $derived(currentRange.high);
@@ -65,41 +65,24 @@
   }
 
   function updateLowStaffNote() {
-    if (!vectorScoreStaff) return;
-    vectorScoreStaff.changeNoteByIndex(lowRange, 0);
+    if (!musicStaffInstance) return;
+    musicStaffInstance.changeNoteByIndex(lowRange, 0);
   }
 
   function updateHighStaffNote() {
-    if (!vectorScoreStaff) return;
-    vectorScoreStaff.changeNoteByIndex(highRange, 1);
+    if (!musicStaffInstance) return;
+    musicStaffInstance.changeNoteByIndex(highRange, 1);
   }
 
   function handleConfirm() {
     onResponse(true, { low: lowRange, high: highRange });
   }
 
-  $effect(() => {
-    const activeClef = currentStaffType;
+  onMount(() => {
+    if (!musicStaffInstance) return;
 
-    untrack(() => {
-      if (!staffElement) return;
-
-      staffElement.innerHTML = "";
-
-      vectorScoreStaff = new MusicStaff(staffElement, {
-        staffType: activeClef,
-        staffBackgroundColor: "var(--color-bg-surface-1)",
-        staffColor: "var(--color-on-bg-surface)",
-        width: 160,
-        noteStartX: 0,
-        scale: 1.4,
-        spaceAbove: 4,
-        spaceBelow: 4,
-      });
-
-      vectorScoreStaff.drawNote([lowRange, highRange]);
-      vectorScoreStaff.justifyNotes();
-    });
+    musicStaffInstance.drawNote([lowRange, highRange]);
+    musicStaffInstance.justifyNotes();
   });
 </script>
 
@@ -112,7 +95,7 @@
   </div>
 
   <div class="modal-body flex-row">
-    <div class="staff-buttons flex-col">
+    <div class="staff-buttons flex-col lay-gap-base">
       <Button
         variant="outlined"
         size="icon-base"
@@ -122,7 +105,6 @@
         <Icon icon="arrowUp" />
       </Button>
       <div class="flex-col lay-gap-xsm">
-        <p class="text-caption">Low Range</p>
         <p>{lowRange}</p>
       </div>
       <Button
@@ -135,9 +117,20 @@
       </Button>
     </div>
 
-    <div class="staff-container grid-center" bind:this={staffElement}></div>
+    <div class="staff-container grid-center">
+      <VSMusicStaff
+        bind:instance={musicStaffInstance}
+        options={{
+          staffType: currentStaffType,
+          scale: 1.3,
+          width: 180,
+          spaceAbove: 4,
+          spaceBelow: 4,
+        }}
+      />
+    </div>
 
-    <div class="staff-buttons flex-col">
+    <div class="staff-buttons flex-col lay-gap-base">
       <Button
         variant="outlined"
         size="icon-base"
@@ -147,7 +140,6 @@
         <Icon icon="arrowUp" />
       </Button>
       <div class="flex-col lay-gap-xsm">
-        <p class="text-caption">High Range</p>
         <p>{highRange}</p>
       </div>
       <Button

@@ -7,6 +7,8 @@
   import Icon from "$lib/components/Icons/Icon.svelte";
   import ConfirmationModalCard from "$lib/components/Modal/ConfirmationModalCard.svelte";
   import ExerciseLayout from "$lib/components/Exercises/ExerciseLayout.svelte";
+  import type { MusicStaff } from "vector-score";
+  import VSMusicStaff from "$lib/components/VSMusicStaff.svelte";
 
   type Props = {
     config: IntervalEarConfig;
@@ -19,7 +21,7 @@
   const exerciseController = new IntervalEarTrainingController(config);
 
   let isExitModalOpen = $state(false);
-  let staffElement: HTMLDivElement | null = $state(null);
+  let musicStaffInstance: MusicStaff | null = $state(null);
 
   function handleExitPressed() {
     if (exerciseController.isExerciseOver) {
@@ -37,7 +39,8 @@
   }
 
   onMount(() => {
-    if (staffElement) exerciseController.setupVectorScoreStaff(staffElement);
+    if (musicStaffInstance)
+      exerciseController.addVSStaffInstancee(musicStaffInstance);
   });
 
   onDestroy(() => {
@@ -94,7 +97,18 @@
 </main>
 
 {#snippet gameContainer()}
-  <div class="staff-container" bind:this={staffElement}></div>
+  <div class="grid-center">
+    <VSMusicStaff
+      bind:instance={musicStaffInstance}
+      options={{
+        scale: 1.2,
+        noteStartX: 40,
+        width: 240,
+        spaceAbove: 4,
+        spaceBelow: 4,
+      }}
+    />
+  </div>
 {/snippet}
 {#snippet scoreContainer()}
   <div class="score-item green">
@@ -125,12 +139,6 @@
 <style>
   main {
     padding: var(--space-8) var(--space-12);
-  }
-
-  .staff-container {
-    display: flex;
-    justify-content: center;
-    padding-block: var(--space-12);
   }
 
   .input-wrapper {

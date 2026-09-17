@@ -33,6 +33,6 @@
 		"@tombatossals/chords-db": "^0.5.1",
 		"howler": "^2.2.4",
 		"tonal": "^6.4.3",
-		"vector-score": "^1.2.1"
+		"vector-score": "^1.3.1"
 	}
 }

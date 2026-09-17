@@ -1,8 +1,8 @@
 <script lang="ts">
   import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
   import Icon from "$lib/components/Icons/Icon.svelte";
-  import RootNoteInput from "$lib/components/RootNoteInput.svelte";
   import Button from "$lib/components/UI/Button.svelte";
+  import NoteInput from "$lib/components/UI/NoteInput.svelte";
   import Select from "$lib/components/UI/Select.svelte";
   import { getChord, getChordAbsoulteOctave } from "$lib/helpers/musicTheory";
   import { simpleChordSymbols } from "$lib/helpers/musicTheoryConstants";
@@ -25,16 +25,10 @@
   let isDiatonicPaletteAddMode = $state(true);
 
   let customRootNote: string = $state("C");
-  let customRootAccidental: string = $state("n");
   let customRootSymbol: string = $state("maj");
 
   function handleCustomChordAdd() {
-    const fixedAccidental =
-      customRootAccidental === "n" ? "" : customRootAccidental;
-    const chordObj = getChordAbsoulteOctave(
-      customRootNote + fixedAccidental,
-      customRootSymbol,
-    );
+    const chordObj = getChordAbsoulteOctave(customRootNote, customRootSymbol);
     if (!chordObj) return;
 
     playerRef.progression.push({
@@ -44,12 +38,7 @@
   }
 
   function handleCustomChordPlay() {
-    const fixedAccidental =
-      customRootAccidental === "n" ? "" : customRootAccidental;
-    const chordObj = getChord(
-      customRootNote + fixedAccidental,
-      customRootSymbol,
-    );
+    const chordObj = getChord(customRootNote, customRootSymbol);
     if (!chordObj) return;
 
     pianoAudioService.playChord(chordObj.notes, "high");
@@ -266,17 +255,14 @@
   </section>
 
   <section
-    class="flex-col space-above-base"
+    class="custom-section space-above-xlg"
     class:hide={currentActiveTab !== "custom"}
   >
-    <RootNoteInput
-      bind:noteValue={customRootNote}
-      bind:accidentalValue={customRootAccidental}
-    />
-    <div class="custom__chord-select space-above-sm">
+    <NoteInput bind:activeNote={customRootNote} />
+    <div class="custom__chord-select space-above-lg">
       <Select bind:value={customRootSymbol} options={simpleChordSymbols} />
     </div>
-    <div class="custom__buttons flex-row lay-gap-base space-above-base">
+    <div class="custom__buttons flex-row space-above-base">
       <Button variant="secondary" fullWidth onclick={handleCustomChordPlay}
         >Play</Button
       >
@@ -323,10 +309,15 @@
     width: 10ch;
     padding-block: var(--space-12);
   }
+  .custom-section {
+    width: 100%;
+    max-width: 340px;
+    margin-inline: auto;
+  }
   .custom__chord-select {
     width: fit-content;
   }
   .custom__buttons {
-    max-width: 300px;
+    width: 100%;
   }
 </style>

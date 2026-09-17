@@ -27,7 +27,6 @@ export const intervalObjs: IntervalEntry[] = [
   { name: "Perfect Octave", interval: "P8" },
 ]
 
-export const chordCategories = ["Common", "Major", "Minor", "Dominant", "Diminished", "Suspended"];
 export const chordCategoryEntries: Record<string, Pick<GeneralChord, "name" | "symbol">[]> = {
   "Common": [
     { name: "major", symbol: "maj" },
@@ -41,7 +40,7 @@ export const chordCategoryEntries: Record<string, Pick<GeneralChord, "name" | "s
     { name: "augmented", symbol: "aug" },
     { name: "diminished", symbol: "dim" },
   ],
-  "Major": [
+  "Maj": [
     { name: "major", symbol: "maj" },
     { name: "major seventh", symbol: "maj7" },
     { name: "major ninth", symbol: "maj9" },
@@ -52,7 +51,7 @@ export const chordCategoryEntries: Record<string, Pick<GeneralChord, "name" | "s
     { name: "added eleventh", symbol: "add11" },
     { name: "added thirteenth", symbol: "add13" },
   ],
-  "Minor": [
+  "Min": [
     { name: "minor", symbol: "min" },
     { name: "minor sixth", symbol: "min6" },
     { name: "minor seventh", symbol: "min7" },
@@ -60,7 +59,7 @@ export const chordCategoryEntries: Record<string, Pick<GeneralChord, "name" | "s
     { name: "minor thirteenth", symbol: "min13" },
     { name: "minor major seventh", symbol: "mmaj7" },
   ],
-  "Dominant": [
+  "Dom": [
     { name: "dominant seventh", symbol: "7" },
     { name: "ninth", symbol: "9" },
     { name: "eleventh", symbol: "11" },
@@ -68,17 +67,19 @@ export const chordCategoryEntries: Record<string, Pick<GeneralChord, "name" | "s
     { name: "dominant seventh suspended fourth", symbol: "7sus4" },
     { name: "dominant ninth suspended fourth", symbol: "9sus4" },
   ],
-  "Diminished": [
+  "Dim": [
     { name: "diminished", symbol: "dim" },
     { name: "diminished seventh", symbol: "dim7" },
     { name: "half diminished", symbol: "m7b5" },
   ],
-  "Suspended": [
+  "Sus": [
     { name: "suspended second", symbol: "sus2" },
     { name: "suspended fourth", symbol: "sus4" },
     { name: "dominant seventh suspended fourth", symbol: "7sus4" },
   ],
 };
+export const chordCategories = Object.keys(chordCategoryEntries);
+
 export const modeNumeralMap: Record<string, string[]> = {
   "major": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],
   "ionian": ["I", "ii", "iii", "IV", "V", "vi", "vii°"],

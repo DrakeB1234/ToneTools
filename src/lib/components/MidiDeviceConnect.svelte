@@ -12,9 +12,8 @@
   }
 </script>
 
-<Button variant="outlined" size="small" onclick={() => (isModalOpen = true)}>
+<Button variant="outlined" onclick={() => (isModalOpen = true)}>
   <Icon icon="piano" size="small" />
-  Device
   <span class={midiService.isDeviceConnected ? "connected" : "disconnected"}
   ></span>
 </Button>

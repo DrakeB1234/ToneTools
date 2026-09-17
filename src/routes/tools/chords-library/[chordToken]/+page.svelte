@@ -217,7 +217,7 @@
           />
         </div>
       {:else if activeTab === "guitar"}
-        <div class="guitar-chords-container space-above-base">
+        <div class="guitar-chords-container space-above-xlg">
           {#if !guitarChordObj}
             <div class="guitar-chords-container__not-found">
               <p>
@@ -226,13 +226,21 @@
               </p>
             </div>
           {:else}
-            <VSGuitarChords bind:instance={guitarChordsInstance} />
+            <VSGuitarChords
+              bind:instance={guitarChordsInstance}
+              options={{ centerChords: false }}
+            />
           {/if}
         </div>
       {:else}
         <div class="music-staff-container grid-center space-above-base">
           <VSMusicStaff
-            options={{ staffType: "treble", scale: 1.3, spaceAbove: 4 }}
+            options={{
+              staffType: "treble",
+              scale: 1.3,
+              spaceAbove: 4,
+              width: 200,
+            }}
             bind:instance={musicStaffInstance}
           />
         </div>
@@ -340,7 +348,8 @@
   }
 
   .guitar-chords-container {
-    text-align: center;
+    margin-inline: auto;
+    width: fit-content;
   }
 
   .piano-guitar-toggle {

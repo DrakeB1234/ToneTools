@@ -1,14 +1,16 @@
 <script lang="ts">
-  import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
-  import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
   import ExerciseLayout from "$lib/components/Exercises/ExerciseLayout.svelte";
   import Button from "$lib/components/UI/Button.svelte";
-  import { onDestroy, onMount } from "svelte";
-  import type { ConfigOptions } from "./helpers";
+  import { onMount } from "svelte";
+  import { StaffTypeSpacing, type ConfigOptions } from "./helpers";
   import { Controller } from "./Controller.svelte";
   import { naturalNoteNames } from "$lib/helpers/musicTheoryConstants";
   import { midiService } from "$lib/midiservice/midiService.svelte";
   import MidiDeviceConnect from "$lib/components/MidiDeviceConnect.svelte";
+  import VSMusicStaff from "$lib/components/VSMusicStaff.svelte";
+  import { MusicStaff } from "vector-score";
+  import NoteInput from "$lib/components/UI/NoteInput.svelte";
+  import NoteKeyboard from "$lib/components/UI/NoteKeyboard.svelte";
 
   type Props = {
     config: ConfigOptions;
@@ -17,37 +19,28 @@
 
   let { config, handleExit }: Props = $props();
 
-  let staffElement: HTMLDivElement | null = $state(null);
+  // svelte-ignore state_referenced_locally
+  const staffSpacingObj = StaffTypeSpacing[config.clef];
+  let musicStaffInstance: MusicStaff | null = $state(null);
+
   // svelte-ignore state_referenced_locally
   const controller = new Controller(config);
-
-  let activeInputAccidental = $state("");
-  let playedMidiNote = $state("");
 
   function handleExitPressed() {
     handleExit();
   }
 
-  function handleAccidentalInput(accidental: string) {
-    if (activeInputAccidental === accidental) {
-      activeInputAccidental = "";
-      return;
-    }
-    activeInputAccidental = accidental;
-  }
-
-  function handleInput(noteLetter: string) {
-    const fullNote = noteLetter + activeInputAccidental;
+  function handleInput(note: string) {
+    const fullNote = note;
     controller.handleInput(fullNote);
   }
 
   onMount(() => {
-    if (staffElement) controller.setupVectorScoreStaff(staffElement);
+    if (musicStaffInstance) controller.addVSStaffInstancee(musicStaffInstance);
 
     const unsubscribe = midiService.subscribe((msg) => {
       if (msg.type === "noteOn" && msg.notes.length > 0) {
         controller.handleMidiInput(msg.notes[0]);
-        playedMidiNote = msg.notes[0];
       }
     });
 
@@ -65,30 +58,13 @@
     gameContainerMessage={controller.currentMessage}
     gameContainerSnippet={gameContainer}
     scoreContainerSnippet={scoreContainer}
+    showMidiDevice
   />
-  <div>
-    <MidiDeviceConnect />
-  </div>
-  <div class="input flex-row space-above-base">
-    <Button
-      variant="outlined"
-      size="large"
-      state={activeInputAccidental === "#" ? "on" : "off"}
-      onclick={() => handleAccidentalInput("#")}>#</Button
-    >
-    <Button
-      variant="outlined"
-      size="large"
-      state={activeInputAccidental === "b" ? "on" : "off"}
-      onclick={() => handleAccidentalInput("b")}>b</Button
-    >
-  </div>
-  <div class="input flex-row space-above-sm">
-    {#each naturalNoteNames as note}
-      <Button variant="outlined" size="large" onclick={() => handleInput(note)}
-        >{note}</Button
-      >
-    {/each}
+  <div class="space-above-base">
+    <NoteKeyboard
+      onNoteClick={handleInput}
+      preferFlats={controller.preferFlats}
+    />
   </div>
 </main>
 
@@ -97,15 +73,25 @@
     class="start-container grid-center"
     class:hide={controller.status !== "idle"}
   >
-    <Button class="space-above-lg" onclick={() => controller.start()}
-      >Start</Button
+    <Button
+      class="space-above-lg"
+      size="large"
+      onclick={() => controller.start()}>Start</Button
     >
   </div>
-  <div
-    class="staff-container"
-    class:hide={controller.status !== "playing"}
-    bind:this={staffElement}
-  ></div>
+  <div class="staff-container" class:hide={controller.status !== "playing"}>
+    <VSMusicStaff
+      bind:instance={musicStaffInstance}
+      options={{
+        staffType: config.clef,
+        scale: 1.2,
+        width: 200,
+        noteStartX: 60,
+        spaceAbove: staffSpacingObj.above,
+        spaceBelow: staffSpacingObj.below,
+      }}
+    />
+  </div>
 {/snippet}
 {#snippet scoreContainer()}
   <div class="score-item green">
@@ -114,7 +100,7 @@
   </div>
   <div class="score-item">
     <p class="text-caption">Time Left</p>
-    <p class="text-heading-2">{controller.timer}</p>
+    <p class="text-heading-2">{controller.formattedTime}</p>
   </div>
   <div class="score-item red">
     <p class="text-caption">Wrong</p>
@@ -136,8 +122,5 @@
     display: flex;
     justify-content: center;
     padding-block: var(--space-12);
-  }
-  .input {
-    justify-content: center;
   }
 </style>

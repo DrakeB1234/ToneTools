@@ -12,9 +12,9 @@ export type StaffSpacing = {
 
 export type ConfigOptions = {
   clef: StaffTypes;
-  timer: number;
   noteRange: NoteRange;
   allowedAccidentals: string[];
+  timer?: TimerOption | number;
 };
 
 export type Preset = {
@@ -23,11 +23,14 @@ export type Preset = {
   config: ConfigOptions;
 }
 
+export const timerOptions = ["30", "60", "120", "240", "Endless"] as const;
+export type TimerOption = typeof timerOptions[number];
+
 export const defaultConfig: ConfigOptions = {
   clef: "grand",
-  timer: 60,
   noteRange: { low: "C4", high: "C5" },
-  allowedAccidentals: ["n"]
+  allowedAccidentals: ["n"],
+  timer: "60"
 };
 
 export const presets: Preset[] = [
@@ -41,7 +44,7 @@ export const presets: Preset[] = [
         low: "C4",
         high: "B4"
       },
-      timer: 90
+      timer: 60
     }
   },
   {

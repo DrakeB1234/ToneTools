@@ -226,17 +226,8 @@ export class IntervalEarTrainingController {
     if (this.status !== "idle") this.playInterval();
   }
 
-  setupVectorScoreStaff = (staffContainerElement: HTMLDivElement) => {
-    this.staffInstance = new MusicStaff(staffContainerElement, {
-      staffType: 'grand',
-      staffColor: 'var(--color-on-bg-surface)',
-      staffBackgroundColor: 'var(--color-bg-surface-1)',
-      width: 220,
-      noteStartX: 20,
-      scale: 1.2,
-      spaceAbove: 2,
-      spaceBelow: 2
-    });
+  addVSStaffInstancee = (instance: MusicStaff) => {
+    this.staffInstance = instance;
   }
 
   destroy() {

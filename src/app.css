@@ -181,9 +181,7 @@ svg {
   --color-bg-track-orange: oklch(80% 0.5 85);
   --color-bg-track-purple: oklch(54% 0.38 300);
 
-  --color-bg-guitar-fret-1: oklch(60% 0.1 245);
-  --color-bg-guitar-fret-2: oklch(55% 0.12 245);
-  --color-bg-guitar-fret-3: oklch(50% 0.1 245);
+  --color-bg-guitar-fret-1: oklch(55% 0.12 245);
 
   --color-border: var(--palette-slate-400);
   --color-border-subtle: var(--palette-slate-300);
@@ -258,9 +256,7 @@ svg {
   --color-bg-track-orange: oklch(70% 0.5 85);
   --color-bg-track-purple: oklch(48% 0.38 300);
 
-  --color-bg-guitar-fret-1: oklch(90% 0.09 245);
-  --color-bg-guitar-fret-2: oklch(85% 0.14 245);
-  --color-bg-guitar-fret-3: oklch(80% 0.12 245);
+  --color-bg-guitar-fret-1: oklch(65% 0.14 245);
 
   --color-border: oklch(50% 0.04 256);
   --color-border-subtle: oklch(37.203% 0.02295 272.953);
@@ -275,6 +271,7 @@ svg {
 body {
   font-family: var(--inter);
   background-color: var(--color-bg-page);
+  overflow-y: scroll;
 }
 
 hr {
@@ -560,7 +557,13 @@ span,
   gap: 0;
 }
 
-/* ==== Specific Target Element Classes ==== */
+/* VS theming */
+
+.vs-staff-layer,
+.vs-notes-layer {
+  color: var(--color-on-bg-surface);
+}
+
 .vs-note.correct-note {
   color: var(--color-bg-addon-green-contrast);
 }
@@ -569,30 +572,40 @@ span,
   color: var(--color-bg-addon-red-contrast);
 }
 
-text.vs-guitar-text-small {
-  font-size: 12px;
+.vs-guitar-group-fret-lines,
+.vs-guitar-group-string-lines {
+  color: var(--color-on-bg-surface);
+}
+
+.vs-guitar-text {
+  font-size: var(--font-size-base);
+}
+
+.vs-guitar-fret-label {
+  font-size: var(--font-size-sm);
+}
+
+.vs-guitar-fret-text {
+  color: var(--palette-white);
   font-weight: var(--font-weight-bold);
 }
 
-text.vs-guitar-text-base {
-  font-size: 16px;
+.vs-guitar-group-string-labels>text {
+  font-size: var(--font-size-sm);
 }
 
-circle.vs-guitar-fret-dot:nth-of-type(odd) {
+.vs-guitar-fret-dot {
   color: var(--color-bg-guitar-fret-1);
 }
 
-circle.vs-guitar-fret-dot:nth-of-type(even) {
-  color: var(--color-bg-guitar-fret-2);
+.vs-guitar-barre {
+  color: var(--color-bg-guitar-fret-1);
 }
 
-rect.vs-guitar-barre {
-  color: var(--color-bg-guitar-fret-3);
-}
+/* ==== Specific Target Element Classes ==== */
 
 a.btn.card-button {
   padding: var(--space-12);
-  padding-bottom: var(--space-24);
   background-color: var(--color-bg-surface-1);
   border: 1px solid var(--color-border-subtle);
   box-shadow: var(--shadow-1);
@@ -602,7 +615,7 @@ a.btn.card-button {
 
 @media (max-width: 768px) {
   :root {
-    --app-padding: var(--space-16) var(--space-12);
+    --app-padding: var(--space-12);
   }
 
   .lay-grid-cards {

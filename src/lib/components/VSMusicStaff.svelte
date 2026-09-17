@@ -11,14 +11,13 @@
   function setupVectorScore(node: HTMLDivElement) {
     const defaultOptions: MusicStaffOptions = {
       staffType: "grand",
-      staffColor: "var(--color-on-bg-surface)",
-      staffBackgroundColor: "var(--color-bg-surface-1)",
-      width: 300,
+      width: 260,
       noteStartX: 0,
       scale: 1,
       spaceAbove: 2,
       spaceBelow: 2,
       keySignature: undefined,
+      svgAutoFill: true,
       ...options,
     };
 

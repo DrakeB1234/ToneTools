@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
+  import NoteInput from "$lib/components/UI/NoteInput.svelte";
   import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
-  import RootNoteInput from "$lib/components/RootNoteInput.svelte";
   import Button from "$lib/components/UI/Button.svelte";
   import Wrapper from "$lib/components/Wrapper.svelte";
   import { lastUsedService } from "$lib/data/lastUsedService.svelte";
@@ -11,10 +11,6 @@
 
   let scales = getAllModes();
   let inputNote = $state("C");
-  let inputAccidental = $state("n");
-  let fullNote = $derived(
-    inputNote + (inputAccidental === "n" ? "" : inputAccidental),
-  );
 
   onMount(() => {
     // Save url for last used data
@@ -31,41 +27,42 @@
     <PageHeaderContainer headerText="Scales Library" fallbackHref="/" />
 
     <section class="card">
-      <RootNoteInput
-        bind:noteValue={inputNote}
-        bind:accidentalValue={inputAccidental}
-      />
-
-      <div class="scales-container flex-col space-above-lg">
-        {#each scales as scale (scale)}
-          <Button
-            element="a"
-            variant="outlined"
-            href={encodeUrlScale(fullNote, scale)}
-            class="lay-justify-start"
-          >
-            <div class="scale-button flex-col lay-gap-none">
-              <p>{fullNote}&nbsp;{scale}</p>
-              <p class="text-body-subtle">{scale}</p>
-            </div>
-          </Button>
-        {/each}
-      </div>
+      <NoteInput bind:activeNote={inputNote} hideEnharmonics={false} />
     </section>
+
+    <div class="scales-container flex-col space-above-base">
+      {#each scales as scale (scale)}
+        <Button
+          element="a"
+          variant="outlined"
+          href={encodeUrlScale(inputNote, scale)}
+          class="lay-justify-start"
+        >
+          <div class="scale-button flex-col lay-gap-none">
+            <p>{inputNote}&nbsp;{scale}</p>
+            <p class="text-body-subtle">{scale}</p>
+          </div>
+        </Button>
+      {/each}
+    </div>
   </main>
 </Wrapper>
 
 <style>
   main {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: var(--space-16);
 
     width: 100%;
     padding: var(--app-padding);
   }
+
+  .scales-container {
+    gap: var(--space-12);
+  }
+
   .scale-button {
     align-items: start;
-    padding: var(--space-4);
+    padding: var(--space-8);
   }
 </style>

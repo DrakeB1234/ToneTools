@@ -97,6 +97,9 @@
   .timeline-wrapper {
     position: relative;
   }
+  .chord-palette-wrapper {
+    padding-bottom: var(--space-52);
+  }
 
   .current-chord-text {
     min-height: 1.5rem;

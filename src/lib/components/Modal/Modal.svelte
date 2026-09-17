@@ -25,7 +25,9 @@
 </script>
 
 <dialog bind:this={dialogElement} onclose={handleClose} class="modal-wrapper">
-  {@render children()}
+  {#if isOpen}
+    {@render children()}
+  {/if}
 </dialog>
 
 <style>

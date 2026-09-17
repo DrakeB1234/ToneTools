@@ -17,11 +17,11 @@
     const defaultOptions: GuitarChordOptions = {
       stringLabels: ["E", "A", "D", "G", "B", "E"],
       inlineChordsAmount: inlineChordsAmount,
-      scale: 1,
+      scale: 1.1,
       fretCount: 5,
       stringCount: 6,
-      color: "var(--color-on-bg-surface)",
-      backgroundColor: "var(--color-bg-surface-1)",
+      centerChords: true,
+      svgAutoFill: true,
       ...options,
     };
 

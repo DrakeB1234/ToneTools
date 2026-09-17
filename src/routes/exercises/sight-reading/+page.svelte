@@ -14,9 +14,11 @@
   import {
     defaultConfig,
     StaffTypeNoteRanges,
+    timerOptions,
     validateNoteRange,
     type ConfigOptions,
     type NoteRange,
+    type TimerOption,
   } from "./helpers";
   import NoteRangeModal from "./NoteRangeModal.svelte";
   import { page } from "$app/state";
@@ -26,6 +28,10 @@
     StaffTypeNoteRanges[configOptions.clef],
   );
   let isNoteRangeModalOpen = $state(false);
+
+  function handleTimerOptionChange(value: TimerOption) {
+    configOptions.timer = value;
+  }
 
   function handleClefChange() {
     const currentLowMidi = convertNoteNameToMidi(configOptions.noteRange.low);
@@ -129,17 +135,20 @@
             ]}
           />
         </div>
-        <div class="input flex-col__input-label">
-          <Label labelFor="timer">Timer</Label>
-          <Input
-            id="timer"
-            type="number"
-            min="1"
-            max="60"
-            placeholder="60"
-            bind:value={configOptions.timer}
-          />
+
+        <div class="timer">
+          <span class="text-caption">Timer</span>
+          <div class="timer__options flex-row space-above-xsm">
+            {#each timerOptions as time}
+              <Button
+                variant="outlined"
+                state={configOptions.timer === time ? "on" : "off"}
+                onclick={() => handleTimerOptionChange(time)}>{time}</Button
+              >
+            {/each}
+          </div>
         </div>
+
         <div class="input flex-col__input-label">
           <p class="text-caption">Note Range</p>
           <p class="text-heading-3">

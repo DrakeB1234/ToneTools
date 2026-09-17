@@ -1,12 +1,14 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import Button from "../UI/Button.svelte";
+  import MidiDeviceConnect from "../MidiDeviceConnect.svelte";
 
   type Props = {
     handleExitClick: () => void;
     gameContainerMessage: string;
     gameContainerSnippet: Snippet;
     scoreContainerSnippet: Snippet;
+    showMidiDevice?: boolean;
   };
 
   let {
@@ -14,10 +16,17 @@
     gameContainerMessage,
     gameContainerSnippet,
     scoreContainerSnippet,
+    showMidiDevice = false,
   }: Props = $props();
 </script>
 
-<Button variant="outlined" onclick={handleExitClick}>Exit</Button>
+<div class="game-container__top flex-row">
+  <Button variant="outlined" size="large" onclick={handleExitClick}>Exit</Button
+  >
+  {#if showMidiDevice}
+    <MidiDeviceConnect />
+  {/if}
+</div>
 
 <div class="game-container space-above-sm">
   <div class="message-container">
@@ -31,6 +40,9 @@
 </div>
 
 <style>
+  .game-container__top {
+    justify-content: space-between;
+  }
   .game-container {
     padding: var(--space-16) var(--space-8);
     border: 1px solid var(--color-border-subtle);

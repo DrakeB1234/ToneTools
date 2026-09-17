@@ -1,7 +1,7 @@
 import { MusicStaff } from "vector-score";
-import { StaffTypeNoteRanges, StaffTypeSpacing, type ConfigOptions, type NoteRange, type StaffSpacing } from "./helpers";
+import { type ConfigOptions } from "./helpers";
 import type { GeneralNote } from "$lib/types/musicTheoryTypes";
-import { convertNoteNameToMidi, convertNoteNameToObj, getFullNoteNameFromObj, stepNoteName } from "$lib/helpers/musicTheory";
+import { convertNoteNameToObj, getFullNoteNameFromObj, stepNoteName } from "$lib/helpers/musicTheory";
 import { sfxAudioService } from "$lib/audio/sfxAudioService.svelte";
 import { pianoAudioService } from "$lib/audio/pianoAudioService.svelte";
 import { naturalNoteNames } from "$lib/helpers/musicTheoryConstants";
@@ -16,9 +16,10 @@ export class Controller {
   correctAnswers = $state(0);
   timer = $state(0);
 
+  preferFlats = $state(true);
+
   private config: ConfigOptions;
   private staffInstance: MusicStaff | null = null;
-  private staffTypeSpacing: StaffSpacing;
   private timerInterval: ReturnType<typeof setInterval> | null = null;
   private currentQuestionNoteObj: GeneralNote | null = null;
 
@@ -26,8 +27,10 @@ export class Controller {
 
   constructor(config: ConfigOptions) {
     this.config = config;
-    this.staffTypeSpacing = StaffTypeSpacing[config.clef];
-    this.timer = config.timer;
+
+    const initalTimerNumber = Number(this.config.timer);
+
+    this.timer = Number.isNaN(initalTimerNumber) ? 0 : initalTimerNumber;
 
     this.notePool = this.buildNotePool();
   }
@@ -82,6 +85,13 @@ export class Controller {
 
     this.currentQuestionNoteObj = randomNote;
 
+    if (randomNote.accidental === "#") {
+      this.preferFlats = false;
+    }
+    else {
+      this.preferFlats = true;
+    }
+
     if (!this.staffInstance) return;
     this.staffInstance.changeNoteByIndex(getFullNoteNameFromObj(randomNote), 0);
   }
@@ -91,29 +101,15 @@ export class Controller {
     this.currentMessage = "Exercise Over!"
   }
 
-  setupVectorScoreStaff = (staffContainerElement: HTMLDivElement) => {
-    this.staffInstance = new MusicStaff(staffContainerElement, {
-      staffType: this.config.clef,
-      staffColor: 'var(--color-on-bg-surface)',
-      staffBackgroundColor: 'var(--color-bg-surface-1)',
-      width: 200,
-      noteStartX: 60,
-      scale: 1.2,
-      spaceAbove: this.staffTypeSpacing.above,
-      spaceBelow: this.staffTypeSpacing.below
-    });
+  private startTimer() {
+    const timerValue = Number(this.config.timer);
+    if (Number.isNaN(timerValue)) {
+      this.timerInterval = setInterval(() => {
+        this.timer++;
+      }, 1000);
 
-    this.staffInstance.drawNote("C4");
-  }
-
-  start() {
-    if (this.status !== "idle") return;
-
-    this.status = "playing";
-    this.currentMessage = "";
-
-    this.generateQuestion();
-
+      return;
+    }
     this.timerInterval = setInterval(() => {
       this.timer--;
 
@@ -125,8 +121,33 @@ export class Controller {
     }, 1000);
   }
 
+  get formattedTime() {
+    const minutes = Math.floor(this.timer / 60);
+    const seconds = this.timer % 60;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  }
+
+  addVSStaffInstancee = (instance: MusicStaff) => {
+    this.staffInstance = instance;
+
+    this.staffInstance.drawNote("C4");
+  }
+
+  start() {
+    if (this.status !== "idle") return;
+
+    this.status = "playing";
+    this.currentMessage = "-";
+
+    this.generateQuestion();
+
+    this.startTimer();
+  }
+
   handleInput(note: string) {
     if (this.status !== "playing" || !this.currentQuestionNoteObj) return;
+    this.currentMessage = "-";
+
     const parsedNote = convertNoteNameToObj(note);
     const currentQuestion = this.currentQuestionNoteObj;
 
@@ -136,6 +157,8 @@ export class Controller {
     } else {
       this.wrongAnswers++;
       sfxAudioService.play("wrong_guess");
+      const stringNote = getFullNoteNameFromObj(this.currentQuestionNoteObj);
+      this.currentMessage = `Wrong, Correct Answer: ${stringNote}`
     }
 
     this.generateQuestion();
@@ -143,6 +166,8 @@ export class Controller {
 
   handleMidiInput(note: string) {
     if (this.status !== "playing" || !this.currentQuestionNoteObj) return;
+    this.currentMessage = "-";
+
     const parsedNote = convertNoteNameToObj(note);
     const currentQuestion = this.currentQuestionNoteObj;
 
@@ -152,6 +177,8 @@ export class Controller {
     } else {
       this.wrongAnswers++;
       sfxAudioService.play("wrong_guess");
+      const stringNote = getFullNoteNameFromObj(this.currentQuestionNoteObj);
+      this.currentMessage = `Wrong, Correct Answer: ${stringNote}`
     }
 
     this.generateQuestion();
@@ -160,5 +187,6 @@ export class Controller {
   destroy() {
     this.staffInstance = null;
     if (this.timerInterval) clearInterval(this.timerInterval);
+    this.timerInterval = null;
   }
 }

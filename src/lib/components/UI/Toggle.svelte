@@ -3,16 +3,19 @@
     toggled = $bindable(false),
     disabled = false,
     ariaLabel = "Toggle switch",
+    size = "medium",
+    ontoggle = () => {},
     ...rest
   } = $props();
 </script>
 
-<label class="toggle-label" aria-disabled={disabled}>
+<label class="toggle-label {size}" aria-disabled={disabled}>
   <input
     type="checkbox"
     bind:checked={toggled}
     {disabled}
     aria-label={ariaLabel}
+    onclick={() => ontoggle()}
     {...rest}
   />
 
@@ -23,7 +26,7 @@
   .toggle-label {
     position: relative;
     display: inline-block;
-    width: 48px;
+    width: 40px;
     height: 24px;
     cursor: pointer;
 
@@ -60,10 +63,10 @@
   .slider:before {
     position: absolute;
     content: "";
-    height: 16px;
-    width: 16px;
-    left: 4px;
-    bottom: 4px;
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
     background-color: var(--color-bg-surface-1);
     transition: transform 0.1s;
     border-radius: 50%;
@@ -79,11 +82,25 @@
   }
 
   input:checked + .slider:before {
-    transform: translateX(24px);
+    transform: translateX(16px);
   }
 
   input:focus-visible + .slider {
     outline: 2px solid var(--color-bg-primary);
     outline-offset: 2px;
+  }
+
+  .toggle-label.small {
+    width: 32px;
+    height: 20px;
+  }
+
+  .toggle-label.small .slider:before {
+    height: 16px;
+    width: 16px;
+  }
+
+  .toggle-label.small input:checked + .slider:before {
+    transform: translateX(12px);
   }
 </style>
