@@ -6,7 +6,11 @@
 	import { midiService } from "$lib/midiservice/midiService.svelte";
 	import { dev } from "$app/environment";
 	import { RenderScan } from "svelte-render-scan";
-	import "../app.css";
+	import { afterNavigate } from "$app/navigation";
+	import { lastUsedService } from "$lib/data/lastUsedService.svelte";
+	import { page } from "$app/state";
+	import "$lib/assets/app.css";
+	import "$lib/assets/button.css";
 
 	let { children } = $props();
 
@@ -14,6 +18,10 @@
 		pianoAudioService.init();
 		sfxAudioService.init();
 		midiService.init();
+	});
+
+	afterNavigate(() => {
+		lastUsedService.addLastUsed(page.url.pathname);
 	});
 </script>
 

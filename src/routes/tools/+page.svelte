@@ -1,45 +1,43 @@
 <script>
-  import IconDetailCardButton from "$lib/components/Cards/IconDetailCardButton.svelte";
-  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
-  import Wrapper from "$lib/components/Wrapper.svelte";
-  import { toolsData } from "$lib/data/appData";
+	import Icon from "$lib/components/Icons/Icon.svelte";
+	import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
+	import Button from "$lib/components/UI/Button.svelte";
+	import Wrapper from "$lib/components/Wrapper.svelte";
+	import { toolsData } from "$lib/data/appData";
 </script>
 
 <svelte:head>
-  <title>Tools | Tone Tools</title>
+	<title>Tools | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>
-  <main>
-    <PageHeaderContainer
-      headerText="Tools"
-      fallbackHref="/"
-      useHistory={false}
-    />
+	<main class="page">
+		<PageHeaderContainer headerText="Tools" fallbackHref="/" useHistory={false} />
 
-    <section class="card flex-col lay-gap-none space-above-base">
-      {#each toolsData as data, i (data.urlName)}
-        <IconDetailCardButton
-          icon={data.icon}
-          color={data.color}
-          title={data.name}
-          description={data.description}
-          href={data.href}
-        />
-        {#if i < toolsData.length - 1}
-          <hr />
-        {/if}
-      {/each}
-    </section>
-  </main>
+		<section class="card flex-col lay-gap-none space-above-sm">
+			{#each toolsData as data, i (data.urlName)}
+				<Button element="a" variant="text" class="btn--row" href={data.href} fullWidth>
+					<div class="flex-row lay-gap-base">
+						<div class="icon-container {data.color}">
+							<Icon icon={data.icon} />
+						</div>
+						<div class="item-button__text flex-col lay-gap-xsm">
+							<p class="text-heading-3">{data.name}</p>
+							<p class="text-caption-subtle">{data.description}</p>
+						</div>
+					</div>
+				</Button>
+				{#if i < toolsData.length - 1}
+					<hr />
+				{/if}
+			{/each}
+		</section>
+	</main>
 </Wrapper>
 
 <style>
-  main {
-    padding: var(--app-padding);
-  }
-  .card {
-    padding: 0;
-    overflow: hidden;
-  }
+	.card {
+		padding: 0;
+		overflow: hidden;
+	}
 </style>

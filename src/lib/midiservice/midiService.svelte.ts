@@ -1,9 +1,9 @@
 import { convertMidiToNoteName } from "$lib/helpers/musicTheory";
 
 export type MidiMessage = {
-  type: 'noteOn' | 'noteOff' | 'other';
-  notes: string[];
-  attackType: AttackType
+	type: "noteOn" | "noteOff" | "other";
+	notes: string[];
+	attackType: AttackType;
 };
 
 type AttackType = "single" | "chord" | null;
@@ -11,143 +11,140 @@ type AttackType = "single" | "chord" | null;
 type MidiCallback = (msg: MidiMessage) => void;
 
 class MidiService {
-  isReady = $state(false);
-  isDeviceConnected = $state(false);
-  error = $state<string | null>(null);
-  connectedDeviceName = $state("");
+	isReady = $state(false);
+	isDeviceConnected = $state(false);
+	error = $state<string | null>(null);
+	connectedDeviceName = $state("");
 
-  private access: MIDIAccess | null = null;
-  private subscribers = new Set<MidiCallback>();
+	private access: MIDIAccess | null = null;
+	private subscribers = new Set<MidiCallback>();
 
-  private inputBuffer: number[] = [];
-  private bufferTimer: any = null;
-  private readonly CHORD_DETECTION_DELAY_MS = 40;
+	private inputBuffer: number[] = [];
+	private bufferTimer: any = null;
+	private readonly CHORD_DETECTION_DELAY_MS = 40;
 
-  private attachListeners() {
-    if (!this.access) return;
-    for (const input of this.access.inputs.values()) {
-      input.onmidimessage = this.handleMessage;
-    }
-  }
+	private attachListeners() {
+		if (!this.access) return;
+		for (const input of this.access.inputs.values()) {
+			input.onmidimessage = this.handleMessage;
+		}
+	}
 
-  private handleMessage = (event: any) => {
-    if (this.subscribers.size === 0) return;
+	private handleMessage = (event: any) => {
+		if (this.subscribers.size === 0) return;
 
-    const [status, data1, data2] = event.data;
-    // 0xF0 (240) is the mask for the command (e.g. 144 = NoteOn)
-    // 0x0F (15) is the mask for the channel (0-15)
-    const command = status & 0xF0;
-    const velocity = data2;
-    const note = data1;
+		const [status, data1, data2] = event.data;
+		// 0xF0 (240) is the mask for the command (e.g. 144 = NoteOn)
+		// 0x0F (15) is the mask for the channel (0-15)
+		const command = status & 0xf0;
+		const velocity = data2;
+		const note = data1;
 
-    let type: MidiMessage['type'] = 'other';
-    if (command === 144 && velocity > 0) type = 'noteOn';
-    else if (command === 128 || (command === 144 && velocity === 0)) type = 'noteOff';
+		let type: MidiMessage["type"] = "other";
+		if (command === 144 && velocity > 0) type = "noteOn";
+		else if (command === 128 || (command === 144 && velocity === 0)) type = "noteOff";
 
-    if (type !== 'noteOn') {
-      const message: MidiMessage = { type, notes: [convertMidiToNoteName(note)], attackType: null };
-      this.subscribers.forEach(callback => callback(message));
-    }
-    else if (type === 'noteOn') {
-      this.processAttack(note);
-    }
-  }
+		if (type !== "noteOn") {
+			const message: MidiMessage = { type, notes: [convertMidiToNoteName(note)], attackType: null };
+			this.subscribers.forEach((callback) => callback(message));
+		} else if (type === "noteOn") {
+			this.processAttack(note);
+		}
+	};
 
-  private processAttack(note: number) {
-    this.inputBuffer.push(note);
+	private processAttack(note: number) {
+		this.inputBuffer.push(note);
 
-    if (this.bufferTimer) {
-      clearTimeout(this.bufferTimer);
-    }
+		if (this.bufferTimer) {
+			clearTimeout(this.bufferTimer);
+		}
 
-    this.bufferTimer = setTimeout(() => {
-      this.finalizeAttack();
-    }, this.CHORD_DETECTION_DELAY_MS);
-  }
+		this.bufferTimer = setTimeout(() => {
+			this.finalizeAttack();
+		}, this.CHORD_DETECTION_DELAY_MS);
+	}
 
-  private finalizeAttack() {
-    const notes = [...this.inputBuffer].sort((a, b) => a - b);
-    const notesObj: string[] = notes.map(e => convertMidiToNoteName(e));
-    const type = notes.length > 1 ? 'chord' : 'single';
+	private finalizeAttack() {
+		const notes = [...this.inputBuffer].sort((a, b) => a - b);
+		const notesObj: string[] = notes.map((e) => convertMidiToNoteName(e));
+		const type = notes.length > 1 ? "chord" : "single";
 
-    const message: MidiMessage = { type: "noteOn", notes: notesObj, attackType: type };
-    this.subscribers.forEach(callback => callback(message));
+		const message: MidiMessage = { type: "noteOn", notes: notesObj, attackType: type };
+		this.subscribers.forEach((callback) => callback(message));
 
-    this.inputBuffer = [];
-    this.bufferTimer = null;
-  }
+		this.inputBuffer = [];
+		this.bufferTimer = null;
+	}
 
-  private updateConnectionState() {
-    if (!this.access) return;
+	private updateConnectionState() {
+		if (!this.access) return;
 
-    const inputCount = this.access.inputs.size;
-    this.isDeviceConnected = inputCount > 0;
+		const inputCount = this.access.inputs.size;
+		this.isDeviceConnected = inputCount > 0;
 
-    const inputValues = this.access.inputs.values();
-    let inputDeviceName = "";
-    for (let input of inputValues) {
-      inputDeviceName += input.name
-    }
-    this.connectedDeviceName = inputDeviceName;
-  }
+		const inputValues = this.access.inputs.values();
+		let inputDeviceName = "";
+		for (let input of inputValues) {
+			inputDeviceName += input.name;
+		}
+		this.connectedDeviceName = inputDeviceName;
+	}
 
-  async init() {
-    if (this.access || this.isReady) return;
+	async init() {
+		if (this.access || this.isReady) return;
 
-    if (!navigator.requestMIDIAccess) {
-      this.error = "Web MIDI API not supported in this browser.";
-      return;
-    }
+		if (!navigator.requestMIDIAccess) {
+			this.error = "Web MIDI API not supported in this browser.";
+			return;
+		}
 
-    try {
-      this.access = await navigator.requestMIDIAccess({ sysex: false });
-      this.isReady = true;
-      this.error = null;
+		try {
+			this.access = await navigator.requestMIDIAccess({ sysex: false });
+			this.isReady = true;
+			this.error = null;
 
-      this.attachListeners();
-      this.updateConnectionState();
+			this.attachListeners();
+			this.updateConnectionState();
 
-      this.access.onstatechange = (e: MIDIConnectionEvent) => {
-        this.updateConnectionState();
+			this.access.onstatechange = (e: MIDIConnectionEvent) => {
+				this.updateConnectionState();
 
-        if (e.port?.type === 'input' && e.port.state === 'connected') {
-          this.attachListeners();
-        }
-      };
+				if (e.port?.type === "input" && e.port.state === "connected") {
+					this.attachListeners();
+				}
+			};
+		} catch (err: any) {
+			console.error("MIDI Access Error:", err);
 
-    } catch (err: any) {
-      console.error("MIDI Access Error:", err);
+			if (err.name === "SecurityError" || err.name === "NotAllowedError") {
+				this.error = "MIDI Permission Denied. Please allow MIDI access in your address bar.";
+			} else {
+				this.error = "MIDI Connection Failed: " + (err.message || "Unknown Error");
+			}
+		}
+	}
 
-      if (err.name === 'SecurityError' || err.name === 'NotAllowedError') {
-        this.error = "MIDI Permission Denied. Please allow MIDI access in your address bar.";
-      } else {
-        this.error = "MIDI Connection Failed: " + (err.message || "Unknown Error");
-      }
-    }
-  }
+	subscribe(callback: MidiCallback): () => void {
+		this.subscribers.add(callback);
 
-  subscribe(callback: MidiCallback): () => void {
-    this.subscribers.add(callback);
+		return () => {
+			this.subscribers.delete(callback);
+		};
+	}
 
-    return () => {
-      this.subscribers.delete(callback);
-    };
-  }
+	refreshDevices = async () => {
+		this.error = null;
+		if (!this.isReady) {
+			await this.init();
+		} else {
+			this.updateConnectionState();
+			this.attachListeners();
+		}
+	};
 
-  refreshDevices = async () => {
-    this.error = null;
-    if (!this.isReady) {
-      await this.init();
-    }
-    else {
-      this.updateConnectionState();
-      this.attachListeners();
-    }
-  }
-
-  get subscribersCount(): number {
-    return this.subscribers.size;
-  }
+	get subscribersCount(): number {
+		return this.subscribers.size;
+	}
 }
 
 export const midiService = new MidiService();

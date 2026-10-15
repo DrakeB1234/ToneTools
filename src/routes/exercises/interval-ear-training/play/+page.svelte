@@ -1,45 +1,41 @@
 <script lang="ts">
-  import { afterNavigate, goto } from "$app/navigation";
-  import { page } from "$app/state";
-  import Wrapper from "$lib/components/Wrapper.svelte";
-  import { onMount } from "svelte";
-  import type { IntervalEarConfig } from "../intervalEarTrainingHelpers";
-  import PlayIntervalEarTraining from "../PlayIntervalEarTraining.svelte";
+	import { afterNavigate, goto } from "$app/navigation";
+	import { page } from "$app/state";
+	import Wrapper from "$lib/components/Wrapper.svelte";
+	import { exercisesData } from "$lib/data/appData";
+	import {
+		defaultConfig,
+		resolveConfig,
+		type ConfigOptions
+	} from "$lib/exercises/interval-ear-training/config";
+	import PlayIntervalEarTraining from "$lib/exercises/interval-ear-training/PlayExercise.svelte";
 
-  const { config } = page.state as {
-    config?: IntervalEarConfig;
-  };
+	let exerciseAppData = exercisesData.find((e) => e.href === "/exercises/interval-ear-training")!;
 
-  let hasPreviousPage = $state(false);
+	const rawConfig = (page.state as { config?: ConfigOptions })?.config;
+	const config: ConfigOptions = rawConfig && resolveConfig(rawConfig) ? rawConfig : defaultConfig;
 
-  function handleExit() {
-    if (hasPreviousPage) {
-      history.back();
-    } else {
-      goto("/exercises/interval-ear-training");
-    }
-  }
+	let hasPreviousPage = $state(false);
 
-  afterNavigate(({ from }) => {
-    if (from) {
-      hasPreviousPage = true;
-    }
-  });
+	function handleExit() {
+		if (hasPreviousPage) {
+			history.back();
+		} else {
+			goto(exerciseAppData.href);
+		}
+	}
 
-  // Ensures that navigate methods are called on client side, and not SSR (server)
-  onMount(() => {
-    if (!config) {
-      goto("/exercises/interval-ear-training");
-    }
-  });
+	afterNavigate(({ from }) => {
+		if (from) {
+			hasPreviousPage = true;
+		}
+	});
 </script>
 
 <svelte:head>
-  <title>Intervals Ear Training | Tone Tools</title>
+	<title>{exerciseAppData.name} | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>
-  {#if config}
-    <PlayIntervalEarTraining {config} {handleExit} />
-  {/if}
+	<PlayIntervalEarTraining {config} {handleExit} />
 </Wrapper>

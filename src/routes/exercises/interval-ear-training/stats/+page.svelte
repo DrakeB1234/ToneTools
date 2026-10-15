@@ -1,138 +1,243 @@
 <script lang="ts">
-  import ConfirmationModalCard from "$lib/components/Modal/ConfirmationModalCard.svelte";
-  import Modal from "$lib/components/Modal/Modal.svelte";
-  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
-  import Button from "$lib/components/UI/Button.svelte";
-  import Wrapper from "$lib/components/Wrapper.svelte";
-  import { statsDataService } from "$lib/data/intervalEarTrainingDataService";
-  import { getIntervalName } from "$lib/helpers/musicTheory";
+	import ConfirmationModalCard from "$lib/components/Modal/ConfirmationModalCard.svelte";
+	import Modal from "$lib/components/Modal/Modal.svelte";
+	import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
+	import Button from "$lib/components/UI/Button.svelte";
+	import Select from "$lib/components/UI/Select.svelte";
+	import Wrapper from "$lib/components/Wrapper.svelte";
+	import {
+		intervalStatsService,
+		sortStatVariants,
+		type SortStatVariants
+	} from "$lib/data/db/intervalStatsService.svelte";
 
-  let isModalOpen = $state(false);
+	let dashboardState = $derived(intervalStatsService.dashboard);
+	let isModalOpen = $state(false);
+	let sortSelectOption: SortStatVariants = $state("intervals");
 
-  let latestStats = $state(statsDataService.getStats());
-  let statsArray = $derived(
-    Object.entries(latestStats).map(([interval, stats]) => {
-      const total = stats.correct + stats.wrong;
+	let sortedStats = $derived(
+		dashboardState.status === "success"
+			? intervalStatsService.sortStatsArray(dashboardState.statsArray, sortSelectOption)
+			: []
+	);
 
-      return {
-        interval,
-        name: getIntervalName(interval),
-        correct: stats.correct,
-        wrong: stats.wrong,
-        correctPercent:
-          total > 0 ? Math.round((stats.correct / total) * 100) : 0,
-        wrongPercent: total > 0 ? Math.round((stats.wrong / total) * 100) : 0,
-      };
-    }),
-  );
+	const sortSelectOptions = sortStatVariants.map((variant) => {
+		let label = "";
+		switch (variant) {
+			case "intervals": {
+				label = "Intervals";
+				break;
+			}
+			case "accuracy-asc": {
+				label = "Accuracy Asc";
+				break;
+			}
+			case "accuracy-desc": {
+				label = "Accuracy Desc";
+				break;
+			}
+			case "most-played": {
+				label = "Most Played";
+				break;
+			}
+		}
 
-  function handleResetDataPressed() {
-    isModalOpen = true;
-  }
+		return {
+			label,
+			value: variant
+		};
+	});
 
-  function handleResetModalResponse(confirmed: boolean) {
-    if (confirmed) {
-      statsDataService.resetSessionStats();
-      latestStats = {};
-    }
-    isModalOpen = false;
-  }
+	function handleResetDataPressed() {
+		isModalOpen = true;
+	}
+
+	function handleResetModalResponse(confirmed: boolean) {
+		if (confirmed) {
+			intervalStatsService.resetAll();
+		}
+		isModalOpen = false;
+	}
 </script>
 
 <svelte:head>
-  <title>Guided Intervals Ear Training | Tone Tools</title>
+	<title>Stats Intervals Ear Training | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>
-  <main>
-    <PageHeaderContainer
-      headerText="Stats Intervals"
-      fallbackHref="/exercises/interval-ear-training"
-    />
+	<main class="page">
+		<PageHeaderContainer
+			headerText="Interval Stats"
+			fallbackHref="/exercises/interval-ear-training"
+		/>
 
-    <section class="card flex-col">
-      {#each statsArray as stat (stat.interval)}
-        <div class="interval-stat flex-row">
-          <div class="interval-stat__text">
-            <p class="text-heading-3">{stat.interval}</p>
-            <p class="text-caption">{stat.name}</p>
-          </div>
-          <div class="interval-stat__stats flex-col">
-            <div class="flex-row lay-gap-none">
-              {#if stat.correctPercent > 0}
-                <span class="stat correct" style="width: {stat.correctPercent}%"
-                ></span>
-              {/if}
-              {#if stat.wrongPercent > 0}
-                <span class="stat wrong" style="width: {stat.wrongPercent}%"
-                ></span>
-              {/if}
-            </div>
-            <div class="stats__text flex-row">
-              <p>Correct {stat.correct}</p>
-              <p>Wrong {stat.wrong}</p>
-            </div>
-          </div>
-        </div>
-      {:else}
-        <div class="no-data flex-col">
-          <p class="text-heading-3">No data found.</p>
-          <p>Try playing some more exercises to see your stats!</p>
-        </div>
-      {/each}
-    </section>
-    <div class="reset-stats flex-row space-above-base">
-      <Button variant="destructive-outlined" onclick={handleResetDataPressed}
-        >Reset Data</Button
-      >
-    </div>
-  </main>
+		{#if dashboardState.status === "empty"}
+			<div class="card card--exercise empty-card grid-center lay-gap-none space-above-sm">
+				<p>No interval stats available yet.</p>
+				<p>Start practicing to see your progress here.</p>
+			</div>
+		{:else}
+			<div class="card card--exercise space-above-sm">
+				<div class="overview">
+					<div class="overview__item">
+						<p class="text-heading-1">{dashboardState.overallAccuracy}%</p>
+						<p>Overall Accuracy</p>
+					</div>
+					<div class="overview__item">
+						<p class="text-heading-1">
+							{#if dashboardState.strongestInterval}
+								{dashboardState.strongestInterval.interval}
+								<span class="text-body">({dashboardState.strongestInterval.correctPercent}%)</span>
+							{:else}
+								-
+							{/if}
+						</p>
+						<p>Strongest</p>
+					</div>
+					<div class="overview__item">
+						<p class="text-heading-1">
+							{#if dashboardState.weakestInterval}
+								{dashboardState.weakestInterval.interval}
+								<span class="text-body">({dashboardState.weakestInterval.correctPercent}%)</span>
+							{:else}
+								-
+							{/if}
+						</p>
+						<p>Weakest</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="interval-card panel space-above-base">
+				<div class="interval-card__top flex-row lay-space-between">
+					<p>Stats</p>
+					<div class="flex-row">
+						<p class="text-caption">Sort by</p>
+						<Select
+							style="width: fit-content;"
+							bind:value={sortSelectOption}
+							options={sortSelectOptions}
+						/>
+					</div>
+				</div>
+				{#each sortedStats as stat}
+					<div class="interval flex-row space-above-sm">
+						<div class="interval__name flex-col">
+							<p class="text-heading-3">{stat.interval}</p>
+							<p class="text-caption-subtle">{stat.name}</p>
+						</div>
+						<div class="interval__progress">
+							<div
+								class="custom-progress"
+								role="progressbar"
+								aria-valuenow={stat.correctPercent}
+								aria-valuemin="0"
+								aria-valuemax="100"
+							>
+								<div class="custom-progress-fill" style="width: {stat.correctPercent}%;"></div>
+							</div>
+						</div>
+						<div class="interval__amount flex-col lay-gap-none">
+							<p class="text-caption-subtle">Correct</p>
+							<span class="text-heading-3">{stat.correct} / {stat.correct + stat.wrong}</span>
+						</div>
+					</div>
+				{/each}
+			</div>
+
+			<div class="reset-stats flex-row space-above-base">
+				<Button variant="destructive" onclick={handleResetDataPressed}>Reset</Button>
+			</div>
+		{/if}
+	</main>
 </Wrapper>
 
 <Modal isOpen={isModalOpen}>
-  <ConfirmationModalCard
-    title="Reset Stats"
-    message="Are you sure you want to reset ALL of your stats data? This action is irreversible."
-    confirmationText="Reset"
-    onResponse={handleResetModalResponse}
-  />
+	<ConfirmationModalCard
+		title="Reset Stats"
+		message="Are you sure you want to reset ALL of your stats data? This action is irreversible."
+		confirmationText="Reset"
+		onResponse={handleResetModalResponse}
+	/>
 </Modal>
 
 <style>
-  main {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-16);
+	.empty-card {
+		height: 7em;
+	}
 
-    width: 100%;
-    padding: var(--app-padding);
-  }
-  .no-data {
-    padding: var(--space-16);
-  }
-  .interval-stat {
-    padding-block: var(--space-16);
-  }
-  .interval-stat__text {
-    padding-inline: var(--space-8);
-    min-width: 11ch;
-  }
-  .interval-stat__stats {
-    width: 100%;
-  }
-  .stat {
-    height: 3px;
-  }
-  .stat.correct {
-    background-color: var(--color-bg-success);
-  }
-  .stat.wrong {
-    background-color: var(--color-bg-danger);
-  }
-  .stats__text {
-    justify-content: space-between;
-  }
-  .reset-stats {
-    justify-content: end;
-  }
+	.overview {
+		display: grid;
+		grid-template-columns: 14em repeat(auto-fit, minmax(200px, 1fr));
+		place-items: end center;
+		row-gap: var(--space-24);
+		padding: var(--space-8);
+	}
+
+	.overview__item {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
+		text-align: center;
+	}
+
+	.reset-stats {
+		justify-content: end;
+	}
+
+	.interval-card {
+		padding: 0;
+	}
+
+	.interval {
+		gap: 0;
+		padding: var(--space-16) var(--space-24);
+	}
+
+	.interval-card__top {
+		padding: var(--space-12);
+	}
+
+	.interval:not(:last-child) {
+		border-bottom: 1px solid var(--color-border-subtle);
+	}
+
+	.interval__name {
+		flex: 1;
+		gap: 0;
+	}
+
+	.interval__progress {
+		flex: 2;
+		margin-inline: var(--space-24);
+	}
+
+	.custom-progress {
+		width: 100%;
+		max-width: 350px;
+		height: 8px;
+		background-color: var(--color-bg-surface-2);
+		border-radius: var(--radius-full, 99px);
+		overflow: hidden;
+	}
+
+	.custom-progress-fill {
+		height: 100%;
+		background-color: var(--color-bg-addon-green);
+	}
+
+	.interval__amount {
+		text-align: right;
+	}
+
+	@media (max-width: 768px) {
+		.overview {
+			padding-inline: 0;
+			grid-template-columns: 8em repeat(auto-fit, minmax(80px, 1fr));
+		}
+
+		.interval {
+			padding: var(--space-12);
+		}
+	}
 </style>

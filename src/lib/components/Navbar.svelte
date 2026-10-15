@@ -1,235 +1,219 @@
 <script>
-  import { onNavigate } from "$app/navigation";
-  import { exercisesData, toolsData } from "$lib/data/appData";
-  import Icon from "./Icons/Icon.svelte";
-  import Button from "./UI/Button.svelte";
+	import { onNavigate } from "$app/navigation";
+	import { exercisesData, toolsData } from "$lib/data/appData";
+	import Icon from "./Icons/Icon.svelte";
+	import Button from "./UI/Button.svelte";
 
-  let mobileMenuOpen = $state(false);
+	let mobileMenuOpen = $state(false);
 
-  function toggleMobileMenu() {
-    mobileMenuOpen = !mobileMenuOpen;
-  }
+	function toggleMobileMenu() {
+		mobileMenuOpen = !mobileMenuOpen;
+	}
 
-  onNavigate(() => {
-    mobileMenuOpen = false;
-  });
+	onNavigate(() => {
+		mobileMenuOpen = false;
+	});
 </script>
 
 <div class="desktop-header flex-row lay-gap-lg">
-  <a href="/" class="desktop-header__logo link flex-row lay-gap-sm">
-    <img
-      src="/icon-192x192.webp"
-      alt="Tone Tools Logo"
-      width="32"
-      height="32"
-    />
-    <h1 class="text-heading-2">Tone Tools</h1>
-  </a>
+	<a href="/" class="desktop-header__logo link flex-row lay-gap-sm">
+		<img src="/icon-192x192.webp" alt="Tone Tools Logo" width="32" height="32" />
+		<h1 class="text-heading-2">Tone Tools</h1>
+	</a>
 
-  <div class="desktop-header__links flex-row">
-    <a href="/exercises" class="link">Exercises</a>
-    <a href="/tools" class="link">Tools</a>
-    <a href="/about" class="link">About</a>
-    <a href="/settings" class="link">Settings</a>
-  </div>
+	<div class="desktop-header__links flex-row">
+		<a href="/exercises" class="link">Exercises</a>
+		<a href="/tools" class="link">Tools</a>
+		<a href="/about" class="link">About</a>
+		<a href="/settings" class="link">Settings</a>
+	</div>
 </div>
 
 <div class="mobile-header flex-row">
-  <a href="/" class="link">
-    <img
-      src="/icon-192x192.webp"
-      alt="Tone Tools Logo"
-      width="32"
-      height="32"
-    />
-  </a>
-  <div class="mobile-header__menu">
-    <Button variant="text" size="icon-base" onclick={toggleMobileMenu}>
-      <Icon icon="menu" />
-    </Button>
-  </div>
+	<a href="/" class="link">
+		<img src="/icon-192x192.webp" alt="Tone Tools Logo" width="32" height="32" />
+	</a>
+	<div class="mobile-header__menu">
+		<Button variant="text" icon onclick={toggleMobileMenu}>
+			<Icon icon="menu" />
+		</Button>
+	</div>
 </div>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div
-  class="backdrop"
-  class:hide={!mobileMenuOpen}
-  onclick={toggleMobileMenu}
-></div>
+<div class="backdrop" class:hide={!mobileMenuOpen} onclick={toggleMobileMenu}></div>
 <aside class="mobile-sidebar" class:hide={!mobileMenuOpen}>
-  <div class="mobile-sidebar__top flex-row">
-    <a href="/" class="link flex-row">
-      <img
-        src="/icon-192x192.webp"
-        alt="Tone Tools Logo"
-        width="32"
-        height="32"
-      />
-      <h1 class="text-heading-2">Tone Tools</h1>
-    </a>
+	<div class="mobile-sidebar__top flex-row">
+		<a href="/" class="link flex-row">
+			<img src="/icon-192x192.webp" alt="Tone Tools Logo" width="32" height="32" />
+			<h1 class="text-heading-2">Tone Tools</h1>
+		</a>
 
-    <Button variant="text" size="icon-base" onclick={toggleMobileMenu}>
-      <Icon icon="close" />
-    </Button>
-  </div>
+		<Button variant="text" icon onclick={toggleMobileMenu}>
+			<Icon icon="close" />
+		</Button>
+	</div>
 
-  <div class="mobile-sidebar__links flex-col lay-gap-xsm">
-    {#each exercisesData.slice(0, 5) as item}
-      <a href={item.href} class="link link--sidebar">
-        <Icon icon={item.icon} />
-        <p>{item.name}</p>
-      </a>
-    {/each}
-    <a href="/exercises" class="link link--sidebar">
-      <p>View Exercises</p>
-    </a>
-  </div>
+	<div class="mobile-sidebar__links flex-col">
+		{#each exercisesData.slice(0, 5) as item}
+			<a href={item.href} class="link link--sidebar">
+				<Icon icon={item.icon} />
+				<p>{item.name}</p>
+			</a>
+		{/each}
+		<a href="/exercises" class="link link--sidebar">
+			<p class="text-caption">View More</p>
+		</a>
+	</div>
 
-  <hr class="space-above-base" />
+	<hr class="space-above-base" />
 
-  <div class="mobile-sidebar__links flex-col lay-gap-xsm">
-    {#each toolsData.slice(0, 5) as item}
-      <a href={item.href} class="link link--sidebar">
-        <Icon icon={item.icon} />
-        <p>{item.name}</p>
-      </a>
-    {/each}
-    <a href="/tools" class="link link--sidebar">
-      <p>View Tools</p>
-    </a>
-  </div>
+	<div class="mobile-sidebar__links flex-col">
+		{#each toolsData.slice(0, 5) as item}
+			<a href={item.href} class="link link--sidebar">
+				<Icon icon={item.icon} />
+				<p>{item.name}</p>
+			</a>
+		{/each}
+		<a href="/tools" class="link link--sidebar">
+			<p class="text-caption">View More</p>
+		</a>
+	</div>
 
-  <hr class="space-above-base" />
+	<hr class="space-above-base" />
 
-  <div class="mobile-sidebar__links flex-col lay-gap-xsm">
-    <a href="/about" class="link link--sidebar">
-      <Icon icon="about" />
-      <p>About</p>
-    </a>
-    <a href="/settings" class="link link--sidebar">
-      <Icon icon="settings" />
-      <p>Settings</p>
-    </a>
-  </div>
+	<div class="mobile-sidebar__links flex-col">
+		<a href="/about" class="link link--sidebar">
+			<Icon icon="about" />
+			<p>About</p>
+		</a>
+		<a href="/settings" class="link link--sidebar">
+			<Icon icon="settings" />
+			<p>Settings</p>
+		</a>
+	</div>
 </aside>
 
 <style>
-  .desktop-header {
-    display: none;
-    position: sticky;
-    top: 0;
-    z-index: 97;
-    padding: var(--space-8);
+	.desktop-header {
+		display: none;
+		position: sticky;
+		top: 0;
+		z-index: 97;
+		padding: var(--space-8);
 
-    background-color: var(--color-bg-surface-1);
-    border-bottom: 1px solid var(--color-border-subtle);
-    box-shadow: var(--shadow-1);
-    overflow-x: auto;
+		background-color: var(--color-bg-surface-1);
+		border-bottom: 1px solid var(--color-border-subtle);
+		box-shadow: var(--shadow-1);
+		overflow-x: auto;
 
-    background-color: var(--color-bg-surface-1);
-  }
+		background-color: var(--color-bg-surface-1);
+	}
 
-  .desktop-header__logo.link:hover {
-    background-color: inherit;
-  }
+	.desktop-header__logo.link:hover {
+		background-color: inherit;
+	}
 
-  .mobile-header {
-    position: sticky;
-    top: 0;
-    justify-content: space-between;
-    padding: var(--space-4);
-    z-index: 97;
+	.mobile-header {
+		position: sticky;
+		top: 0;
+		justify-content: space-between;
+		padding: var(--space-4);
+		z-index: 97;
 
-    background-color: var(--color-bg-surface-1);
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: var(--shadow-1);
-  }
+		background-color: var(--color-bg-surface-1);
+		border-bottom: 1px solid var(--color-border);
+		box-shadow: var(--shadow-1);
+	}
 
-  .link {
-    display: flex;
-    align-items: center;
+	.link {
+		display: flex;
+		align-items: center;
 
-    width: fit-content;
-    min-height: 40px;
-    padding: 0 var(--space-12);
-    border-radius: var(--radius-base);
+		width: fit-content;
+		min-height: 40px;
+		padding: 0 var(--space-12);
+		border-radius: var(--radius-base);
 
-    -webkit-tap-highlight-color: transparent;
+		-webkit-tap-highlight-color: transparent;
 
-    transition: var(--transition-color);
-  }
+		transition: var(--transition-color);
+	}
 
-  .link:hover {
-    background-color: var(--color-bg-surface-1-active);
-  }
+	.link:hover {
+		background-color: var(--color-bg-surface-1-active);
+	}
 
-  .backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 98;
+	.backdrop {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		z-index: 98;
 
-    background-color: rgba(0, 0, 0, 0.4);
-  }
+		background-color: rgba(0, 0, 0, 0.4);
+	}
 
-  .backdrop.hide {
-    display: none;
-  }
+	.backdrop.hide {
+		display: none;
+	}
 
-  .mobile-sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 99;
-    overflow-y: auto;
+	.mobile-sidebar {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 99;
+		overflow-y: auto;
 
-    width: clamp(300px, 20dvw, 500px);
-    padding: var(--space-4);
+		width: clamp(300px, 20dvw, 500px);
+		padding: var(--space-4);
 
-    background-color: var(--color-bg-surface-1);
-    border-right: 1px solid var(--color-border);
-    box-shadow: var(--shadow-2);
-  }
+		color: var(--color-on-bg-surface);
+		background-color: var(--color-bg-surface-1);
+		border-right: 1px solid var(--color-border);
+		box-shadow: var(--shadow-2);
+	}
 
-  .mobile-sidebar.hide {
-    display: none;
-  }
+	.mobile-sidebar.hide {
+		display: none;
+	}
 
-  .mobile-sidebar__top {
-    justify-content: space-between;
-    margin-bottom: var(--space-24);
-  }
+	.mobile-sidebar__top {
+		justify-content: space-between;
+		margin-bottom: var(--space-24);
+	}
 
-  .mobile-sidebar__top > a:first-child {
-    width: 100%;
-  }
+	.mobile-sidebar__top > a:first-child {
+		width: 100%;
+	}
 
-  .mobile-sidebar__links {
-    margin-top: var(--space-16);
-  }
+	.mobile-sidebar__links {
+		margin-top: var(--space-16);
+		gap: var(--space-4);
+	}
 
-  .mobile-sidebar__links > .link {
-    padding-block: var(--space-16);
-  }
+	.mobile-sidebar__links > .link {
+		padding-block: var(--space-16);
+		gap: var(--space-12);
+	}
 
-  .link--sidebar {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
+	.link--sidebar {
+		display: flex;
+		align-items: center;
+		gap: var(--space-8);
 
-    width: 100%;
-  }
+		width: 100%;
+	}
 
-  @media (min-width: 900px) {
-    .mobile-header {
-      display: none;
-    }
-    .desktop-header {
-      display: flex;
-    }
-  }
+	@media (min-width: 900px) {
+		.mobile-header {
+			display: none;
+		}
+		.desktop-header {
+			display: flex;
+		}
+	}
 </style>

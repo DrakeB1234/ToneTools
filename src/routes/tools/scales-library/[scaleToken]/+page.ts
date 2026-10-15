@@ -1,58 +1,53 @@
-import { error } from '@sveltejs/kit';
-import type { PageLoad } from './$types';
-import { regexScaleToken } from '$lib/helpers/musicTheoryConstants';
-import { getFormulaFromMode, getFullNoteNameFromObj, getModeDiatonicTriads, getNumeralsFromMode, getRelativeMajorMinorScales, getScaleNotes } from '$lib/helpers/musicTheory';
+import { error } from "@sveltejs/kit";
+import type { PageLoad } from "./$types";
+import { regexScaleToken } from "$lib/helpers/musicTheoryConstants";
+import {
+	getFormulaFromMode,
+	getFullNoteNameFromObj,
+	getModeDiatonicTriads,
+	getNumeralsFromMode,
+	getRelativeMajorMinorScales,
+	getScaleNotes
+} from "$lib/helpers/musicTheory";
 
 export const load: PageLoad = ({ params }) => {
-  const rawUrlParam = params.scaleToken;
+	const rawUrlParam = params.scaleToken;
 
-  const match = rawUrlParam.match(regexScaleToken);
+	const match = rawUrlParam.match(regexScaleToken);
 
-  if (!match || !match.groups) {
-    throw error(404, "Invalid scale format provided in URL");
-  }
+	if (!match || !match.groups) {
+		throw error(404, "Invalid scale format provided in URL");
+	}
 
-  const { note, accidental, scale } = match.groups;
+	const { note, accidental, scale } = match.groups;
 
-  let fixedNote = note;
-  if (accidental === "sharp") fixedNote += "#";
-  else if (accidental === "flat") fixedNote += "b";
+	let fixedNote = note;
+	if (accidental === "sharp") fixedNote += "#";
+	else if (accidental === "flat") fixedNote += "b";
 
-  const startingOctave = 4;
+	const startingOctave = 4;
 
-  const notes = getScaleNotes(
-    fixedNote,
-    scale,
-    startingOctave,
-  );
-  const triads = getModeDiatonicTriads(
-    fixedNote,
-    scale,
-    startingOctave,
-  );
-  const numerals = getNumeralsFromMode(scale);
-  const formula = getFormulaFromMode(scale);
-  const relativeModes = getRelativeMajorMinorScales(
-    fixedNote,
-    scale,
-  );
+	const notes = getScaleNotes(fixedNote, scale, startingOctave);
+	const triads = getModeDiatonicTriads(fixedNote, scale, startingOctave);
+	const numerals = getNumeralsFromMode(scale);
+	const formula = getFormulaFromMode(scale);
+	const relativeModes = getRelativeMajorMinorScales(fixedNote, scale);
 
+	if (!notes || !triads || !numerals || !formula || !relativeModes) {
+		throw error(404, "Scale not found in library");
+	}
 
-  if (!notes || !triads || !numerals || !formula || !relativeModes) {
-    throw error(404, "Scale not found in library");
-  };
+	const pianoRollNotes = notes.map((e) => getFullNoteNameFromObj(e));
 
-  const pianoRollNotes = notes.map(e => getFullNoteNameFromObj(e));
+	return {
+		noteToken: fixedNote,
+		scaleToken: scale,
+		pianoRollNotes: pianoRollNotes,
 
-  return {
-    noteToken: fixedNote,
-    scaleToken: scale,
-    pianoRollNotes: pianoRollNotes,
-
-    scaleNotes: notes,
-    triads: triads,
-    numerals: numerals,
-    formula: formula,
-    relativeModes: relativeModes
-  };
+		scaleNotes: notes,
+		triads: triads,
+		numerals: numerals,
+		formula: formula,
+		relativeModes: relativeModes
+	};
 };

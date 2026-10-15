@@ -1,44 +1,45 @@
 .modal-card {
-  width: 100%;
-  max-height: 100%;
+	width: 100%;
+	max-height: 100%;
 
-  background-color: var(--color-bg-surface-1);
-  border-radius: var(--radius-lg);
+	background-color: var(--color-bg-surface-1);
+	border-radius: var(--radius-lg);
 
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 }
 
 .modal-header {
-  flex-shrink: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-8) var(--space-16);
-  padding-right: var(--space-12);
-  border-bottom: 1px solid var(--color-border);
+	flex-shrink: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--space-8) var(--space-16);
+	padding-right: var(--space-12);
+	border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .modal-body {
-  flex-grow: 1;
-  overflow-y: auto;
-  min-height: 0;
-  padding: var(--space-16);
+	flex-grow: 1;
+	overflow-y: auto;
+	min-height: 0;
+	padding: var(--space-24) var(--space-16);
 }
 
 .modal-footer {
-  flex-shrink: 0;
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-12);
-  padding: var(--space-12) var(--space-16);
-  background-color: var(--color-bg-surface-1);
+	flex-shrink: 0;
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--space-12);
+	padding: var(--space-12) var(--space-16);
+	margin-top: var(--space-16);
+	background-color: var(--color-bg-surface-1);
 }
 
 @media (min-width: 600px) {
-  .modal-card {
-    margin-inline: auto;
-    max-width: 550px;
-  }
+	.modal-card {
+		margin-inline: auto;
+		max-width: 550px;
+	}
 }

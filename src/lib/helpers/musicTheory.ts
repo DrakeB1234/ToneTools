@@ -1,462 +1,497 @@
 import { Chord, Interval, Midi, Mode, Note, Scale } from "tonal";
-import { chordCategoryEntries, chordInversionNames, intervalObjs, majorModes, minorModes, modeFormulaMap, modeNumeralMap, naturalNoteNames } from "./musicTheoryConstants";
-import { type DiatonicChordSet, type GeneralChord, type GeneralNote } from "../types/musicTheoryTypes";
-
-// Intervals
-
-export function getIntervalName(interval: string): string {
-  const intervalObj = intervalObjs.find(e => e.interval === interval);
-
-  return intervalObj?.name ?? "";
-}
+import {
+	chordCategoryEntries,
+	chordInversionNames,
+	majorModes,
+	minorModes,
+	modeFormulaMap,
+	modeNumeralMap,
+	naturalNoteNames
+} from "./musicTheoryConstants";
+import {
+	type DiatonicChordSet,
+	type GeneralChord,
+	type GeneralNote
+} from "../types/musicTheoryTypes";
 
 export function incrementNoteNameByInterval(note: string, interval: string) {
-  const newNote = Note.transpose(note, interval);
+	const newNote = Note.transpose(note, interval);
 
-  return newNote;
+	return newNote;
 }
 
 export function decrementNoteNameByInterval(note: string, interval: string) {
-  // Convert app interval string (m2) to tonals (2m) for proper parsing
-  const normalizedInterval = Interval.get(interval).name;
-  const newNote = Note.transpose(note, `-${normalizedInterval}`);
+	// Convert app interval string (m2) to tonals (2m) for proper parsing
+	const normalizedInterval = Interval.get(interval).name;
+	const newNote = Note.transpose(note, `-${normalizedInterval}`);
 
-  return newNote;
+	return newNote;
 }
 
 export function getIntervalDistanceFromNoteNames(noteNameA: string, noteNameB: string) {
-  return Interval.distance(noteNameA, noteNameB);
+	return Interval.distance(noteNameA, noteNameB);
 }
 
 // Notes
 
 export function noteToAbsoluteSemitone(noteName: string): number | null {
-  const rawValue = Midi.toMidi(noteName);
+	const rawValue = Midi.toMidi(noteName);
 
-  if (!rawValue) return null
-  return rawValue - 12;
+	if (!rawValue) return null;
+	return rawValue - 12;
 }
 
 export function convertNoteNameToObj(noteName: string): GeneralNote {
-  const tonalNoteObj = Note.get(noteName);
+	const tonalNoteObj = Note.get(noteName);
 
-  return {
-    letter: tonalNoteObj.letter,
-    accidental: tonalNoteObj.acc !== "" ? tonalNoteObj.acc : null,
-    octave: tonalNoteObj.oct ?? null,
-  }
+	return {
+		letter: tonalNoteObj.letter,
+		accidental: tonalNoteObj.acc !== "" ? tonalNoteObj.acc : null,
+		octave: tonalNoteObj.oct ?? null
+	};
 }
 
-export function convertNoteNameToMidi(noteName: string): number | null { return Note.midi(noteName) ?? null }
+export function convertNoteNameToMidi(noteName: string): number | null {
+	return Note.midi(noteName) ?? null;
+}
 
-export function convertMidiToNoteName(midiNum: number): string { return Midi.midiToNoteName(midiNum); }
+export function convertNoteObjToMidi(note: GeneralNote): number | null {
+	return Note.midi(getFullNoteNameFromObj(note));
+}
+
+export function convertMidiToNoteName(midiNum: number): string {
+	return Midi.midiToNoteName(midiNum);
+}
 
 export function convertNoteNameToChroma(note: string): number | null {
-  const chroma = Note.chroma(note);
-  return !Number.isNaN(chroma) ? chroma : null;
+	const chroma = Note.chroma(note);
+	return !Number.isNaN(chroma) ? chroma : null;
 }
 
 export function getFullNoteNameFromObj(note: GeneralNote) {
-  return `${note.letter}${note.accidental ?? ""}${note.octave ?? ""}`;
+	return `${note.letter}${note.accidental ?? ""}${note.octave ?? ""}`;
 }
 
 export function simplifyNoteNames(noteNames: string[]) {
-  return noteNames.map(e => {
-    return Note.simplify(e)
-  });
+	return noteNames.map((e) => {
+		return Note.simplify(e);
+	});
 }
 
-export function simplifyNoteName(noteName: string) { return Note.simplify(noteName) };
+export function simplifyNoteName(noteName: string) {
+	return Note.simplify(noteName);
+}
 
-export function sortNoteNames(noteNames: string[]) { return Note.sortedNames(noteNames) };
+export function sortNoteNames(noteNames: string[]) {
+	return Note.sortedNames(noteNames);
+}
 
 export function getPitchClassFromNoteName(noteName: string) {
-  return Note.pitchClass(noteName);
+	return Note.pitchClass(noteName);
 }
 
 export function getLetterFromNoteName(noteName: string) {
-  return noteName.at(0);
+	return noteName.at(0);
 }
 
 export function getAccidentalFromNoteName(noteName: string) {
-  const accidental = Note.get(noteName).acc;
-  return accidental !== "" ? accidental : "n";
+	const accidental = Note.get(noteName).acc;
+	return accidental !== "" ? accidental : "n";
 }
 
 export function stepNoteName(noteName: string, direction: number) {
-  const noteObj = Note.get(noteName);
-  if (noteObj.empty) return noteName;
+	const noteObj = Note.get(noteName);
+	if (noteObj.empty) return noteName;
 
-  let nextStep = noteObj.step + direction;
-  let nextOctave = noteObj.oct;
+	let nextStep = noteObj.step + direction;
+	let nextOctave = noteObj.oct;
 
-  if (nextStep > 6) {
-    nextStep = 0;
-    if (nextOctave !== undefined) nextOctave += direction;
-  }
-  else if (nextStep < 0) {
-    nextStep = 6;
-    if (nextOctave !== undefined) nextOctave += direction;
-  };
+	if (nextStep > 6) {
+		nextStep = 0;
+		if (nextOctave !== undefined) nextOctave += direction;
+	} else if (nextStep < 0) {
+		nextStep = 6;
+		if (nextOctave !== undefined) nextOctave += direction;
+	}
 
-  const nextLetter = naturalNoteNames[nextStep];
-  return nextOctave !== undefined ? `${nextLetter}${nextOctave}` : nextLetter;
+	const nextLetter = naturalNoteNames[nextStep];
+	return nextOctave !== undefined ? `${nextLetter}${nextOctave}` : nextLetter;
 }
 
 // Chords
 
 export function getPreferredChordSymbol(chordSymbol: string) {
-  if (chordSymbol.includes("M")) return "maj";
+	if (chordSymbol.includes("M")) return "maj";
 
-  return chordSymbol;
+	return chordSymbol;
 }
 
 export function detectChordsByNoteNames(notes: string[]) {
-  const chordTokens = Chord.detect(notes);
+	const chordTokens = Chord.detect(notes);
 
-  if (chordTokens) {
-    const chordObjs = chordTokens.map(e => Chord.get(e));
-    return chordObjs.map(e => {
-      const symbolWithoutTonic = getChordSymbolWithoutTonic(e.symbol, e.tonic ?? "");
-      const fixedChordSymbol = getPreferredChordSymbol(symbolWithoutTonic);
+	if (chordTokens) {
+		const chordObjs = chordTokens.map((e) => Chord.get(e));
+		return chordObjs.map((e) => {
+			const symbolWithoutTonic = getChordSymbolWithoutTonic(e.symbol, e.tonic ?? "");
+			const fixedChordSymbol = getPreferredChordSymbol(symbolWithoutTonic);
 
-      return {
-        tonic: e.tonic,
-        symbol: fixedChordSymbol,
-        notes: e.notes
-      }
-    });
-  }
-  else return null;
+			return {
+				tonic: e.tonic,
+				symbol: fixedChordSymbol,
+				notes: e.notes
+			};
+		});
+	} else return null;
 }
 
 export function getAllCategoryChords(category: string) {
-  return chordCategoryEntries[category];
+	return chordCategoryEntries[category];
 }
 
-export function getChord(note: string, chordSymbol: string, bassNote?: string, startingOctave: number = 4) {
-  const fixedChordSymbol = chordSymbol + (bassNote ? `/${bassNote}` : "");
-  const chordObj = Chord.get(note + fixedChordSymbol);
+export function getChord(
+	note: string,
+	chordSymbol: string,
+	bassNote?: string,
+	startingOctave: number = 4
+) {
+	const fixedChordSymbol = chordSymbol + (bassNote ? `/${bassNote}` : "");
+	const chordObj = Chord.get(note + fixedChordSymbol);
 
-  if (chordObj.empty) return null;
+	if (chordObj.empty) return null;
 
-  const chordNotes = Chord.notes(chordObj.symbol, note + startingOctave);
-  const notes: GeneralNote[] = chordNotes.map(e => {
-    return convertNoteNameToObj(e);
-  });
+	const chordNotes = Chord.notes(chordObj.symbol, note + startingOctave);
+	const notes: GeneralNote[] = chordNotes.map((e) => {
+		return convertNoteNameToObj(e);
+	});
 
-  const resChordSymbol = getPreferredChordSymbol(fixedChordSymbol);
+	const resChordSymbol = getPreferredChordSymbol(fixedChordSymbol);
 
-  return {
-    name: chordObj.name,
-    symbol: resChordSymbol,
-    tonic: note,
-    bass: chordObj.bass,
-    notes: notes,
-
-  } as GeneralChord;
+	return {
+		name: chordObj.name,
+		symbol: resChordSymbol,
+		tonic: note,
+		bass: chordObj.bass,
+		notes: notes
+	} as GeneralChord;
 }
 
 export function getChordAbsoulteOctave(note: string, chordSymbol: string, bassNote?: string) {
-  return getChord(note, chordSymbol, bassNote, 0);
+	return getChord(note, chordSymbol, bassNote, 0);
 }
 
 export function findChordInversionFromNotes(notes: string[], fullChordSymbol: string) {
-  if (notes.length === 0) return 0;
+	if (notes.length === 0) return 0;
 
-  // Remove Bass Symbol
-  const baseSymbol = fullChordSymbol.split("/")[0];
-  const lowestPitchClass = getPitchClassFromNoteName(notes[0]);
+	// Remove Bass Symbol
+	const baseSymbol = fullChordSymbol.split("/")[0];
+	const lowestPitchClass = getPitchClassFromNoteName(notes[0]);
 
-  const chordObj = Chord.get(baseSymbol);
+	const chordObj = Chord.get(baseSymbol);
 
-  const inversionIdx = chordObj.notes.indexOf(lowestPitchClass);
+	const inversionIdx = chordObj.notes.indexOf(lowestPitchClass);
 
-  return Math.max(0, inversionIdx);
+	return Math.max(0, inversionIdx);
 }
 
 // findChord function may return null, if there is any null chord, return null to caller
 export function getChordInversions(note: string, chordSymbol: string, startingOctave: number = 4) {
-  const chordObj = Chord.get(note + chordSymbol);
+	const chordObj = Chord.get(note + chordSymbol);
 
-  const chordInversions = chordObj.notes.map(e => {
-    return getChord(note, chordSymbol, e, startingOctave);
-  });
+	const chordInversions = chordObj.notes.map((e) => {
+		return getChord(note, chordSymbol, e, startingOctave);
+	});
 
-  if (chordInversions.includes(null)) return null;
+	if (chordInversions.includes(null)) return null;
 
-  return chordInversions.map((e, idx) => {
-    return {
-      chord: e!,
-      inversionName: chordInversionNames[idx]
-    }
-  })
-
+	return chordInversions.map((e, idx) => {
+		return {
+			chord: e!,
+			inversionName: chordInversionNames[idx]
+		};
+	});
 }
 
 export function getChordSecondaryDominant(note: string) {
-  const secondaryDominantRoot = incrementNoteNameByInterval(note, "5P");
+	const secondaryDominantRoot = incrementNoteNameByInterval(note, "5P");
 
-  return getChord(secondaryDominantRoot, "7");
+	return getChord(secondaryDominantRoot, "7");
 }
 
-export function getSecondaryDominantsFromScale(tonic: string, scaleType: string): DiatonicChordSet[] | null {
-  const diatonicTargets = getDiatonicChordsFromScale(tonic, scaleType);
-  if (!diatonicTargets) return null;
+export function getSecondaryDominantsFromScale(
+	tonic: string,
+	scaleType: string
+): DiatonicChordSet[] | null {
+	const diatonicTargets = getDiatonicChordsFromScale(tonic, scaleType);
+	if (!diatonicTargets) return null;
 
-  const result = diatonicTargets.map((diatonicObj) => {
-    const targetTonic = diatonicObj.chords[0].tonic;
+	const result = diatonicTargets.map((diatonicObj) => {
+		const targetTonic = diatonicObj.chords[0].tonic;
 
-    const rawSecDomTonic = incrementNoteNameByInterval(targetTonic, "5P");
-    const secDomTonic = simplifyNoteName(rawSecDomTonic);
+		const rawSecDomTonic = incrementNoteNameByInterval(targetTonic, "5P");
+		const secDomTonic = simplifyNoteName(rawSecDomTonic);
 
-    const secDomDegree = `V7/${diatonicObj.degree}`;
+		const secDomDegree = `V7/${diatonicObj.degree}`;
 
-    return {
-      degree: secDomDegree,
-      chords: [
-        { tonic: secDomTonic, symbol: "7" },
-        { tonic: secDomTonic, symbol: "9" },
-        { tonic: secDomTonic, symbol: "7b9" }
-      ]
-    };
-  });
+		return {
+			degree: secDomDegree,
+			chords: [
+				{ tonic: secDomTonic, symbol: "7" },
+				{ tonic: secDomTonic, symbol: "9" },
+				{ tonic: secDomTonic, symbol: "7b9" }
+			]
+		};
+	});
 
-  return result;
+	return result;
 }
 
 // Major / Minor modes are considered by the modes listed in exported consts majorModes and minorModes
-export function getBorrowedChordsFromScale(tonic: string, scaleType: string): DiatonicChordSet[] | null {
-  let borrowedScaleType = "minor";
+export function getBorrowedChordsFromScale(
+	tonic: string,
+	scaleType: string
+): DiatonicChordSet[] | null {
+	let borrowedScaleType = "minor";
 
-  if (majorModes.includes(scaleType.toLowerCase())) {
-    borrowedScaleType = "minor";
-  } else if (minorModes.includes(scaleType.toLowerCase())) {
-    borrowedScaleType = "major";
-  }
+	if (majorModes.includes(scaleType.toLowerCase())) {
+		borrowedScaleType = "minor";
+	} else if (minorModes.includes(scaleType.toLowerCase())) {
+		borrowedScaleType = "major";
+	}
 
-  const borrowedChords = getDiatonicChordsFromScale(tonic, borrowedScaleType);
+	const borrowedChords = getDiatonicChordsFromScale(tonic, borrowedScaleType);
 
-  if (!borrowedChords) return null;
+	if (!borrowedChords) return null;
 
-  return borrowedChords;
+	return borrowedChords;
 }
 
 export function getChordIntervalFormula(note: string, chordSymbol: string) {
-  const chordObj = Chord.get(note + chordSymbol);
-  return chordObj.intervals;
+	const chordObj = Chord.get(note + chordSymbol);
+	return chordObj.intervals;
 }
 
 export function getChordAliases(note: string, chordSymbol: string) {
-  const chordObj = Chord.get(note + chordSymbol);
-  const fixedAliases = chordObj.aliases.filter(e => e !== "");
-  return fixedAliases;
+	const chordObj = Chord.get(note + chordSymbol);
+	const fixedAliases = chordObj.aliases.filter((e) => e !== "");
+	return fixedAliases;
 }
 
 export function getScalesFromChord(note: string, chordSymbol: string) {
-  return Chord.chordScales(note + chordSymbol);
+	return Chord.chordScales(note + chordSymbol);
 }
 
-export function getSimilarChords(note: string, chordSymbol: string): Pick<GeneralChord, "tonic" | "symbol" | "name">[] {
-  let similarChords = Chord.extended(note + chordSymbol).slice(0, 10);
-  if (similarChords.length < 2) similarChords = Chord.reduced(note + chordSymbol).slice(0, 10);
+export function getSimilarChords(
+	note: string,
+	chordSymbol: string
+): Pick<GeneralChord, "tonic" | "symbol" | "name">[] {
+	let similarChords = Chord.extended(note + chordSymbol).slice(0, 10);
+	if (similarChords.length < 2) similarChords = Chord.reduced(note + chordSymbol).slice(0, 10);
 
-  const chordObjs = similarChords.map(e => Chord.get(e));
+	const chordObjs = similarChords.map((e) => Chord.get(e));
 
-  return chordObjs.map(e => {
-    const fixedChordSymbol = getChordSymbolWithoutTonic(e.symbol, note);
+	return chordObjs.map((e) => {
+		const fixedChordSymbol = getChordSymbolWithoutTonic(e.symbol, note);
 
-    return {
-      name: e.name,
-      symbol: fixedChordSymbol,
-      tonic: note,
-    }
-  })
+		return {
+			name: e.name,
+			symbol: fixedChordSymbol,
+			tonic: note
+		};
+	});
 }
 
-export function getModeDiatonicTriads(note: string, scaleType: string, startingOctave: number = 4): GeneralChord[] | null {
-  const triads = Mode.triads(scaleType, note);
-  const scaleName = `${note + startingOctave} ${scaleType}`;
-  const scaleNotes = Scale.get(scaleName).notes;
+export function getModeDiatonicTriads(
+	note: string,
+	scaleType: string,
+	startingOctave: number = 4
+): GeneralChord[] | null {
+	const triads = Mode.triads(scaleType, note);
+	const scaleName = `${note + startingOctave} ${scaleType}`;
+	const scaleNotes = Scale.get(scaleName).notes;
 
-  if (triads.length < 1) return null;
+	if (triads.length < 1) return null;
 
-  const result: GeneralChord[] = triads.map((e, index) => {
-    const chordObj = Chord.get(e);
+	const result: GeneralChord[] = triads.map((e, index) => {
+		const chordObj = Chord.get(e);
 
-    const chordNotes = Chord.notes(e, scaleNotes[index]);
-    const noteObjs = chordNotes.map(e => convertNoteNameToObj(e));
+		const chordNotes = Chord.notes(e, scaleNotes[index]);
+		const noteObjs = chordNotes.map((e) => convertNoteNameToObj(e));
 
-    const symbolWithoutTonic = getChordSymbolWithoutTonic(chordObj.aliases[0], chordObj.tonic ?? "");
-    let fixedSymbol = symbolWithoutTonic;
-    if (fixedSymbol === "M") fixedSymbol = "maj";
-    if (fixedSymbol === "m") fixedSymbol = "min";
+		const symbolWithoutTonic = getChordSymbolWithoutTonic(
+			chordObj.aliases[0],
+			chordObj.tonic ?? ""
+		);
+		let fixedSymbol = symbolWithoutTonic;
+		if (fixedSymbol === "M") fixedSymbol = "maj";
+		if (fixedSymbol === "m") fixedSymbol = "min";
 
-    return {
-      name: chordObj.name,
-      symbol: fixedSymbol,
-      tonic: chordObj.tonic ?? "",
-      bass: chordObj.bass,
-      notes: noteObjs,
-    }
-  });
+		return {
+			name: chordObj.name,
+			symbol: fixedSymbol,
+			tonic: chordObj.tonic ?? "",
+			bass: chordObj.bass,
+			notes: noteObjs
+		};
+	});
 
-  return result;
+	return result;
 }
 
-export function getDiatonicChordsFromScale(tonic: string, scaleType: string): DiatonicChordSet[] | null {
-  const scaleName = `${tonic} ${scaleType}`;
-  const scaleObj = Scale.get(scaleName);
+export function getDiatonicChordsFromScale(
+	tonic: string,
+	scaleType: string
+): DiatonicChordSet[] | null {
+	const scaleName = `${tonic} ${scaleType}`;
+	const scaleObj = Scale.get(scaleName);
 
-  if (scaleObj.empty) return null;
+	if (scaleObj.empty) return null;
 
-  // Fetches precise notes by their 1-based scale degree and auto-handles octave wraps
-  const getNoteByDegree = Scale.degrees(scaleName);
+	// Fetches precise notes by their 1-based scale degree and auto-handles octave wraps
+	const getNoteByDegree = Scale.degrees(scaleName);
 
-  const result = scaleObj.notes.map((_, idx) => {
-    const rootDegree = idx + 1;
-    const rootNote = getNoteByDegree(rootDegree);
-    const rootNoteWithoutOctave = rootNote.replace(/\d/g, '');
+	const result = scaleObj.notes.map((_, idx) => {
+		const rootDegree = idx + 1;
+		const rootNote = getNoteByDegree(rootDegree);
+		const rootNoteWithoutOctave = rootNote.replace(/\d/g, "");
 
-    const triadNotes = [
-      rootNote,
-      getNoteByDegree(rootDegree + 2),
-      getNoteByDegree(rootDegree + 4)
-    ];
+		const triadNotes = [rootNote, getNoteByDegree(rootDegree + 2), getNoteByDegree(rootDegree + 4)];
 
-    const seventhNotes = [
-      ...triadNotes,
-      getNoteByDegree(rootDegree + 6)
-    ];
+		const seventhNotes = [...triadNotes, getNoteByDegree(rootDegree + 6)];
 
-    const ninthNotes = [
-      ...seventhNotes,
-      getNoteByDegree(rootDegree + 8)
-    ];
+		const ninthNotes = [...seventhNotes, getNoteByDegree(rootDegree + 8)];
 
-    const chords: Pick<GeneralChord, "tonic" | "symbol">[] = [];
-    const cleanedTriadChord = formatDiatonicChord(triadNotes, rootNoteWithoutOctave);
-    const cleanedSeventhChord = formatDiatonicChord(seventhNotes, rootNoteWithoutOctave);
-    const cleanedNinthChord = formatDiatonicChord(ninthNotes, rootNoteWithoutOctave);
-    if (cleanedTriadChord) chords.push(cleanedTriadChord);
-    if (cleanedSeventhChord) chords.push(cleanedSeventhChord);
-    if (cleanedNinthChord) chords.push(cleanedNinthChord);
+		const chords: Pick<GeneralChord, "tonic" | "symbol">[] = [];
+		const cleanedTriadChord = formatDiatonicChord(triadNotes, rootNoteWithoutOctave);
+		const cleanedSeventhChord = formatDiatonicChord(seventhNotes, rootNoteWithoutOctave);
+		const cleanedNinthChord = formatDiatonicChord(ninthNotes, rootNoteWithoutOctave);
+		if (cleanedTriadChord) chords.push(cleanedTriadChord);
+		if (cleanedSeventhChord) chords.push(cleanedSeventhChord);
+		if (cleanedNinthChord) chords.push(cleanedNinthChord);
 
-    const degree = modeNumeralMap[scaleType][idx];
+		const degree = modeNumeralMap[scaleType][idx];
 
-    return {
-      degree: degree,
-      chords: chords
-    };
-  });
+		return {
+			degree: degree,
+			chords: chords
+		};
+	});
 
-  return result;
+	return result;
 }
 
-function formatDiatonicChord(notes: string[], rootNote: string): Pick<GeneralChord, "tonic" | "symbol"> | null {
-  const detected = Chord.detect(notes);
+function formatDiatonicChord(
+	notes: string[],
+	rootNote: string
+): Pick<GeneralChord, "tonic" | "symbol"> | null {
+	const detected = Chord.detect(notes);
 
-  if (!detected.length) {
-    return { tonic: rootNote, symbol: "" };
-  }
+	if (!detected.length) {
+		return { tonic: rootNote, symbol: "" };
+	}
 
-  const bestMatch = detected.find(c => c.startsWith(rootNote));
-  if (!bestMatch) return null;
+	const bestMatch = detected.find((c) => c.startsWith(rootNote));
+	if (!bestMatch) return null;
 
-  const chordObj = Chord.get(bestMatch);
+	const chordObj = Chord.get(bestMatch);
 
-  const chordTonic = chordObj.tonic ?? rootNote;
-  let cleanSymbol = getChordSymbolWithoutTonic(chordObj.symbol, chordTonic);
-  cleanSymbol = getPreferredChordSymbol(cleanSymbol);
+	const chordTonic = chordObj.tonic ?? rootNote;
+	let cleanSymbol = getChordSymbolWithoutTonic(chordObj.symbol, chordTonic);
+	cleanSymbol = getPreferredChordSymbol(cleanSymbol);
 
-  return {
-    tonic: chordObj.tonic ?? rootNote,
-    symbol: cleanSymbol
-  };
+	return {
+		tonic: chordObj.tonic ?? rootNote,
+		symbol: cleanSymbol
+	};
 }
 
-function getChordSymbolWithoutTonic(chordSymbol: string, tonic: string) { return chordSymbol.replace(tonic, ""); }
+function getChordSymbolWithoutTonic(chordSymbol: string, tonic: string) {
+	return chordSymbol.replace(tonic, "");
+}
 
 // Misc Music Theory
 
 export function getNumeralsFromMode(scaleType: string): string[] | null {
-  try {
-    const romanNumerals = modeNumeralMap[scaleType];
+	try {
+		const romanNumerals = modeNumeralMap[scaleType];
 
-    return romanNumerals;
-  }
-  catch {
-    return null;
-  }
-};
+		return romanNumerals;
+	} catch {
+		return null;
+	}
+}
 
 export function getFormulaFromMode(scaleType: string): string[] | null {
-  try {
-    const formula = modeFormulaMap[scaleType];
+	try {
+		const formula = modeFormulaMap[scaleType];
 
-    return formula;
-  }
-  catch {
-    return null;
-  }
-};
+		return formula;
+	} catch {
+		return null;
+	}
+}
 
-export function getScaleNotes(noteLetter: String, scaleType: string, startingOctave: number = 4): GeneralNote[] | null {
-  const rootNote = noteLetter + startingOctave.toString();
-  const fullScale = `${rootNote} ${scaleType}`;
-  const scaleObj = Scale.get(fullScale);
+export function getScaleNotes(
+	noteLetter: String,
+	scaleType: string,
+	startingOctave: number = 4
+): GeneralNote[] | null {
+	const rootNote = noteLetter + startingOctave.toString();
+	const fullScale = `${rootNote} ${scaleType}`;
+	const scaleObj = Scale.get(fullScale);
 
-  if (scaleObj.empty) return null;
+	if (scaleObj.empty) return null;
 
-  const generalNoteObjs: GeneralNote[] = scaleObj.notes.map(e => convertNoteNameToObj(e));
+	const generalNoteObjs: GeneralNote[] = scaleObj.notes.map((e) => convertNoteNameToObj(e));
 
-  return generalNoteObjs;
-};
+	return generalNoteObjs;
+}
 
 export function getRelativeMajorMinorScales(noteLetter: String, scaleType: string) {
-  const modes = Scale.modeNames(`${noteLetter} ${scaleType}`);
-  const minorMode = modes.find(e => e[1] === "minor");
-  const majorMode = modes.find(e => e[1] === "major");
-  if (!minorMode || !majorMode) return null;
+	const modes = Scale.modeNames(`${noteLetter} ${scaleType}`);
+	const minorMode = modes.find((e) => e[1] === "minor");
+	const majorMode = modes.find((e) => e[1] === "major");
+	if (!minorMode || !majorMode) return null;
 
-  return {
-    majorMode: `${majorMode[0]} ${majorMode[1]}`,
-    minorMode: `${minorMode[0]} ${minorMode[1]}`
-  };
+	return {
+		majorMode: `${majorMode[0]} ${majorMode[1]}`,
+		minorMode: `${minorMode[0]} ${minorMode[1]}`
+	};
 }
 
 export function getAllModes(): string[] {
-  let tempValues = Mode.names();
+	let tempValues = Mode.names();
 
-  tempValues = tempValues.map(e => {
-    if (e === "ionian") return "major";
-    else if (e === "aeolian") return "minor";
-    else return e;
-  });
+	tempValues = tempValues.map((e) => {
+		if (e === "ionian") return "major";
+		else if (e === "aeolian") return "minor";
+		else return e;
+	});
 
-  return tempValues;
-};
+	return tempValues;
+}
 
 export function getNaturalNoteNames(): string[] {
-  return naturalNoteNames;
+	return naturalNoteNames;
 }
 
 export function getNoteNamesCircleOfFifths(preferFlat: boolean): string[] {
-  if (preferFlat) {
-    return ["C", "D", "E", "F", "G", "A", "B", "Gb", "Db", "Ab", "Eb", "Bb"];
-  }
-  return ["C", "D", "E", "F", "G", "A", "B", "F#", "C#", "G#", "D#", "A#"];
+	if (preferFlat) {
+		return ["C", "D", "E", "F", "G", "A", "B", "Gb", "Db", "Ab", "Eb", "Bb"];
+	}
+	return ["C", "D", "E", "F", "G", "A", "B", "F#", "C#", "G#", "D#", "A#"];
 }
 
 export function getEnharmonicNote(note: string, preferFlat: boolean = false): string {
-  if (preferFlat) {
-    return note.includes("#") ? Note.enharmonic(note) : note;
-  }
-  else {
-    return note.includes("b") ? Note.enharmonic(note) : note;
-  }
+	if (preferFlat) {
+		return note.includes("#") ? Note.enharmonic(note) : note;
+	} else {
+		return note.includes("b") ? Note.enharmonic(note) : note;
+	}
 }
 
-export function getEnharmonicNotesFromArray(notes: string[], preferFlat: boolean = false): string[] {
-  return notes.map(e => getEnharmonicNote(e, preferFlat));
+export function getEnharmonicNotesFromArray(
+	notes: string[],
+	preferFlat: boolean = false
+): string[] {
+	return notes.map((e) => getEnharmonicNote(e, preferFlat));
 }

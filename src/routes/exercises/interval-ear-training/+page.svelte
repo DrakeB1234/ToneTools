@@ -1,158 +1,129 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
-  import Modal from "$lib/components/Modal/Modal.svelte";
-  import Button from "$lib/components/UI/Button.svelte";
-  import Wrapper from "$lib/components/Wrapper.svelte";
-  import { intervalObjs } from "$lib/helpers/musicTheoryConstants";
-  import type { IntervalEntry } from "$lib/types/musicTheoryTypes";
-  import { defaultConfig } from "./intervalEarTrainingHelpers";
-  import ConfigModalCard from "./ConfigModalCard.svelte";
-  import IconDetailCardButton from "$lib/components/Cards/IconDetailCardButton.svelte";
-  import { onMount } from "svelte";
-  import { lastUsedService } from "$lib/data/lastUsedService.svelte";
-  import { page } from "$app/state";
+	import { goto } from "$app/navigation";
+	import PageHeaderContainer from "$lib/components/PageHeaderContainer.svelte";
+	import Modal from "$lib/components/Modal/Modal.svelte";
+	import Button from "$lib/components/UI/Button.svelte";
+	import Wrapper from "$lib/components/Wrapper.svelte";
+	import ConfigModalCard from "$lib/exercises/interval-ear-training/ConfigModalCard.svelte";
+	import {
+		defaultConfig,
+		quickIntervalVariants,
+		quickIntervalVariantValues,
+		type IntervalSelectOptions
+	} from "$lib/exercises/interval-ear-training/config";
+	import Icon from "$lib/components/Icons/Icon.svelte";
+	import { exercisesData } from "$lib/data/appData";
+	import MainExerciseCard from "$lib/exercises/MainExerciseCard.svelte";
 
-  let configOptions = $state(defaultConfig);
-  let activeIntervalStrings: string[] = $derived(
-    configOptions.selectedIntervals.map((e) => e.interval),
-  );
+	let exerciseAppData = exercisesData.find((e) => e.href === "/exercises/interval-ear-training")!;
+	let configOptions = $state(defaultConfig);
 
-  let isConfigOpen = $state(false);
+	let isConfigOpen = $state(false);
+	let activeQuickOption = $derived.by<IntervalSelectOptions | null>(() => {
+		for (const option of quickIntervalVariants) {
+			const preset = quickIntervalVariantValues[option];
+			if (
+				preset.length === configOptions.selectedIntervals.length &&
+				preset.every((val) => configOptions.selectedIntervals.includes(val))
+			) {
+				return option;
+			}
+		}
+		return null;
+	});
 
-  function handleIntervalButtonClick(interval: IntervalEntry) {
-    const isAlreadySelected = configOptions.selectedIntervals.some(
-      (i) => i.interval === interval.interval,
-    );
+	function handleQuickIntervalOptionClick(option: IntervalSelectOptions) {
+		const intervals = quickIntervalVariantValues[option];
+		if (!intervals) return;
 
-    if (isAlreadySelected) {
-      configOptions.selectedIntervals = configOptions.selectedIntervals.filter(
-        (i) => i.interval !== interval.interval,
-      );
-    } else {
-      configOptions.selectedIntervals = [
-        ...configOptions.selectedIntervals,
-        interval,
-      ];
-    }
-  }
+		configOptions.selectedIntervals = intervals;
+	}
 
-  function onModalFinished() {
-    isConfigOpen = false;
-  }
+	function onModalFinished() {
+		isConfigOpen = false;
+	}
 
-  function onStartClick() {
-    configOptions.selectedIntervals.sort((a, b) => {
-      const indexA = intervalObjs.findIndex(
-        (obj) => obj.interval === a.interval,
-      );
-      const indexB = intervalObjs.findIndex(
-        (obj) => obj.interval === b.interval,
-      );
+	function onStartClick() {
+		const snapshotConfig = $state.snapshot(configOptions);
 
-      return indexA - indexB;
-    });
-    const snapshotConfig = $state.snapshot(configOptions);
-
-    goto("/exercises/interval-ear-training/play", {
-      state: {
-        config: snapshotConfig,
-      },
-    });
-  }
-
-  onMount(() => {
-    // Save url for last used data
-    lastUsedService.addLastUsed(page.url.pathname);
-  });
+		goto("/exercises/interval-ear-training/play", {
+			state: {
+				config: snapshotConfig
+			}
+		});
+	}
 </script>
 
 <svelte:head>
-  <title>Intervals Ear Training | Tone Tools</title>
+	<title>{exerciseAppData.name} | Tone Tools</title>
 </svelte:head>
 
 <Wrapper>
-  <main>
-    <PageHeaderContainer
-      headerText="Intervals Ear Training"
-      fallbackHref="/"
-      useHistory={false}
-    />
+	<main class="page">
+		<PageHeaderContainer headerText="Exercises" fallbackHref="/exercises" useHistory={false} />
 
-    <section class="top-card card">
-      <IconDetailCardButton
-        icon="book"
-        color="purple"
-        title="Guided"
-        description="Learn intervals through a guided set of exercises."
-        href="/exercises/interval-ear-training/guided"
-      />
-      <hr />
-      <IconDetailCardButton
-        icon="leaderBoard"
-        color="green"
-        title="Stats"
-        description="Check out how well you can indentify each interval."
-        href="/exercises/interval-ear-training/stats"
-      />
-    </section>
+		<MainExerciseCard {exerciseAppData}>
+			<div class="link-buttons flex-row space-above-xlg">
+				<Button element="a" variant="outlined" href="/exercises/interval-ear-training/guided">
+					<Icon icon="book" color="var(--color-bg-addon-green)" />
+					Guided Mode
+				</Button>
+				<Button element="a" variant="outlined" href="/exercises/interval-ear-training/stats">
+					<Icon icon="leaderBoard" color="var(--color-bg-addon-green)" />
+					Stats
+				</Button>
+			</div>
 
-    <section class="card">
-      <div class="flex-row">
-        <Button onclick={onStartClick}>Start Exercise</Button>
-        <Button variant="secondary" onclick={() => (isConfigOpen = true)}>
-          Configure
-        </Button>
-      </div>
+			<hr class="space-above-base" />
 
-      <p class="space-above-lg">Selected Intervals</p>
-      <div class="flex-col space-above-sm">
-        {#each intervalObjs as interval (interval.interval)}
-          <Button
-            variant="outlined"
-            state={activeIntervalStrings.includes(interval.interval)
-              ? "on"
-              : "off"}
-            onclick={() => handleIntervalButtonClick(interval)}
-            class="interval-button"
-          >
-            <div class="flex-row">
-              <p class="interval-text">{interval.interval}</p>
-              <p>{interval.name}</p>
-            </div>
-          </Button>
-        {/each}
-      </div>
-    </section>
-  </main>
+			<div class="intervals-input flex-col space-above-lg">
+				<p class="text-caption">Intervals</p>
+				<div class="flex-row lay-flex-wrap">
+					{#each quickIntervalVariants as option}
+						<Button
+							variant="outlined"
+							onclick={() => handleQuickIntervalOptionClick(option)}
+							active={activeQuickOption === option}>{option}</Button
+						>
+					{/each}
+				</div>
+				<div class="intervals-container flex-row lay-flex-wrap space-above-xsm">
+					{#each configOptions.selectedIntervals as interval}
+						<span>{interval}</span>
+					{/each}
+				</div>
+			</div>
+
+			<div class="main-buttons flex-row space-above-xlg">
+				<Button size="large" onclick={onStartClick}>Start Exercise</Button>
+				<Button size="large" variant="secondary" onclick={() => (isConfigOpen = true)}
+					>Configure</Button
+				>
+			</div>
+		</MainExerciseCard>
+	</main>
 </Wrapper>
 
 <Modal bind:isOpen={isConfigOpen}>
-  <ConfigModalCard
-    bind:configData={configOptions}
-    onComplete={onModalFinished}
-  />
+	<ConfigModalCard bind:configData={configOptions} onComplete={onModalFinished} />
 </Modal>
 
 <style>
-  main {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-16);
+	.link-buttons {
+		justify-content: end;
+	}
 
-    width: 100%;
-    padding: var(--app-padding);
-  }
-  .top-card {
-    padding: 0;
-    overflow: hidden;
-  }
-  .interval-text {
-    text-align: right;
-    min-width: 3ch;
-  }
-  :global(.btn.interval-button) {
-    justify-content: start;
-    padding: var(--space-16);
-  }
+	.intervals-container {
+		overflow: hidden;
+	}
+
+	.intervals-container > span {
+		font-size: var(--font-size-12);
+		color: var(--color-on-bg-surface-subtle);
+	}
+
+	.intervals-container > span:not(:first-child)::before {
+		content: "|";
+		margin-right: var(--space-8);
+	}
 </style>

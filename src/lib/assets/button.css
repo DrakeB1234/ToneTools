@@ -1,0 +1,192 @@
+@layer components {
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: var(--btn-justify, center);
+		gap: var(--btn-gap, var(--space-4));
+
+		padding: var(--btn-pad, var(--_pad, var(--space-8) var(--space-12)));
+		border: 1px solid var(--btn-border, var(--_border, transparent));
+		border-radius: var(--btn-radius, var(--radius-base));
+		box-shadow: var(--btn-shadow, none);
+
+		background-color: var(--btn-bg, var(--_bg, transparent));
+		color: var(--btn-fg, var(--_fg, var(--color-on-bg-surface)));
+		font-size: var(--font-size-base);
+		font-weight: var(--font-weight-regular);
+		text-decoration: none;
+		cursor: pointer;
+
+		-webkit-tap-highlight-color: transparent;
+		transition: var(--transition-color);
+	}
+
+	.btn:disabled,
+	.btn[aria-disabled="true"] {
+		opacity: 0.7;
+		cursor: default;
+	}
+
+	/* ---- Sizes ---- */
+	.btn--size-large {
+		--_pad: var(--space-12) var(--space-16);
+		min-height: 44px;
+	}
+	.btn--size-base {
+		--_pad: var(--space-8) var(--space-12);
+		min-height: 40px;
+	}
+	.btn--size-small {
+		--_pad: var(--space-4) var(--space-8);
+		min-height: 34px;
+	}
+
+	/* ---- Layout Modifiers ---- */
+	.btn--icon {
+		padding: var(--btn-pad, var(--space-8));
+		aspect-ratio: 1 / 1;
+		justify-content: center;
+	}
+
+	.btn--icon.btn--size-large {
+		padding: var(--space-12);
+	}
+	.btn--icon.btn--size-base {
+		padding: var(--space-8);
+	}
+	.btn--icon.btn--size-small {
+		padding: var(--space-4);
+	}
+
+	/* ---- Shapes ---- */
+	.btn--shape-circle {
+		border-radius: 50%;
+	}
+	.btn--shape-pill {
+		border-radius: var(--radius-full);
+	}
+
+	/* ---- Variants ---- */
+	.btn--primary {
+		--_bg: var(--color-bg-primary);
+		--_fg: var(--color-on-bg-primary);
+		--_bg-hover: var(--color-bg-primary-active);
+	}
+	.btn--secondary {
+		--_bg: var(--color-bg-secondary);
+		--_fg: var(--color-on-bg-secondary);
+		--_bg-hover: var(--color-bg-secondary-active);
+	}
+	.btn--destructive {
+		--_bg: var(--color-bg-danger);
+		--_fg: var(--color-on-bg-primary);
+		--_bg-hover: var(--color-bg-danger-active);
+	}
+	.btn--outlined {
+		--_border: var(--color-border);
+		--_bg-hover: var(--color-bg-surface-1-active);
+		--_bg-press: var(--color-bg-surface-2);
+	}
+	.btn--text {
+		--_bg-hover: var(--color-bg-surface-1-active);
+		--_bg-press: var(--color-bg-surface-2);
+	}
+	.btn--destructive-outlined {
+		--_border: var(--color-bg-danger);
+		--_fg: var(--color-bg-danger);
+		--_bg-hover: var(--color-bg-tint-danger);
+	}
+
+	/* For "button as a click target" wrappers: no chrome, no padding. */
+	.btn--unstyled {
+		--_pad: 0;
+		display: block;
+		border-radius: 0;
+		min-width: 0;
+		min-height: 0; /* Prevent the base 44px min-height from breaking card layouts */
+	}
+
+	/* ---- Toggled state (placed after variants so it wins) ---- */
+	.btn[data-active="on"] {
+		--_bg: var(--color-bg-primary-subtle);
+		--_bg-hover: var(--color-bg-primary-subtle);
+		--_bg-press: var(--color-bg-primary-subtle);
+		--_border: var(--color-on-bg-primary-subtle);
+		--_fg: var(--color-on-bg-primary-subtle);
+	}
+
+	/* ---- Layout modifiers (from props) ---- */
+	.btn--full-width {
+		width: 100%;
+	}
+
+	/* ---- Interaction ---- */
+	@media (hover: hover) {
+		.btn:hover:not(:disabled):not([aria-disabled="true"]) {
+			background-color: var(
+				--btn-bg-hover,
+				var(--_bg-hover, var(--btn-bg, var(--_bg, transparent)))
+			);
+		}
+	}
+	@media (hover: none) {
+		.btn:active:not(:disabled):not([aria-disabled="true"]) {
+			background-color: var(
+				--btn-bg-hover,
+				var(--_bg-press, var(--_bg-hover, var(--btn-bg, var(--_bg, transparent))))
+			);
+		}
+	}
+
+	/* ==== Shared shapes ====
+	 * Used via the class prop: <Button class="btn--card">.
+	 * Replaces .link-card, .similar-chord-button,
+	 * a.btn.card-button and the other per-page overrides.
+	 */
+	.btn--card {
+		justify-content: start;
+		--btn-pad: var(--space-16);
+		--btn-bg: var(--color-bg-surface-1);
+		--btn-border: var(--color-border-subtle);
+		--btn-bg-hover: var(--color-bg-surface-1-active);
+		--btn-shadow: var(--shadow-1);
+		--btn-gap: 0;
+	}
+
+	/* List row: left-aligned content, e.g. interval list, tool list */
+	.btn--row {
+		--btn-justify: start;
+		--btn-pad: var(--space-16);
+	}
+
+	/* Set width for larger inputs, e.g. ChordPalette diatonic chord buttons */
+	.btn--wide {
+		justify-content: center;
+		min-width: 10ch;
+		--btn-pad: var(--space-12);
+	}
+
+	/* Square note key NoteInput / NoteKeyboard */
+	.btn--note {
+		width: 100%;
+		min-width: 0;
+		height: auto;
+		aspect-ratio: 1;
+		--btn-pad: 0;
+	}
+
+	/* Buttons that are used as tabs for multiple sections, e.g. tabs in ChordPalette */
+	.btn--tab {
+		min-width: fit-content;
+	}
+
+	/* Floating action button */
+	.btn--fab {
+		--btn-shadow: var(--shadow-1);
+	}
+
+	/* Specifically used on hero banner to make a darker primary button */
+	.btn--on-primary {
+		background-color: var(--color-bg-primary-dark);
+	}
+}
